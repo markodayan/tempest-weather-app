@@ -44,6 +44,10 @@ Only the native Fetch API is used (no Axios or similar).
 
 Tailwind CSS v4, wired in via `@tailwindcss/vite` (not the PostCSS plugin) — see `vite.config.ts`. Global styles are just `@import 'tailwindcss';` in `src/index.css`; prefer utility classes in JSX over adding custom CSS.
 
+## Commit messages
+
+Follow `docs/commit-convention.md` (`type(scope): summary`, Conventional-Commits-based) for every commit — it's the mechanism for documenting progress against the assignment.
+
 ## Notes
 
 - The `playground/` directory (gitignored) is a sandbox for exercising API/data-layer code standalone via `npm run playground` — it is not part of the app bundle and is excluded from `tsc -b`'s build coordination but included in `tsconfig.app.json`'s `include`.
