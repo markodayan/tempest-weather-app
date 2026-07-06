@@ -26,6 +26,7 @@ export function useLocationSearch() {
 
     geocodeLocation(debouncedSearchTerm, controller.signal)
       .then((results) => {
+        if (controller.signal.aborted) return;
         setSuggestions(results);
         setError(null);
         setResolvedTerm(debouncedSearchTerm);
