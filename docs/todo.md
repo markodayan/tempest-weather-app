@@ -6,7 +6,8 @@
 
 - ~~Setup Vitest~~ Configured via `vite.config.ts`'s `test` field (jsdom environment, `src/test/setup.ts` for jest-dom matchers). `npm test` runs once (CI-safe), `npm run test:watch` for the interactive loop.
 - ~~Write test for search-related pure functions~~ `src/lib/coordinates.test.ts` and `src/api/countryCodes.test.ts`.
-- [ ] Write tests for `useDebounce` and `useLocationSearch` hooks
+- ~~Write tests for `useDebounce` and `useLocationSearch` hooks~~ `src/hooks/useDebounce.test.ts` and `src/hooks/useLocationSearch.test.ts`. Also surfaced and fixed a missing abort guard in `useLocationSearch`'s success branch — see `docs/testing.md`.
+- [ ] Write fetch-mocked tests for `geocode.ts` and `weather.ts` (mock global `fetch`, not the module — these are the layer directly below the hooks that already mock the module). Worth specifically pinning down: the request URL/params built correctly (this is where the `count`-vs-`countryCode` ordering gotcha lives), non-ok/network-error handling, and `weather.ts`'s normalisation logic (`zipDailyWeather`, `attachCurrentWeatherToToday`, the `TODAY_INDEX` split).
 - [ ] Work on preferences functionality (state management, caching, connection to weather request pipeline, UI components within `Search.tsx`)
 - [ ] Document the fields being requested from the Weather API (the fields specified within `current` and `daily` query params). The Open-Meteo API documentation has all the details.
 - [ ] Draw a diagram of the data path and data shapes and types from inputs supplied to search all the way to weather data served from the weather hook
