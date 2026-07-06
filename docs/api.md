@@ -34,6 +34,30 @@ export type Location = {
 export type LocationResults = Location[];
 ```
 
+### Disambiguating common place names
+
+Open-Meteo ranks matches primarily by feature type and population, so a small suburb sharing
+a name with larger, more populous places elsewhere (e.g. Glenwood, a Durban suburb, vs. the many
+US towns named Glenwood) can be buried far past the requested `count` — verified: it ranked
+81st of 100 for a bare `Glenwood` query. Appending free text to `name` (e.g. `"Glenwood South
+Africa"`) doesn't help either; Open-Meteo does name matching, not free-text parsing, and returns
+zero results for a compound string like that.
+
+To work around this, `geocodeLocation` (via `extractCountryHint` in `countryCodes.ts`) recognises
+an optional trailing country name or code and passes it through as Open-Meteo's documented
+`countryCode` filter param — either comma-separated (`"Glenwood, South Africa"`) or, since users
+naturally type it that way, plain trailing words (`"Glenwood South Africa"`, tried against
+progressively shorter trailing word-groups from a small curated country-name list). Falls back to
+searching the whole string as the place name if nothing matches, so it never behaves worse than
+before this existed.
+
+**Non-obvious gotcha**: `count` limits the raw name-matched pool *before* `countryCode` filtering
+is applied, not the final filtered result count — requesting `count=5` with a country filter can
+filter down to zero even when matches exist, if none of the top 5 population-ranked matches
+happen to be in that country. `geocodeLocation` works around this by requesting the API's max
+pool size (100) whenever a country hint is present, then slicing down to the display count
+itself after filtering.
+
 ## Weather API
 
 This API will be used to retrieve the current day weather conditions, as well as the weather conditions for the last 3 days, and the forecast for the next 3 days.
