@@ -2,23 +2,27 @@
 
 ## Technology Stack
 
-- Implementing as React SPA using Vite and Tailwind.
-
-- Leveraging <b>Open-Meteo</b> as a data source. After reviewing all the options available publically, their APIs provide me with the best path to acquiring the data needed for this app.
-
-- Due to this being a new project, will opt to use <b>Vitest</b> for unit and component testing, while using <b>Playwright</b> for E2E testing.
+- React SPA (using Vite, Tailwind, TypeScript).
+- Open-Meteo APIs used for fetching location and weather data (Geocoding API, Weather API).
+- Vitest for unit and component testing.
+- Playwright for E2E testing.
+- Zod for validation (search params etc)
+- Postman for API testing
 
 ## Features
 
-- <b>Search and Desired Search UX</b>:
-  - As a user, I should be able to write locations in the search bar and receive immediate feedback for locations matching the emerging search term. The top 5 matches should pop up as clickable options to trigger a query for the 7 day window of weather (current day, past 3 days, and next 3 days forecast).
-  - As a user, I should be able to quickly select locations previously queried thereby reducing effort for commonly repeated locations (query caching)
+- <b>Search and User Preferences</b>:
+  - As a user, I should be able to get suggested locations while I am typing my search term that I can click on shorten the time taken for the app to understand my query.
+  - As a user, I should be able to adjust unit preferences for temperature, precipitation and wind speed.
+  - As a user, I should be able to view the weather for the current day, 3 days before, and 3 days after (forecast) for any surburb, town, city, state or country.
+  - As a user, I should be able to select any one of the 7 day cards and observe a more detailed report about the weather on that day.
+  - As a user, my most recent locations should be available to select (query term caching).
   - As a user, I want to be informed if the location I am looking for can't be found.
-  - [TBC] As a user, I should be able to see additional results if the predictive search does not yield my specific location
-  - As a user, I should be able to toggle preferences for weather data including temperature scales (Celsius, Fahrenheit), wind speed (km/h, mph, m/s, kn), precipation preferred units (mm, in).
-  - As a user, I should be able to set a preference for automatic refresh of my query if I want updates throughout my session/day.
-  - As a user, my preferences should be able to be persisted across sessions (preference caching)
-- <b> Weather Data (Weather Cards and Detailed View) </b>:
+  - As a user, I should be able to toggle preferences for weather data including temperature scales (Celsius, Fahrenheit), wind speed (km/h, mph, m/s, kt), precipation preferred units (mm, in).
+  - [TBC]As a user, I should be able to leave the window open and have the application update autonomously.
+  - As a user, my preferences should be able to be persisted across sessions on my device (preference caching)
+  - As a user, I should be able to productively use this app on PC, mobile and tablet browsers.
+- <b> Weather Data (Weather Tiles and Selected Day Weather Report) </b>:
   - Submitting a query for an existing location should populate a 7-day weather card grid (3 days weather prior to current day, the current day, the forecast for the next 3 days), with the default highlighted card being the current day.
   - Any day's weather card selected in the grid will become highlighted and will cause the detailed view component to display its weather data.
   - If looking at weather of current day, the weather information should be as fresh as possible.
