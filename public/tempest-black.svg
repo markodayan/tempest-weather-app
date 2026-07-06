@@ -1,0 +1,44 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1000 1000"
+  role="img"
+  aria-labelledby="title desc"
+>
+  <title id="title">Tempest weather app symbol</title>
+  <desc id="desc">
+    A minimalist inverted triangle with a horizontal line through it.
+  </desc>
+
+  <style>
+    :root {
+      --tempest-bg: black;
+      --tempest-triangle: #5d75bbff;
+      --tempest-line: #06355bff;
+      --tempest-triangle-stroke-width: 64;
+      --tempest-line-stroke-width: 48;
+    }
+  </style>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="var(--tempest-bg)" />
+
+  <!-- Inverted triangle -->
+  <path
+    d="M 130 130 H 870 L 500 860 Z"
+    fill="none"
+    stroke="var(--tempest-triangle)"
+    stroke-width="var(--tempest-triangle-stroke-width)"
+    stroke-linejoin="miter"
+  />
+
+  <!-- Horizontal line -->
+  <line
+    x1="185"
+    y1="520"
+    x2="815"
+    y2="520"
+    stroke="var(--tempest-line)"
+    stroke-width="var(--tempest-line-stroke-width)"
+    stroke-linecap="butt"
+  />
+</svg>
