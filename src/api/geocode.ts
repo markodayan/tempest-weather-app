@@ -43,7 +43,7 @@ function normaliseLocation(item: RawGeocodingItem): Location {
   };
 }
 
-export async function geocodeLocation(query: string): Promise<LocationResults> {
+export async function geocodeLocation(query: string, signal?: AbortSignal): Promise<LocationResults> {
   const trimmedQuery = query.trim();
 
   // only start debounce search if more than 1 char typed
@@ -59,7 +59,7 @@ export async function geocodeLocation(query: string): Promise<LocationResults> {
   let res: Response;
 
   try {
-    res = await fetch(`${GEOCODER_BASE_URL}?${params.toString()}`);
+    res = await fetch(`${GEOCODER_BASE_URL}?${params.toString()}`, { signal });
   } catch (err) {
     throw new Error('Network error while geocoding location.', {
       cause: err,
