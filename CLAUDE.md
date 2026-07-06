@@ -16,9 +16,11 @@ npm run build     # type-check (tsc -b, project references) then production buil
 npm run lint      # eslint .
 npm run preview   # preview the production build
 npm run playground  # run playground/index.ts via tsx (scratch space for testing API calls, e.g. geocode.ts)
+npm test           # run the Vitest suite once (jsdom environment, config in vite.config.ts's `test` field)
+npm run test:watch  # Vitest in watch mode
 ```
 
-There is no test runner installed yet. `docs/strategy.md` specifies the intended stack: **Vitest** for unit/component tests and **Playwright** for E2E — set these up before/when adding tests rather than assuming they exist.
+Playwright for E2E is specified in `docs/strategy.md` but not yet set up — add it when there's enough UI to drive end-to-end.
 
 TypeScript uses project references (`tsconfig.json` → `tsconfig.app.json` for `src`/`playground`, `tsconfig.node.json` for Vite config). `npm run build` runs `tsc -b` across all references before bundling.
 
@@ -43,6 +45,10 @@ Only the native Fetch API is used (no Axios or similar).
 ## Styling
 
 Tailwind CSS v4, wired in via `@tailwindcss/vite` (not the PostCSS plugin) — see `vite.config.ts`. Global styles are just `@import 'tailwindcss';` in `src/index.css`; prefer utility classes in JSX over adding custom CSS.
+
+## Testing
+
+`docs/testing.md` tracks current testing stack/scripts and what's covered so far — update it whenever testing setup or coverage changes (new test files, a new layer added, config changes).
 
 ## Commit messages
 
