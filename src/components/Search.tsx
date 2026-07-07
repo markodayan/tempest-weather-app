@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { MapPin, SearchIcon } from 'lucide-react';
+import { MapPin, SearchIcon, X } from 'lucide-react';
 import { useLocationSearch } from '../hooks/useLocationSearch';
 import type { Location } from '../api';
 import { formatLatitude, formatLongitude } from '../lib/coordinates';
 
 export default function Search() {
   const { searchTerm, setSearchTerm, suggestions, loading, error } = useLocationSearch();
-  // suppresses the dropdown right after a selection, so setting searchTerm to the
-  // chosen location's title doesn't immediately reopen it with a fresh search
+
+  // will remove dropdown after selection to avoid searchTerm state value not to immediately reopen to do another search for locations matching the term
   const [justSelected, setJustSelected] = useState(false);
+  // The location data of the user's selected place (used to update component-scope state as well as will be used in setter for weather hook when implemented)
+  const [chosenLocation, setChosenLocation] = useState<Location | null>(null);
 
   const showDropdown = searchTerm.trim().length > 0 && !justSelected;
 
@@ -19,20 +21,33 @@ export default function Search() {
 
   function handleSelect(location: Location) {
     setJustSelected(true);
-    setSearchTerm(`${location.location_title}, ${location.location_country}`);
+    setChosenLocation(location);
   }
 
+  // Used to submit query to weather API (todo) as well as managing component-level action state (whether user has chosen a location or not)
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    // Return early if there were no suggestion results
+    if (suggestions.length === 0) return;
+
+    setJustSelected(true);
+    setChosenLocation(suggestions[0]);
+  }
+
+  // Reneables the searchbar input to allow the user to make a new search
+  function resetSearch() {
+    setChosenLocation(null);
+    setSearchTerm('');
   }
 
   return (
-    <div className='relative w-full max-w-xl mx-auto'>
+    <div className='relative w-full max-w-5xl mx-auto'>
       <form onSubmit={handleSubmit}>
-        <div className='flex items-center gap-3 rounded-full bg-white px-4 py-2 shadow-lg'>
+        <div className={`flex  items-center gap-3 rounded-full bg-white px-6 py-5 shadow-lg`}>
           <div className='flex items-center gap-2'>
-            <img src='/tempest-logo-trans.svg' alt='Tempest logo' className='h-7 w-7' />
-            <span className='text-xl font-bold text-slate-800'>Tempest</span>
+            <img src='/tempest-logo-trans.svg' alt='Tempest logo' className='h-6.5 w-6.5' />
+            <span className='text-xl font-bold text-slate-800 '>Tempest</span>
           </div>
 
           <input
@@ -43,15 +58,31 @@ export default function Search() {
             value={searchTerm}
             onChange={handleChange}
             autoComplete='off'
+            disabled={!!chosenLocation}
+            hidden={!!chosenLocation}
           />
+          {!!chosenLocation && (
+            <div className=' flex-1 text-lg text-slate-800 py-0 ml-3 flex justify-start  rounded-lg'>
+              <span className='location-badge-bg text-white px-2 py-1 pr-10 rounded-lg'>{`${chosenLocation.location_title}, ${chosenLocation.location_area}, ${chosenLocation.location_country}`}</span>
+            </div>
+          )}
 
-          <button
-            type='submit'
-            aria-label='Search'
-            className='p-2 text-slate-400 transition-colors hover:text-sky-600'
-          >
-            <SearchIcon className='h-5 w-5' />
-          </button>
+          {!chosenLocation && (
+            <button
+              type='submit'
+              aria-label='Search'
+              className='p-2 text-slate-400 transition-colors hover:text-primary'
+              disabled={!!chosenLocation}
+            >
+              <SearchIcon className='h-5 w-5' />
+            </button>
+          )}
+
+          {!!chosenLocation && (
+            <button type='button' aria-label='Clear selected location' onClick={resetSearch}>
+              <X className='h-5 w-5' />
+            </button>
+          )}
         </div>
       </form>
 

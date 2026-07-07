@@ -1,1 +1,29 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-primary: #5d75bbff;
+  --color-secondary: #06355bff;
+  --color-background: #1655d1;
+  --color-muted: #252e37;
+  --color-chosen-location-badge: black;
+  --color-potential-contrast: #ff171787;
+}
+
+@layer base {
+}
+
+@layer components {
+  .location-badge-bg {
+    background: linear-gradient(315deg, #18455a, #4667e0);
+    opacity: 70%;
+  }
+
+  .glass {
+    background-color: color-mix(in srgb, rgba(26, 38, 255, 0.267) 100%, transparent);
+    backdrop-filter: blur(300px);
+    border: 1px solid color-mix(in srgb, rgba(178, 12, 215, 0.267) 70%, transparent);
+  }
+}
+
+@layer utilties {
+}
