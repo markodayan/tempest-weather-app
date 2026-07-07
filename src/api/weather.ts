@@ -1,9 +1,4 @@
-import type {
-  WeatherApiValue,
-  WeatherDay,
-  RequestWeatherOptions,
-  WeatherReadings,
-} from './types';
+import type { WeatherApiValue, WeatherDay, RequestWeatherOptions, WeatherReadings } from './types';
 
 const FORECAST_BASE_URL = 'https://api.open-meteo.com/v1/forecast';
 
