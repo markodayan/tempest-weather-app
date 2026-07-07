@@ -133,15 +133,19 @@ export default function PreferencesRow({ chosenLocation }: PreferencesRowProps) 
         onChange={handlePrecipitationUnitChange}
       />
 
-      {showApplyButton && (
-        <button
-          type='button'
-          onClick={handleApply}
-          className='rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white transition-colors hover:opacity-90'
-        >
-          Apply and refresh
-        </button>
-      )}
+      <button
+        type='button'
+        onClick={handleApply}
+        disabled={!showApplyButton}
+        aria-hidden={!showApplyButton}
+        className={`rounded-full bg-primary px-4 py-1 text-xs font-stretch-condensed font-semibold text-white transition-all ease-out hover:opacity-90 ${
+          showApplyButton
+            ? 'duration-500 translate-y-0 opacity-100'
+            : 'duration-150 -translate-y-1.5 pointer-events-none opacity-0'
+        }`}
+      >
+        Apply and refresh
+      </button>
     </div>
   );
 }

@@ -9,8 +9,10 @@ function App() {
   return (
     <div className='min-h-screen bg-page-background'>
       <main>
-        <Search chosenLocation={chosenLocation} onLocationChange={setChosenLocation} />
-        <PreferencesRow chosenLocation={chosenLocation} />
+        <div className='flex flex-col'>
+          <Search chosenLocation={chosenLocation} onLocationChange={setChosenLocation} />
+          <PreferencesRow chosenLocation={chosenLocation} />
+        </div>
       </main>
     </div>
   );
