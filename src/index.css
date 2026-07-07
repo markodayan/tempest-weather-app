@@ -13,6 +13,7 @@
   --color-potential-contrast: #ff171787;
   --color-input-mode: #fefefe;
   --color-search-locked-in-state: #f7f7f7;
+  --color-reset-search: #979797;
 
   /* animation  */
   --animate-pulse-once: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 1;

@@ -93,7 +93,7 @@ export default function Search({ chosenLocation, onLocationChange }: SearchProps
 
             {!!chosenLocation && (
               <button type='button' aria-label='Clear selected location' onClick={resetSearch}>
-                <X className='h-5 w-5' strokeWidth={2} />
+                <X className='h-5 w-5 text-reset-search' strokeWidth={2} />
               </button>
             )}
           </label>
