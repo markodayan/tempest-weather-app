@@ -4,13 +4,16 @@ import { useLocationSearch } from '../hooks/useLocationSearch';
 import type { Location } from '../api';
 import { formatLatitude, formatLongitude } from '../lib/coordinates';
 
-export default function Search() {
+type SearchProps = {
+  chosenLocation: Location | null;
+  onLocationChange: (location: Location | null) => void;
+};
+
+export default function Search({ chosenLocation, onLocationChange }: SearchProps) {
   const { searchTerm, setSearchTerm, suggestions, loading, error } = useLocationSearch();
 
   // will remove dropdown after selection to avoid searchTerm state value not to immediately reopen to do another search for locations matching the term
   const [justSelected, setJustSelected] = useState(false);
-  // The location data of the user's selected place (used to update component-scope state as well as will be used in setter for weather hook when implemented)
-  const [chosenLocation, setChosenLocation] = useState<Location | null>(null);
   const [isFocused, setIsFocused] = useState(false);
 
   const showDropdown = searchTerm.trim().length > 0 && !justSelected && isFocused;
@@ -22,7 +25,7 @@ export default function Search() {
 
   function handleSelect(location: Location) {
     setJustSelected(true);
-    setChosenLocation(location);
+    onLocationChange(location);
   }
 
   // Used to submit query to weather API (todo) as well as managing component-level action state (whether user has chosen a location or not)
@@ -33,12 +36,12 @@ export default function Search() {
     if (suggestions.length === 0) return;
 
     setJustSelected(true);
-    setChosenLocation(suggestions[0]);
+    onLocationChange(suggestions[0]);
   }
 
   // Reneables the searchbar input to allow the user to make a new search
   function resetSearch() {
-    setChosenLocation(null);
+    onLocationChange(null);
     setSearchTerm('');
   }
 
