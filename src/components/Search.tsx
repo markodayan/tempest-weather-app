@@ -11,8 +11,9 @@ export default function Search() {
   const [justSelected, setJustSelected] = useState(false);
   // The location data of the user's selected place (used to update component-scope state as well as will be used in setter for weather hook when implemented)
   const [chosenLocation, setChosenLocation] = useState<Location | null>(null);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const showDropdown = searchTerm.trim().length > 0 && !justSelected;
+  const showDropdown = searchTerm.trim().length > 0 && !justSelected && isFocused;
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setJustSelected(false);
@@ -57,6 +58,8 @@ export default function Search() {
             type='text'
             value={searchTerm}
             onChange={handleChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             autoComplete='off'
             disabled={!!chosenLocation}
             hidden={!!chosenLocation}
@@ -105,6 +108,7 @@ export default function Search() {
                   <button
                     type='button'
                     onClick={() => handleSelect(location)}
+                    onMouseDown={(e) => e.preventDefault()} // keeps focus on the input, so blur never fires (important to override default mousedown behaviour of shifting focus since we are using it to control drop down)
                     className='flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-50'
                   >
                     <MapPin className='mt-1 h-5 w-5 shrink-0 text-slate-400' />
