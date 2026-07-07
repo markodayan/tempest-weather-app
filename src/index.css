@@ -5,9 +5,13 @@
   --color-secondary: #06355bff;
   --color-background: #1655d1;
   --color-tempest-title: #2890e3;
+  --color-search-title-suffix: #111111;
+  --color-search-field-border: #e8eaef;
   --color-muted: #252e37;
   --color-chosen-location-badge: black;
   --color-potential-contrast: #ff171787;
+  --color-input-mode: #fefefe;
+  --color-search-locked-in-state: #f7f7f7;
 }
 
 @layer base {
@@ -15,8 +19,12 @@
 
 @layer components {
   .location-badge-bg {
-    background: linear-gradient(315deg, #18455a, #4667e0);
-    opacity: 70%;
+    /* background: linear-gradient(315deg, #18455a, #4667e0); */
+    /* background: linear-gradient(315deg, #18455a, #2b3036); */
+    /* background: #4fb5e9; */
+    background: var(--color-tempest-title);
+    color: #e0f9ff;
+    opacity: 80%;
   }
 
   .glass {
