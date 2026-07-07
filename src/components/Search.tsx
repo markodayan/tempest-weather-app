@@ -48,7 +48,7 @@ export default function Search() {
         <div className={`flex  items-center gap-3 rounded-full bg-white px-6 py-5 shadow-lg`}>
           <div className='flex items-center gap-2'>
             <img src='/tempest-logo-trans.svg' alt='Tempest logo' className='h-6.5 w-6.5' />
-            <span className='text-xl font-bold text-slate-800 '>Tempest</span>
+            <span className='text-xl font-bold text-tempest-title '>Tempest</span>
           </div>
 
           <input
