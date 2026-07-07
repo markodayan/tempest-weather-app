@@ -3,7 +3,7 @@ import { extractCountryHint } from './countryCodes';
 
 const GEOCODER_BASE_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 
-const GEOCODING_RESULT_COUNT = 5;
+const GEOCODING_RESULT_COUNT = 10;
 const MIN_QUERY_LENGTH = 2;
 
 // Open-Meteo's `count` limits the raw name-matched pool *before* `countryCode`
@@ -50,7 +50,10 @@ function normaliseLocation(item: RawGeocodingItem): Location {
   };
 }
 
-export async function geocodeLocation(query: string, signal?: AbortSignal): Promise<LocationResults> {
+export async function geocodeLocation(
+  query: string,
+  signal?: AbortSignal,
+): Promise<LocationResults> {
   // supports an optional trailing country name/code (e.g. "Glenwood South Africa" or
   // "Glenwood, South Africa") to disambiguate common place names — Open-Meteo ranks by
   // population/feature type, so small suburbs sharing a name with larger, more populous
