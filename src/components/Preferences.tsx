@@ -1,7 +1,12 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import type { TemperatureUnit, WindSpeedUnit, PrecipitationUnit } from '../api';
 import type { UnitPreferences } from '../types';
-import { DEFAULT_PREFERENCES } from '../types';
+import {
+  DEFAULT_PREFERENCES,
+  TEMPERATURE_UNIT_LABELS,
+  WIND_SPEED_UNIT_LABELS,
+  PRECIPITATION_UNIT_LABELS,
+} from '../types';
 
 type RadioOption<T extends string> = {
   value: T;
@@ -16,22 +21,20 @@ function preferencesEqual(a: UnitPreferences, b: UnitPreferences): boolean {
   );
 }
 
-const TEMPERATURE_OPTIONS: RadioOption<TemperatureUnit>[] = [
-  { value: 'celsius', label: '°C' },
-  { value: 'fahrenheit', label: '°F' },
-];
+// Builds an ordered RadioOption list from a unit -> label lookup, so the radio groups here
+// and SelectedDayReport's unit suffixes share one source of truth for label text (src/types.ts).
+function radioOptionsFromLabels<T extends string>(labels: Record<T, string>): RadioOption<T>[] {
+  return (Object.keys(labels) as T[]).map((value) => ({ value, label: labels[value] }));
+}
 
-const WIND_SPEED_OPTIONS: RadioOption<WindSpeedUnit>[] = [
-  { value: 'kmh', label: 'km/h' },
-  { value: 'ms', label: 'm/s' },
-  { value: 'mph', label: 'mph' },
-  { value: 'kn', label: 'kn' },
-];
+// [{ value: 'celsius', label: '°C' }, { value: 'fahrenheit', label: '°F' }]
+const TEMPERATURE_OPTIONS = radioOptionsFromLabels(TEMPERATURE_UNIT_LABELS);
 
-const PRECIPITATION_OPTIONS: RadioOption<PrecipitationUnit>[] = [
-  { value: 'mm', label: 'mm' },
-  { value: 'inch', label: 'in' },
-];
+// [{ value: 'kmh', label: 'km/h' }, { value: 'ms', label: 'm/s' }, { value: 'mph', label: 'mph' }, { value: 'kn', label: 'kn' }]
+const WIND_SPEED_OPTIONS = radioOptionsFromLabels(WIND_SPEED_UNIT_LABELS);
+
+// [{ value: 'mm', label: 'mm' }, { value: 'inch', label: 'in' }]
+const PRECIPITATION_OPTIONS = radioOptionsFromLabels(PRECIPITATION_UNIT_LABELS);
 
 function UnitRadioGroup<T extends string>({
   legend,
