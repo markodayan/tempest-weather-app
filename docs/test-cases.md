@@ -93,6 +93,7 @@ Steps to test:
 1. Do steps 1 through 4 of Test Case 7 above.
    - <b>The badge should be restored to the search bar and it should be back to view-mode</b> -->
 
-### Test Case 9: Go through the above test cases, and for ones involving search, confirm whether updated preference state consistently yields the expected unit changes in the Weather data results.
+### Test Cases [Todo]: Go through the above test cases, and for ones involving search, confirm whether updated preference state consistently yields the expected unit changes in the Weather data results.
 
-Todo
+- [ ] Need to write tests to check if all normalised weather API responses are returning the correct units.
+  > Potentially need to write `current_units` and `daily_units` from every weather API request to state so we can actually test this.
