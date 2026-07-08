@@ -65,16 +65,34 @@ Steps to test:
 3. Reverse the changes you did in Step 2 (e.g. changing wind speed back to `km/h` manually again)
    - <b>This action should make the 'Apply and refresh' button disappear</b>
 
-### Test Case 7: Go through the above test cases, and for ones involving search, confirm whether updated preference state consistently yields the expected unit changes in the Weather data results.
+### Test Case 7: Apply button text changes according to search bar mode
+
+If I search for location A and get its weather displayed, I should be able to clear the search bar and the weather for location A still showing. We now have an empty search bar and weather for Location A still showing (this is intended).
+
+This leaves the user with two options:
+
+1. Query weather for a new location (Location B) using the search bar.
+2. Change preferences and refresh query for Location A.
+
+If the user does Option 2, the apply button will have the new text of 'Apply for Current Location'. This is to give the user a visual cue that despite the search bar being in write-mode, that we can still query the weather for the same location already loaded with their new preferences.
+
+Steps to test:
+
+1. Search for a location (e.g. `'Bantry Bay'`) and click the drop-down for it.
+2. Click the search bar reset button (X symbol).
+3. Try change a preference.
+   - <b>This action should result in the apply button having the 'Apply for Current Location' text instead of the default text.</b>
+4. Click apply button
+   - <b>The preferences should be updated</b>
+   - <b>The badge should be restored</b>
+
+<!-- ### (pending design decision) Potential Test Case 8 (if I make the change): Weather for a location is already queried and the user is now selecting different preferences but the search bar has been reset back to write-mode.
+
+Steps to test:
+
+1. Do steps 1 through 4 of Test Case 7 above.
+   - <b>The badge should be restored to the search bar and it should be back to view-mode</b> -->
+
+### Test Case 9: Go through the above test cases, and for ones involving search, confirm whether updated preference state consistently yields the expected unit changes in the Weather data results.
 
 Todo
-
-### Todo
-
-If I search for location A and get its weather displayed, I should be able to clear the search bar and the weather for location A still showing.
-
-We now have an empty search bar and weather for Location A still showing. So how should we deal with preferences. What we can maybe do is update the button text from 'Apply and refesh' to 'Apply For Current Location'.
-
-If we did not reset the search bar, we should just leave it as 'Apply and refresh'
-
-Ideally, we want the button size to be proportionally the same for the button irrespective of the label text, so maybe we need to set some min width or something like that
