@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import type { Location, TemperatureUnit, WindSpeedUnit, PrecipitationUnit } from '../api';
 
 type RadioOption<T extends string> = {
@@ -88,6 +88,21 @@ type PreferencesRowProps = {
 export default function PreferencesRow({ chosenLocation }: PreferencesRowProps) {
   const [draft, setDraft] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
   const [committed, setCommitted] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
+  const previousChosenLocation = useRef<Location | null>(null);
+
+  // Whenever a new search is submitted (chosenLocation goes from null to a location),
+  // treat whatever preferences are on-screen right now as already "applied" for that
+  // fetch, so the Apply button doesn't appear immediately just because the user changed
+  // a preference before searching.
+  useLayoutEffect(() => {
+    const isNewSearch = chosenLocation !== null && previousChosenLocation.current === null;
+
+    if (isNewSearch) {
+      setCommitted(draft);
+    }
+
+    previousChosenLocation.current = chosenLocation;
+  }, [chosenLocation, draft]);
 
   // only worth prompting a refresh once there's an actual location's weather to refresh
   const showApplyButton = chosenLocation !== null && !preferencesEqual(draft, committed);
