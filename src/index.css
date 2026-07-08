@@ -23,6 +23,10 @@
 }
 
 @layer components {
+  .sun-grad {
+    color: linearGradient(315deg, #feff00, #18455a);
+  }
+
   .location-badge-bg {
     /* background: linear-gradient(315deg, #18455a, #4667e0); */
     /* background: linear-gradient(315deg, #18455a, #2b3036); */

@@ -42,7 +42,7 @@ export default function WeatherDays({
             type='button'
             onClick={() => onSelectDay(index)}
             aria-current={isSelected}
-            className={`flex flex-col items-center gap-1 rounded-2xl border-t-4 bg-white px-2 py-3 shadow-sm transition-colors ${
+            className={`flex flex-col items-center gap-1  border-t-4 bg-white px-2 py-3 shadow-sm transition-colors ${
               isSelected ? 'border-primary' : 'border-transparent'
             }`}
           >
@@ -54,9 +54,7 @@ export default function WeatherDays({
               <span className='font-semibold text-slate-800'>
                 {Math.round(Number(day.temperature_2m_max))}°
               </span>{' '}
-              <span className='text-slate-400'>
-                {Math.round(Number(day.temperature_2m_min))}°
-              </span>
+              <span className='text-slate-400'>{Math.round(Number(day.temperature_2m_min))}°</span>
             </span>
           </button>
         );
