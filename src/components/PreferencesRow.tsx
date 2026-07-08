@@ -107,7 +107,7 @@ export default function PreferencesRow({
   const showApplyButton = weatherLocationId !== null && !preferencesEqual(draft, committed);
 
   // reset was hit but old weather is still showing, vs. a search is actively locked in
-  const applyButtonLabel = hasSearchSelection ? 'Apply and refresh' : 'Apply for current location';
+  const applyButtonLabel = hasSearchSelection ? 'Apply and Refresh' : 'Apply for Current Location';
 
   function handleApply() {
     onCommit(draft);
