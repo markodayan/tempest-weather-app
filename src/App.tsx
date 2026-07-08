@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Search from './components/Search';
 import Preferences from './components/Preferences';
 import WeatherDays from './components/WeatherDays';
+import SelectedDayReport from './components/SelectedDayReport';
 import { useWeather } from './hooks/useWeather';
 import type { Location } from './api';
 import { TODAY_INDEX } from './api';
@@ -75,6 +76,15 @@ function App() {
           />
           <WeatherDays
             weather={weather}
+            loading={loading}
+            error={error}
+            selectedDayIndex={selectedDayIndex}
+            onSelectDay={setSelectedDayIndex}
+          />
+          <SelectedDayReport
+            weather={weather}
+            weatherLocation={weatherLocation}
+            preferences={committed}
             loading={loading}
             error={error}
             selectedDayIndex={selectedDayIndex}

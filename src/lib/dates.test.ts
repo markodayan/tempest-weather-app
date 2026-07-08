@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDayLabelShort, formatDayLabelLong } from './dates';
+import { formatDayLabelShort, formatDayLabelLong, formatTimeOfDay } from './dates';
 
 describe('formatDayLabelShort', () => {
   it('returns "Today" when isToday is true, regardless of the date', () => {
@@ -24,5 +24,11 @@ describe('formatDayLabelLong', () => {
 
   it('formats a non-today date as full weekday, day, full month', () => {
     expect(formatDayLabelLong('2026-07-09', false)).toBe('Thursday 9 July');
+  });
+});
+
+describe('formatTimeOfDay', () => {
+  it('extracts the HH:mm portion of an ISO datetime string', () => {
+    expect(formatTimeOfDay('2026-07-08T06:51')).toBe('06:51');
   });
 });

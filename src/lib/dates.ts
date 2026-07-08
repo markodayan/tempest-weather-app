@@ -35,3 +35,9 @@ export function formatDayLabelLong(dateString: string, isToday: boolean): string
     timeZone: 'UTC',
   }).format(parseIsoDateUtc(dateString));
 }
+
+// sunrise/sunset come back as "YYYY-MM-DDTHH:mm", already resolved to the
+// location's own timezone - no Date parsing needed, just take the time half.
+export function formatTimeOfDay(isoDateTimeString: string): string {
+  return isoDateTimeString.split('T')[1];
+}
