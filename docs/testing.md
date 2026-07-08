@@ -9,8 +9,8 @@ files, a new layer added, config changes), update it here.
   `test` field: `environment: 'jsdom'`, `setupFiles: ['./src/test/setup.ts']`
   (imports `@testing-library/jest-dom/vitest` to extend `expect` with DOM
   matchers).
-- **@testing-library/react**, **@testing-library/user-event** — installed for
-  hook/component tests; not yet used.
+- **@testing-library/react**, **@testing-library/user-event** — component
+  tests (`WeatherDays.test.tsx`) and the underlying hook tests above.
 - **Playwright** — planned for E2E per `docs/strategy.md`, not yet set up.
 
 ## Scripts
@@ -38,6 +38,11 @@ files, a new layer added, config changes), update it here.
   state while a request is in flight, error handling, superseded requests
   getting aborted, and suggestions/error lagging behind a cleared input by
   one debounce interval (see nuances below).
+- `src/components/WeatherDays.test.tsx` — renders one tile per day with its
+  label and rounded high/low temperatures, marks only the
+  `selectedDayIndex` tile as current, calls `onSelectDay` with the clicked
+  day's index, and the loading/error/no-data-yet states each render their
+  own thing with no tiles.
 
 ## Nuances worth knowing before writing more component tests
 

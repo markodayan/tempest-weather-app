@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import Search from './components/Search';
 import Preferences from './components/Preferences';
+import WeatherDays from './components/WeatherDays';
 import { useWeather } from './hooks/useWeather';
 import type { Location } from './api';
+import { TODAY_INDEX } from './api';
 import { DEFAULT_PREFERENCES } from './types';
 import type { UnitPreferences } from './types';
 
@@ -13,8 +15,21 @@ function App() {
   const [weatherLocation, setWeatherLocation] = useState<Location | null>(null);
   // canonical preferences used to fetch weather; only updated on a new search or an explicit Apply
   const [committed, setCommitted] = useState(DEFAULT_PREFERENCES);
+  // which of the 7 days in the window is selected; reset to today whenever a new location loads
+  const [selectedDayIndex, setSelectedDayIndex] = useState(TODAY_INDEX);
+  // tracks weatherLocation as of the last render, purely to detect the change below
+  const [previousWeatherLocation, setPreviousWeatherLocation] = useState(weatherLocation);
 
-  useWeather(weatherLocation, committed);
+  const { weather, loading, error } = useWeather(weatherLocation, committed);
+
+  // Adjusts state during render rather than in an effect, per React's own recommended
+  // pattern for "reset state when a prop/value changes" - safe because setting state while
+  // rendering makes React immediately re-render with the new value before committing
+  // anything to the screen, rather than committing the stale render first.
+  if (weatherLocation !== previousWeatherLocation) {
+    setPreviousWeatherLocation(weatherLocation);
+    setSelectedDayIndex(TODAY_INDEX);
+  }
 
   useEffect(() => {
     document.title = weatherLocation
@@ -57,6 +72,13 @@ function App() {
             hasSearchSelection={searchSelection !== null}
             committed={committed}
             onCommit={handleCommitPreferences}
+          />
+          <WeatherDays
+            weather={weather}
+            loading={loading}
+            error={error}
+            selectedDayIndex={selectedDayIndex}
+            onSelectDay={setSelectedDayIndex}
           />
         </div>
       </main>
