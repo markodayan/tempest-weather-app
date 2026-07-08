@@ -86,16 +86,18 @@ function attachCurrentWeatherToToday(
   });
 }
 
-export async function requestWeather({
-  latitude,
-  longitude,
-  timezone,
-  currentFields,
-  dailyFields,
-  temperatureUnit,
-  windSpeedUnit,
-  precipitationUnit,
-}: RequestWeatherOptions): Promise<WeatherReadings> {
+export async function requestWeather(options: RequestWeatherOptions): Promise<WeatherReadings> {
+  const {
+    latitude,
+    longitude,
+    timezone,
+    currentFields,
+    dailyFields,
+    temperatureUnit,
+    windSpeedUnit,
+    precipitationUnit,
+  } = options;
+
   const params = new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
