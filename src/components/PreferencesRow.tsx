@@ -1,21 +1,11 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import type { TemperatureUnit, WindSpeedUnit, PrecipitationUnit } from '../api';
+import type { UnitPreferences } from '../types';
+import { DEFAULT_PREFERENCES } from '../types';
 
 type RadioOption<T extends string> = {
   value: T;
   label: string;
-};
-
-type UnitPreferences = {
-  temperatureUnit: TemperatureUnit;
-  windSpeedUnit: WindSpeedUnit;
-  precipitationUnit: PrecipitationUnit;
-};
-
-const DEFAULT_PREFERENCES: UnitPreferences = {
-  temperatureUnit: 'celsius',
-  windSpeedUnit: 'kmh',
-  precipitationUnit: 'mm',
 };
 
 function preferencesEqual(a: UnitPreferences, b: UnitPreferences): boolean {
@@ -84,11 +74,18 @@ function UnitRadioGroup<T extends string>({
 type PreferencesRowProps = {
   weatherLocationId: number | null;
   hasSearchSelection: boolean;
+  committed: UnitPreferences;
+  onCommit: (preferences: UnitPreferences) => void;
 };
 
-export default function PreferencesRow({ weatherLocationId, hasSearchSelection }: PreferencesRowProps) {
+export default function PreferencesRow({
+  weatherLocationId,
+  hasSearchSelection,
+  committed,
+  onCommit,
+}: PreferencesRowProps) {
+  // in-progress, editing window
   const [draft, setDraft] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
-  const [committed, setCommitted] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
   const previousWeatherLocationId = useRef<number | null>(null);
 
   // Whenever the displayed weather location changes to a new location, treat whatever
@@ -100,11 +97,11 @@ export default function PreferencesRow({ weatherLocationId, hasSearchSelection }
       weatherLocationId !== null && weatherLocationId !== previousWeatherLocationId.current;
 
     if (isNewWeatherLocation) {
-      setCommitted(draft);
+      onCommit(draft);
     }
 
     previousWeatherLocationId.current = weatherLocationId;
-  }, [weatherLocationId, draft]);
+  }, [weatherLocationId, draft, onCommit]);
 
   // only worth prompting a refresh once there's an actual location's weather to refresh
   const showApplyButton = weatherLocationId !== null && !preferencesEqual(draft, committed);
@@ -113,8 +110,7 @@ export default function PreferencesRow({ weatherLocationId, hasSearchSelection }
   const applyButtonLabel = hasSearchSelection ? 'Apply and refresh' : 'Apply for current location';
 
   function handleApply() {
-    setCommitted(draft);
-    // TODO: trigger a weather refetch with weatherLocationId + committed once useWeather exists
+    onCommit(draft);
   }
 
   function handleTemperatureUnitChange(newUnit: TemperatureUnit) {

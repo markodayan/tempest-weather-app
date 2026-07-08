@@ -86,7 +86,10 @@ function attachCurrentWeatherToToday(
   });
 }
 
-export async function requestWeather(options: RequestWeatherOptions): Promise<WeatherReadings> {
+export async function requestWeather(
+  options: RequestWeatherOptions,
+  signal?: AbortSignal,
+): Promise<WeatherReadings> {
   const {
     latitude,
     longitude,
@@ -114,7 +117,7 @@ export async function requestWeather(options: RequestWeatherOptions): Promise<We
   let res: Response;
 
   try {
-    res = await fetch(`${FORECAST_BASE_URL}?${params.toString()}`);
+    res = await fetch(`${FORECAST_BASE_URL}?${params.toString()}`, { signal });
   } catch (err) {
     throw new Error('Network error while requesting weather forecast.', {
       cause: err,

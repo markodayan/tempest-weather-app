@@ -9,6 +9,8 @@ export type {
   WeatherDay,
   WeatherReadings,
   RequestWeatherOptions,
+  CurrentParamOption,
+  DailyParamOption,
   TemperatureUnit,
   WindSpeedUnit,
   PrecipitationUnit,
