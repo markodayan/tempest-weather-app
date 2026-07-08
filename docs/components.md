@@ -2,7 +2,7 @@
 
 Key actions:
 
-- <b>Search</b>: Triggers a fresh weather fetch request (search bar transitions to view-only state).
+- <b>Search</b>: Triggers a fresh weather fetch request (search bar transitions to view-mode state).
 - <b>Reset</b>: Resets the search bar to write-mode state
 - <b>Apply</b>: Triggers a weather fetch request with updated preferences
 
