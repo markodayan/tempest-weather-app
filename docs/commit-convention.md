@@ -33,8 +33,8 @@ Match the scope to the part of the app the commit touches. Common ones for this 
 
 - `app` — top-level app shell / layout
 - `search-bar` — the `SearchBar` component (search input, suggestions, preference toggles)
-- `weather-grid` — the `WeatherGrid` component (7-day tile grid)
-- `weather-detail` — the `DetailedWeatherReport` component
+- `weather-days` — the `WeatherDays` component (7-day tile grid)
+- `weather-detail` — the `SelectedDayReport` component
 - `geocode` / `forecast` — Open-Meteo data-layer code for each API
 - `playground` — the `playground/` sandbox
 - `config` — eslint/tsconfig/vite config not covered by `build`

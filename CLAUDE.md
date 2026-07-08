@@ -34,8 +34,8 @@ Only the native Fetch API is used (no Axios or similar).
 
 **Intended component structure** (per `docs/components.md`):
 - `SearchBar` — debounced location search with live top-5 suggestions, unit preference toggles (temperature, wind speed, precipitation), and an auto-refresh preference. Submitting locks in a `query` state that drives the fetch.
-- `WeatherGrid` — 7 tiles (3 prior days, current day, 3 forecast days); clicking a tile selects it.
-- `DetailedWeatherReport` — verbose weather data for whichever tile is selected; the current-day view differs from past/future-day views (e.g. freshness of data, day/night indication).
+- `WeatherDays` — 7 tiles (3 prior days, current day, 3 forecast days); clicking a tile selects it.
+- `SelectedDayReport` — verbose weather data for whichever tile is selected; the current-day view differs from past/future-day views (e.g. freshness of data, day/night indication).
 
 **State/behavior notes from `docs/strategy.md`** (design intent, verify against actual code before relying on it):
 - Search results and user preferences (units, auto-refresh) are intended to be cached/persisted across sessions.
