@@ -39,6 +39,16 @@ files, a new layer added, config changes), update it here.
   getting aborted, and suggestions/error lagging behind a cleared input by
   one debounce interval (see nuances below).
 
+## Nuances worth knowing before writing more component tests
+
+**`afterEach(cleanup)` has to be added explicitly.** Vitest's `globals`
+option isn't enabled in `vite.config.ts`, so `afterEach` isn't a global -
+`@testing-library/react`'s automatic cleanup-between-tests relies on
+detecting that global, so it silently never registered without this. Symptom
+was `getByText`/`getByRole` finding duplicate matches from a *previous*
+test's still-mounted DOM, not the current one. Fixed once, in
+`src/test/setup.ts`, so every component test benefits without repeating it.
+
 ## Nuances worth knowing before writing more hook tests
 
 **Fake timers + promises don't mix trivially.** `vi.advanceTimersByTime` only
