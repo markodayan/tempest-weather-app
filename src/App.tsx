@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import Search from './components/Search';
-import PreferencesRow from './components/PreferencesRow';
+import Preferences from './components/Preferences';
 import { useWeather } from './hooks/useWeather';
 import type { Location } from './api';
 import { DEFAULT_PREFERENCES } from './types';
@@ -46,7 +46,7 @@ function App() {
             onSelect={handleLocationSelect}
             onReset={handleLocationReset}
           />
-          <PreferencesRow
+          <Preferences
             weatherLocationId={weatherLocation?.id ?? null}
             hasSearchSelection={searchSelection !== null}
             committed={committed}

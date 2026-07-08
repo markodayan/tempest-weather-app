@@ -21,7 +21,7 @@ Local State:
 
 <br>
 
-## `PreferencesRow` Component
+## `Preferences` Component
 
 > Where a user can configure their preferences for units of measure in the weather data.
 

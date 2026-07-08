@@ -71,19 +71,19 @@ function UnitRadioGroup<T extends string>({
   );
 }
 
-type PreferencesRowProps = {
+type PreferencesProps = {
   weatherLocationId: number | null;
   hasSearchSelection: boolean;
   committed: UnitPreferences;
   onCommit: (preferences: UnitPreferences) => void;
 };
 
-export default function PreferencesRow({
+export default function Preferences({
   weatherLocationId,
   hasSearchSelection,
   committed,
   onCommit,
-}: PreferencesRowProps) {
+}: PreferencesProps) {
   // in-progress, editing window
   const [draft, setDraft] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
   const previousWeatherLocationId = useRef<number | null>(null);
