@@ -68,3 +68,13 @@ Steps to test:
 ### Test Case 7: Go through the above test cases, and for ones involving search, confirm whether updated preference state consistently yields the expected unit changes in the Weather data results.
 
 Todo
+
+### Todo
+
+If I search for location A and get its weather displayed, I should be able to clear the search bar and the weather for location A still showing.
+
+We now have an empty search bar and weather for Location A still showing. So how should we deal with preferences. What we can maybe do is update the button text from 'Apply and refesh' to 'Apply For Current Location'.
+
+If we did not reset the search bar, we should just leave it as 'Apply and refresh'
+
+Ideally, we want the button size to be proportionally the same for the button irrespective of the label text, so maybe we need to set some min width or something like that

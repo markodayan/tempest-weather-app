@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import type { Location, TemperatureUnit, WindSpeedUnit, PrecipitationUnit } from '../api';
+import type { TemperatureUnit, WindSpeedUnit, PrecipitationUnit } from '../api';
 
 type RadioOption<T extends string> = {
   value: T;
@@ -82,34 +82,39 @@ function UnitRadioGroup<T extends string>({
 }
 
 type PreferencesRowProps = {
-  chosenLocation: Location | null;
+  weatherLocationId: number | null;
+  hasSearchSelection: boolean;
 };
 
-export default function PreferencesRow({ chosenLocation }: PreferencesRowProps) {
+export default function PreferencesRow({ weatherLocationId, hasSearchSelection }: PreferencesRowProps) {
   const [draft, setDraft] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
   const [committed, setCommitted] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
-  const previousChosenLocation = useRef<Location | null>(null);
+  const previousWeatherLocationId = useRef<number | null>(null);
 
-  // Whenever a new search is submitted (chosenLocation goes from null to a location),
-  // treat whatever preferences are on-screen right now as already "applied" for that
-  // fetch, so the Apply button doesn't appear immediately just because the user changed
-  // a preference before searching.
+  // Whenever the displayed weather location changes to a new location, treat whatever
+  // preferences are on-screen right now as already "applied" for that fetch, so the
+  // Apply button doesn't appear immediately just because the user changed a preference
+  // before searching.
   useLayoutEffect(() => {
-    const isNewSearch = chosenLocation !== null && previousChosenLocation.current === null;
+    const isNewWeatherLocation =
+      weatherLocationId !== null && weatherLocationId !== previousWeatherLocationId.current;
 
-    if (isNewSearch) {
+    if (isNewWeatherLocation) {
       setCommitted(draft);
     }
 
-    previousChosenLocation.current = chosenLocation;
-  }, [chosenLocation, draft]);
+    previousWeatherLocationId.current = weatherLocationId;
+  }, [weatherLocationId, draft]);
 
   // only worth prompting a refresh once there's an actual location's weather to refresh
-  const showApplyButton = chosenLocation !== null && !preferencesEqual(draft, committed);
+  const showApplyButton = weatherLocationId !== null && !preferencesEqual(draft, committed);
+
+  // reset was hit but old weather is still showing, vs. a search is actively locked in
+  const applyButtonLabel = hasSearchSelection ? 'Apply and refresh' : 'Apply for current location';
 
   function handleApply() {
     setCommitted(draft);
-    // TODO: trigger a weather refetch with chosenLocation + committed once useWeather exists
+    // TODO: trigger a weather refetch with weatherLocationId + committed once useWeather exists
   }
 
   function handleTemperatureUnitChange(newUnit: TemperatureUnit) {
@@ -153,13 +158,13 @@ export default function PreferencesRow({ chosenLocation }: PreferencesRowProps) 
         onClick={handleApply}
         disabled={!showApplyButton}
         aria-hidden={!showApplyButton}
-        className={`rounded-full bg-primary px-4 py-1 text-xs font-stretch-condensed font-semibold text-white transition-all ease-out hover:opacity-90 ${
+        className={`min-w-52 text-center rounded-full bg-primary px-4 py-1 text-xs font-stretch-condensed font-semibold text-white transition-all ease-out hover:opacity-90 ${
           showApplyButton
             ? 'duration-500 translate-y-0 opacity-100'
             : 'duration-150 -translate-y-1.5 pointer-events-none opacity-0'
         }`}
       >
-        Apply and refresh
+        {applyButtonLabel}
       </button>
     </div>
   );

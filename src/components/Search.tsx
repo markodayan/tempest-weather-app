@@ -5,11 +5,12 @@ import type { Location } from '../api';
 import { formatLatitude, formatLongitude } from '../lib/coordinates';
 
 type SearchProps = {
-  chosenLocation: Location | null;
-  onLocationChange: (location: Location | null) => void;
+  searchSelection: Location | null;
+  onSelect: (location: Location) => void;
+  onReset: () => void;
 };
 
-export default function Search({ chosenLocation, onLocationChange }: SearchProps) {
+export default function Search({ searchSelection, onSelect, onReset }: SearchProps) {
   const { searchTerm, setSearchTerm, suggestions, loading, error } = useLocationSearch();
 
   // will remove dropdown after selection to avoid searchTerm state value not to immediately reopen to do another search for locations matching the term
@@ -25,7 +26,7 @@ export default function Search({ chosenLocation, onLocationChange }: SearchProps
 
   function handleSelect(location: Location) {
     setJustSelected(true);
-    onLocationChange(location);
+    onSelect(location);
   }
 
   // Used to submit query to weather API (todo) as well as managing component-level action state (whether user has chosen a location or not)
@@ -36,12 +37,12 @@ export default function Search({ chosenLocation, onLocationChange }: SearchProps
     if (suggestions.length === 0) return;
 
     setJustSelected(true);
-    onLocationChange(suggestions[0]);
+    onSelect(suggestions[0]);
   }
 
   // Reneables the searchbar input to allow the user to make a new search
   function resetSearch() {
-    onLocationChange(null);
+    onReset();
     setSearchTerm('');
   }
 
@@ -57,7 +58,7 @@ export default function Search({ chosenLocation, onLocationChange }: SearchProps
           </div>
 
           <label
-            className={` ${chosenLocation ? 'bg-search-locked-in-state' : 'bg-input-mode'} flex flex-1 justify-between border-2 border-search-field-border rounded-full px-3 `}
+            className={` ${searchSelection ? 'bg-search-locked-in-state' : 'bg-input-mode'} flex flex-1 justify-between border-2 border-search-field-border rounded-full px-3 `}
             htmlFor='search-input'
           >
             <input
@@ -71,28 +72,28 @@ export default function Search({ chosenLocation, onLocationChange }: SearchProps
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
               autoComplete='off'
-              disabled={!!chosenLocation}
-              hidden={!!chosenLocation}
+              disabled={!!searchSelection}
+              hidden={!!searchSelection}
             />
-            {!!chosenLocation && (
+            {!!searchSelection && (
               <div className=' flex-1 text-base py-2 ml-3 flex justify-start  rounded-lg'>
-                <span className='location-badge-bg px-2   rounded-lg'>{`${chosenLocation.location_title}, ${chosenLocation.location_area}, ${chosenLocation.location_country}`}</span>
+                <span className='location-badge-bg px-2   rounded-lg'>{`${searchSelection.location_title}, ${searchSelection.location_area}, ${searchSelection.location_country}`}</span>
               </div>
             )}
 
-            {!chosenLocation && (
+            {!searchSelection && (
               <button
                 type='submit'
-                aria-label='Search'
+                aria-label='Search new location'
                 className='p-2 text-primary transition-colors'
-                disabled={!!chosenLocation}
+                disabled={!!searchSelection}
               >
                 <SearchIcon className='h-5 w-5' />
               </button>
             )}
 
-            {!!chosenLocation && (
-              <button type='button' aria-label='Clear selected location' onClick={resetSearch}>
+            {!!searchSelection && (
+              <button type='button' aria-label='Reset location search' onClick={resetSearch}>
                 <X className='h-5 w-5 text-reset-search' strokeWidth={2} />
               </button>
             )}
