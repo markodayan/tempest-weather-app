@@ -87,6 +87,61 @@ The `current` fields we are requesting for the present day additional weather re
 weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,wind_speed_10m_max,wind_direction_10m_dominant,precipitation_probability_mean,precipitation_sum,precipitation_hours
 ```
 
+### Typed field options (`CurrentParamOption` / `DailyParamOption`)
+
+Open-Meteo's `current` and `daily` query params accept an open-ended list of field names, so `RequestWeatherOptions.currentFields`/`dailyFields` used to just be typed as `string[]` — nothing caught a typo'd or unsupported field name until (or unless) a request actually failed against the API. Instead, `src/api/types.ts` defines two literal string unions listing exactly the fields currently requested (the same two field lists above), and `currentFields`/`dailyFields` are typed against them:
+
+```ts
+export type CurrentParamOption =
+  | 'temperature_2m'
+  | 'relative_humidity_2m'
+  | 'apparent_temperature'
+  | 'is_day'
+  | 'precipitation'
+  | 'weather_code'
+  | 'wind_speed_10m'
+  | 'wind_direction_10m';
+
+export type DailyParamOption =
+  | 'sunrise'
+  | 'sunset'
+  | 'weather_code'
+  | 'temperature_2m_min'
+  | 'temperature_2m_max'
+  | 'wind_speed_10m_max'
+  | 'wind_direction_10m_dominant'
+  | 'precipitation_probability_mean'
+  | 'precipitation_sum'
+  | 'precipitation_hours';
+```
+
+These feed into `RequestWeatherOptions`, the shape `requestWeather` (`src/api/weather.ts`) accepts as its single argument:
+
+```ts
+export type RequestWeatherOptions = {
+  latitude: number;
+  longitude: number;
+  timezone: string;
+
+  currentFields: CurrentParamOption[];
+  dailyFields: DailyParamOption[];
+
+  temperatureUnit: TemperatureUnit;
+  windSpeedUnit: WindSpeedUnit;
+  precipitationUnit: PrecipitationUnit;
+};
+
+function requestWeather(options: RequestWeatherOptions): Promise<WeatherReadings>;
+```
+
+The unions are scoped to only the fields already in use, not Open-Meteo's full catalog of available variables. This is deliberate: it means opting into *any* new field — whether newly discovered in Open-Meteo's docs or simply not yet wired up — requires first adding it to the relevant union. That extra step is the point: every field ever requested is guaranteed to pass through one deliberate, documented decision, and a typo'd or invalid field name fails to compile rather than silently going out in a request.
+
+**To add a new field:**
+
+1. Confirm the exact field name in [Open-Meteo's docs](https://open-meteo.com/en/docs).
+2. Add it as a new member of `CurrentParamOption` (for the `current` section) or `DailyParamOption` (for `daily`) in `src/api/types.ts`.
+3. Include it in whichever `currentFields`/`dailyFields` array is actually passed to `requestWeather` — TypeScript only allows values that are members of the union you just extended.
+
 ### Normalised Weather Payload
 
 > We will be using the Weather API to return a flat array of weather data objects (each object corresponding to a day in the 7-day window)
