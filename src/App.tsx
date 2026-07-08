@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Search from './components/Search';
 import Preferences from './components/Preferences';
 import { useWeather } from './hooks/useWeather';
@@ -15,6 +15,12 @@ function App() {
   const [committed, setCommitted] = useState(DEFAULT_PREFERENCES);
 
   useWeather(weatherLocation, committed);
+
+  useEffect(() => {
+    document.title = weatherLocation
+      ? `${weatherLocation.location_title}, ${weatherLocation.location_area}, ${weatherLocation.location_country} Weather Forecast | Tempest`
+      : 'Tempest';
+  }, [weatherLocation]);
 
   // Restores the search bar's badge to weatherLocation when preferences are committed
   // while the search bar is in write-mode (e.g. "Apply for current location") - searchSelection
