@@ -158,9 +158,9 @@ export default function PreferencesRow({ weatherLocationId, hasSearchSelection }
         onClick={handleApply}
         disabled={!showApplyButton}
         aria-hidden={!showApplyButton}
-        className={`min-w-52 text-center rounded-full bg-primary px-4 py-1 text-xs font-stretch-condensed font-semibold text-white transition-all ease-out hover:opacity-90 ${
+        className={`min-w-52 text-center rounded-full bg-primary px-4 py-1 text-xs font-stretch-condensed font-semibold text-white transition-all ease-out ${
           showApplyButton
-            ? 'duration-500 translate-y-0 opacity-100'
+            ? 'duration-500 translate-y-0 opacity-100 hover:opacity-90'
             : 'duration-150 -translate-y-1.5 pointer-events-none opacity-0'
         }`}
       >
