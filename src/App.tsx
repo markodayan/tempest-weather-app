@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Search from './components/Search';
 import PreferencesRow from './components/PreferencesRow';
 import { useWeather } from './hooks/useWeather';
 import type { Location } from './api';
 import { DEFAULT_PREFERENCES } from './types';
+import type { UnitPreferences } from './types';
 
 function App() {
   // drives Search components badge/disabled-input UI, it gets cleared on reset.
@@ -14,6 +15,18 @@ function App() {
   const [committed, setCommitted] = useState(DEFAULT_PREFERENCES);
 
   useWeather(weatherLocation, committed);
+
+  // Restores the search bar's badge to weatherLocation when preferences are committed
+  // while the search bar is in write-mode (e.g. "Apply for current location") - searchSelection
+  // is the only one of the two that gets cleared, so weatherLocation is the only place left to
+  // pull it back from.
+  const handleCommitPreferences = useCallback(
+    (preferences: UnitPreferences) => {
+      setCommitted(preferences);
+      setSearchSelection(weatherLocation);
+    },
+    [weatherLocation],
+  );
 
   function handleLocationSelect(location: Location) {
     setSearchSelection(location);
@@ -37,7 +50,7 @@ function App() {
             weatherLocationId={weatherLocation?.id ?? null}
             hasSearchSelection={searchSelection !== null}
             committed={committed}
-            onCommit={setCommitted}
+            onCommit={handleCommitPreferences}
           />
         </div>
       </main>
