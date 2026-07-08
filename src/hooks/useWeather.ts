@@ -25,6 +25,13 @@ const DAILY_FIELDS: DailyParamOption[] = [
   'precipitation_probability_mean',
   'precipitation_sum',
   'precipitation_hours',
+  // newly added to work on weather UI
+  'apparent_temperature_min',
+  'apparent_temperature_max',
+  'apparent_temperature_mean',
+  'temperature_2m_mean',
+  'relative_humidity_2m_min',
+  'relative_humidity_2m_max',
 ];
 
 type UseWeatherResult = {
@@ -42,7 +49,10 @@ function toRequestKey(location: Location, preferences: UnitPreferences): string 
   ].join('|');
 }
 
-export function useWeather(location: Location | null, preferences: UnitPreferences): UseWeatherResult {
+export function useWeather(
+  location: Location | null,
+  preferences: UnitPreferences,
+): UseWeatherResult {
   const [weather, setWeather] = useState<WeatherReadings | null>(null);
   const [error, setError] = useState<string | null>(null);
   // the request key that weather/error currently reflect; while it lags behind the

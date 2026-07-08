@@ -48,7 +48,14 @@ export type DailyParamOption =
   | 'wind_direction_10m_dominant'
   | 'precipitation_probability_mean'
   | 'precipitation_sum'
-  | 'precipitation_hours';
+  | 'precipitation_hours'
+  // new types being added
+  | 'apparent_temperature_min'
+  | 'apparent_temperature_max'
+  | 'apparent_temperature_mean'
+  | 'temperature_2m_mean'
+  | 'relative_humidity_2m_min'
+  | 'relative_humidity_2m_max';
 
 export type RequestWeatherOptions = {
   latitude: number;
