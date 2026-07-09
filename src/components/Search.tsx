@@ -16,17 +16,39 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
   // will remove dropdown after selection to avoid searchTerm state value not to immediately reopen to do another search for locations matching the term
   const [justSelected, setJustSelected] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  // which suggestion the keyboard has moved to; -1 means none (focus stays on the input either way)
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
   const showDropdown = searchTerm.trim().length > 0 && !justSelected && isFocused;
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setJustSelected(false);
+    setHighlightedIndex(-1);
     setSearchTerm(e.target.value);
   }
 
   function handleSelect(location: Location) {
     setJustSelected(true);
+    setHighlightedIndex(-1);
     onSelect(location);
+  }
+
+  function handleInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!showDropdown || suggestions.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightedIndex((prev) => Math.min(prev + 1, suggestions.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedIndex((prev) => Math.max(prev - 1, -1));
+    } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+      e.preventDefault();
+      handleSelect(suggestions[highlightedIndex]);
+    } else if (e.key === 'Escape') {
+      setHighlightedIndex(-1);
+      e.currentTarget.blur();
+    }
   }
 
   // Used to submit query to weather API (todo) as well as managing component-level action state (whether user has chosen a location or not)
@@ -69,11 +91,26 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
               type='text'
               value={searchTerm}
               onChange={handleChange}
+              onKeyDown={handleInputKeyDown}
               onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
+              onBlur={() => {
+                setIsFocused(false);
+                setHighlightedIndex(-1);
+              }}
               autoComplete='off'
               disabled={!!searchSelection}
               hidden={!!searchSelection}
+              role='combobox'
+              aria-autocomplete='list'
+              aria-haspopup='listbox'
+              aria-owns='suggested-search-results'
+              aria-controls='suggested-search-results'
+              aria-expanded={showDropdown}
+              aria-activedescendant={
+                highlightedIndex >= 0
+                  ? `suggestion-option-${suggestions[highlightedIndex].id}`
+                  : undefined
+              }
             />
             {!!searchSelection && (
               <div className=' flex-1 text-base py-2 ml-3 flex justify-start  rounded-lg'>
@@ -102,7 +139,11 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
       </form>
 
       {showDropdown && (
-        <div className='absolute inset-x-0 top-full z-10 mt-2 overflow-hidden rounded-2xl bg-white shadow-lg'>
+        <div
+          id='suggested-search-results'
+          role='listbox'
+          className='absolute inset-x-0 top-full z-10 mt-2 overflow-hidden rounded-2xl bg-white shadow-lg'
+        >
           {loading && <p className='px-4 py-3 text-slate-400'>Searching…</p>}
 
           {!loading && error && <p className='px-4 py-3 text-red-500'>{error}</p>}
@@ -115,13 +156,18 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
 
           {!loading && !error && suggestions.length > 0 && (
             <ul>
-              {suggestions.map((location) => (
+              {suggestions.map((location, index) => (
                 <li key={location.id} className='border-b border-slate-100 last:border-none'>
                   <button
                     type='button'
+                    id={`suggestion-option-${location.id}`}
+                    role='option'
+                    aria-selected={index === highlightedIndex}
                     onClick={() => handleSelect(location)}
                     onMouseDown={(e) => e.preventDefault()} // keeps focus on the input, so blur never fires (important to override default mousedown behaviour of shifting focus since we are using it to control drop down)
-                    className='flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-50'
+                    className={`flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-100 ${
+                      index === highlightedIndex ? 'bg-slate-100' : ''
+                    }`}
                   >
                     <MapPin className='mt-1 h-5 w-5 shrink-0 text-slate-400' />
 
