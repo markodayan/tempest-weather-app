@@ -41,3 +41,15 @@ export function formatDayLabelLong(dateString: string, isToday: boolean): string
 export function formatTimeOfDay(isoDateTimeString: string): string {
   return isoDateTimeString.split('T')[1];
 }
+
+// Used by DayPreview's heading, e.g. "Friday" (no day/month, unlike the other labels)
+export function formatWeekdayLabel(dateString: string, isToday: boolean): string {
+  if (isToday) {
+    return 'Today';
+  }
+
+  return new Intl.DateTimeFormat('en-GB', {
+    weekday: 'long',
+    timeZone: 'UTC',
+  }).format(parseIsoDateUtc(dateString));
+}
