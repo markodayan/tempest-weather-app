@@ -15,8 +15,15 @@
   --color-search-locked-in-state: #f7f7f7;
   --color-reset-search: #979797;
 
+  /* Preferences  */
+  --color-non-active-pref-bg: #ffffff;
+  --color-non-active-pref-text: #666666;
+  --color-active-pref-bg: #1a4b96;
+  --color-active-pref-text: #d0e8f0;
+
   /* animation  */
   --animate-pulse-once: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) 1;
+  --animate-pref-text-pulse: pref-text-pulse 400ms ease-out 1;
 }
 
 @layer base {
@@ -57,6 +64,16 @@
 
   .fade-in-up-animation {
     animation: 100ms fadeInUp;
+  }
+
+  @keyframes pref-text-pulse {
+    0%,
+    100% {
+      color: var(--color-active-pref-bg);
+    }
+    50% {
+      color: color-mix(in srgb, var(--color-active-pref-bg) 55%, white);
+    }
   }
 
   .animation-delay-100 {

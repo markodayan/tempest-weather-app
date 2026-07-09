@@ -111,6 +111,10 @@ export default function Preferences({
   const [isExpanded, setIsExpanded] = useState(
     () => window.matchMedia('(min-width: 1280px)').matches,
   );
+  // true once the user has actually clicked the toggle - keeps the open-pulse quiet on
+  // desktop's default-expanded initial render, which isn't a user-triggered "open". Real
+  // state (not a ref) since it's read during render to compute the pulse className.
+  const [hasToggled, setHasToggled] = useState(false);
 
   // Whenever the displayed weather location changes to a new location, treat whatever
   // preferences are on-screen right now as already "applied" for that fetch, so the
@@ -154,22 +158,29 @@ export default function Preferences({
     <div>
       <button
         type='button'
-        onClick={() => setIsExpanded((prev) => !prev)}
+        onClick={() => {
+          setHasToggled(true);
+          setIsExpanded((prev) => !prev);
+        }}
         aria-expanded={isExpanded}
         aria-controls='preferences-content'
-        className={`flex w-full items-center justify-between gap-2 py-2 pr-4 transition-colors duration-[400ms] hover:text-active-pref-bg ${
+        className={`flex w-full items-center justify-between gap-2 py-2 pr-4 transition-colors duration-[300ms] hover:text-active-pref-bg ${
           isExpanded ? 'text-active-pref-bg' : 'text-slate-500'
         }`}
       >
-        <span className='text-sm font-medium'>Manage Unit Preferences</span>
+        <span
+          className={`text-sm font-medium ${isExpanded && hasToggled ? 'animate-pref-text-pulse' : ''}`}
+        >
+          Manage Unit Preferences
+        </span>
         <ChevronDown
-          className={`h-5 w-5 transition-transform duration-[400ms] ${isExpanded ? 'rotate-180' : ''}`}
+          className={`h-5 w-5 transition-transform duration-[300ms] ${isExpanded ? 'rotate-180' : ''} ${isExpanded && hasToggled ? 'animate-pref-text-pulse' : ''}`}
         />
       </button>
 
       <div
         id='preferences-content'
-        className={`grid transition-[grid-template-rows] duration-[400ms] ease-out ${
+        className={`grid transition-[grid-template-rows] duration-[300ms] ease-out ${
           isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
         }`}
       >
