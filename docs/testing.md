@@ -54,6 +54,16 @@ was `getByText`/`getByRole` finding duplicate matches from a *previous*
 test's still-mounted DOM, not the current one. Fixed once, in
 `src/test/setup.ts`, so every component test benefits without repeating it.
 
+**`window.matchMedia` isn't implemented by jsdom.** `Preferences.tsx`'s
+`isExpanded` state reads `window.matchMedia('(min-width: 1280px)').matches`
+once on mount to decide its default (expanded at/above the `xl:` breakpoint,
+collapsed below it). jsdom doesn't implement `matchMedia` at all by default,
+so rendering `Preferences` in a test as-is will throw
+`TypeError: window.matchMedia is not a function`. Whenever a
+`Preferences.test.tsx` gets written, it'll need a `matchMedia` mock/polyfill
+first - either globally in `src/test/setup.ts` (if other components end up
+needing it too) or stubbed per-test via `vi.stubGlobal('matchMedia', ...)`.
+
 ## Nuances worth knowing before writing more hook tests
 
 **Fake timers + promises don't mix trivially.** `vi.advanceTimersByTime` only
@@ -114,6 +124,6 @@ this hook needs to know not to rely on `suggestions`/`error` alone to detect
   Worth pinning down: request URL/params built correctly (this is where the
   `count`-vs-`countryCode` ordering gotcha lives), non-ok/network-error
   handling, and `weather.ts`'s normalisation logic.
-- Components: `Search`
+- Components: `Search`, `Preferences`
 - Integration (multiple components wired together, once more exist)
 - E2E (Playwright)

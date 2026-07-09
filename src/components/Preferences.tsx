@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import type { TemperatureUnit, WindSpeedUnit, PrecipitationUnit } from '../api';
 import type { UnitPreferences } from '../types';
 import {
@@ -50,9 +51,15 @@ function UnitRadioGroup<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div className='flex items-center gap-3'>
-      <span className='text-sm font-medium text-slate-500'>{legend}</span>
-      <div role='radiogroup' aria-label={legend} className='flex rounded-full bg-slate-800 p-1'>
+    <div className='flex w-full flex-col items-start gap-1.5 xl:w-auto xl:flex-row xl:items-center xl:gap-3'>
+      <span className='text-sm tracking-tighter xl:tracking-normal font-medium text-slate-500'>
+        {legend}
+      </span>
+      <div
+        role='radiogroup'
+        aria-label={legend}
+        className='flex w-full rounded-sm bg-non-active-pref-bg xl:w-auto xl:p-0.5'
+      >
         {options.map((option) => {
           const isActive = value === option.value;
 
@@ -60,8 +67,8 @@ function UnitRadioGroup<T extends string>({
             <label
               key={option.value}
               htmlFor={`${name}-${option.value}`}
-              className={`cursor-pointer rounded-full px-4 py-1.5 text-sm font-semibold transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary ${
-                isActive ? 'bg-primary text-white' : 'text-slate-300'
+              className={`flex-1 cursor-pointer rounded-sm px-3 py-0.5 text-center text-xs font-semibold transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary xl:flex-none xl:px-4 xl:py-1 xl:text-sm ${
+                isActive ? 'bg-active-pref-bg text-active-pref-text' : 'text-non-active-pref-text'
               }`}
             >
               <input
@@ -98,6 +105,12 @@ export default function Preferences({
   // in-progress, editing window
   const [draft, setDraft] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
   const previousWeatherLocationId = useRef<number | null>(null);
+  // collapsed by default below the xl breakpoint, expanded by default at/above it - matches
+  // Tailwind's xl: breakpoint (1280px), checked once on mount rather than kept in sync with
+  // resizing, since this only needs to set the initial state, not track the viewport live.
+  const [isExpanded, setIsExpanded] = useState(
+    () => window.matchMedia('(min-width: 1280px)').matches,
+  );
 
   // Whenever the displayed weather location changes to a new location, treat whatever
   // preferences are on-screen right now as already "applied" for that fetch, so the
@@ -122,6 +135,7 @@ export default function Preferences({
 
   function handleApply() {
     onCommit(draft);
+    setIsExpanded(false);
   }
 
   function handleTemperatureUnitChange(newUnit: TemperatureUnit) {
@@ -137,42 +151,70 @@ export default function Preferences({
   }
 
   return (
-    <div className='mx-auto flex w-full max-w-5xl flex-wrap items-center gap-x-10 gap-y-3 px-6 py-4'>
-      <UnitRadioGroup
-        legend='Temperature'
-        name='temperature-unit'
-        options={TEMPERATURE_OPTIONS}
-        value={draft.temperatureUnit}
-        onChange={handleTemperatureUnitChange}
-      />
-      <UnitRadioGroup
-        legend='Wind speed'
-        name='wind-speed-unit'
-        options={WIND_SPEED_OPTIONS}
-        value={draft.windSpeedUnit}
-        onChange={handleWindSpeedUnitChange}
-      />
-      <UnitRadioGroup
-        legend='Precipitation'
-        name='precipitation-unit'
-        options={PRECIPITATION_OPTIONS}
-        value={draft.precipitationUnit}
-        onChange={handlePrecipitationUnitChange}
-      />
-
+    <div>
       <button
         type='button'
-        onClick={handleApply}
-        disabled={!showApplyButton}
-        aria-hidden={!showApplyButton}
-        className={`min-w-56 text-center rounded-full bg-primary px-5 py-2 text-sm font-stretch-condensed font-semibold text-white transition-all ease-out ${
-          showApplyButton
-            ? 'duration-500 translate-y-0 opacity-100 hover:opacity-90'
-            : 'duration-150 -translate-y-1.5 pointer-events-none opacity-0'
+        onClick={() => setIsExpanded((prev) => !prev)}
+        aria-expanded={isExpanded}
+        aria-controls='preferences-content'
+        className={`flex w-full items-center justify-between gap-2 py-2 pr-4 transition-colors duration-[400ms] hover:text-active-pref-bg ${
+          isExpanded ? 'text-active-pref-bg' : 'text-slate-500'
         }`}
       >
-        {applyButtonLabel}
+        <span className='text-sm font-medium'>Manage Unit Preferences</span>
+        <ChevronDown
+          className={`h-5 w-5 transition-transform duration-[400ms] ${isExpanded ? 'rotate-180' : ''}`}
+        />
       </button>
+
+      <div
+        id='preferences-content'
+        className={`grid transition-[grid-template-rows] duration-[400ms] ease-out ${
+          isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        }`}
+      >
+        <div className='flex w-full flex-col items-start gap-y-5 overflow-hidden xl:flex-row xl:justify-evenly'>
+          <div className='flex-1 flex flex-wrap xl:flex-nowrap gap-x-5 justify-center  items-start xl:items-center xl:justify-between xl:pr-30 gap-y-2 xl:gap-y-0'>
+            <UnitRadioGroup
+              legend='Temperature'
+              name='temperature-unit'
+              options={TEMPERATURE_OPTIONS}
+              value={draft.temperatureUnit}
+              onChange={handleTemperatureUnitChange}
+            />
+
+            <UnitRadioGroup
+              legend='Rainfall/Snowfall'
+              name='precipitation-unit'
+              options={PRECIPITATION_OPTIONS}
+              value={draft.precipitationUnit}
+              onChange={handlePrecipitationUnitChange}
+            />
+
+            <UnitRadioGroup
+              legend='Wind speed'
+              name='wind-speed-unit'
+              options={WIND_SPEED_OPTIONS}
+              value={draft.windSpeedUnit}
+              onChange={handleWindSpeedUnitChange}
+            />
+          </div>
+
+          <button
+            type='button'
+            onClick={handleApply}
+            disabled={!showApplyButton}
+            aria-hidden={!showApplyButton}
+            className={`w-full xl:w-auto xl:min-w-56 text-center rounded-sm bg-active-pref-bg px-5 py-2 text-sm font-stretch-condensed font-semibold text-white transition-all ease-out ${
+              showApplyButton
+                ? 'duration-500 translate-y-0 opacity-100 hover:opacity-90'
+                : 'duration-150 -translate-y-1.5 pointer-events-none opacity-0'
+            }`}
+          >
+            {applyButtonLabel}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
