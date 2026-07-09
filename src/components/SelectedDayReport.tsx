@@ -22,9 +22,9 @@ type SelectedDayReportProps = {
 
 function ReportPanel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className='p-4'>
-      <h3 className='mb-3 text-sm font-semibold text-slate-700'>{title}</h3>
-      <div className='flex gap-8'>{children}</div>
+    <div className='p-8'>
+      <h3 className='mb-4 text-lg font-bold text-slate-700'>{title}</h3>
+      <div className='flex gap-10'>{children}</div>
     </div>
   );
 }
@@ -32,8 +32,8 @@ function ReportPanel({ title, children }: { title: string; children: React.React
 function Reading({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className='text-xs uppercase tracking-wide text-slate-400'>{label}</p>
-      <p className='text-xl font-semibold text-slate-800'>{value}</p>
+      <p className='text-xs font-medium uppercase tracking-wide text-slate-400'>{label}</p>
+      <p className='text-4xl font-bold text-slate-800'>{value}</p>
     </div>
   );
 }
@@ -66,9 +66,9 @@ export default function SelectedDayReport({
   const windDirectionDegrees = Number(day.wind_direction_10m_dominant);
 
   return (
-    <div className='mx-auto w-full max-w-5xl px-6 py-3'>
+    <div className='mx-auto w-full max-w-5xl px-6 py-4'>
       <div className='overflow-hidden  bg-white shadow-sm'>
-        <div className='flex items-center gap-3 border-t-4 border-primary px-4 py-3'>
+        <div className='flex items-center gap-4 border-t-4 border-primary px-6 py-4'>
           <button
             type='button'
             aria-label='Previous day'
@@ -76,7 +76,7 @@ export default function SelectedDayReport({
             onClick={() => onSelectDay(selectedDayIndex - 1)}
             className='text-slate-500 disabled:opacity-30'
           >
-            <ChevronLeft className='h-5 w-5' />
+            <ChevronLeft className='h-6 w-6' />
           </button>
           <button
             type='button'
@@ -85,13 +85,13 @@ export default function SelectedDayReport({
             onClick={() => onSelectDay(selectedDayIndex + 1)}
             className='text-slate-500 disabled:opacity-30'
           >
-            <ChevronRight className='h-5 w-5' />
+            <ChevronRight className='h-6 w-6' />
           </button>
-          <span className='font-semibold text-slate-800'>
+          <span className='text-lg font-semibold text-slate-800'>
             {formatDayLabelLong(day.date, day.isToday)}
           </span>
           <span className='text-slate-300'>|</span>
-          <span className='text-slate-600'>
+          <span className='text-lg text-slate-600'>
             {weatherLocation.location_title}, {weatherLocation.location_area},{' '}
             {weatherLocation.location_country}
           </span>
@@ -131,10 +131,12 @@ export default function SelectedDayReport({
               value={`${Math.round(Number(day.wind_speed_10m_max))}${windSpeedLabel}`}
             />
             <div>
-              <p className='text-xs uppercase tracking-wide text-slate-400'>Dominant direction</p>
-              <p className='flex items-center gap-1 text-xl font-semibold text-slate-800'>
+              <p className='text-xs font-medium uppercase tracking-wide text-slate-400'>
+                Dominant direction
+              </p>
+              <p className='flex items-center gap-2 text-4xl font-bold text-slate-800'>
                 <ArrowUp
-                  className='h-4 w-4'
+                  className='h-7 w-7'
                   style={{ transform: `rotate(${windDirectionDegrees}deg)` }}
                   aria-hidden='true'
                 />

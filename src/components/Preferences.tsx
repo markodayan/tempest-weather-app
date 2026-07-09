@@ -50,13 +50,13 @@ function UnitRadioGroup<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div role='radiogroup' aria-label={legend} className='flex items-center gap-3'>
-      <span className='text-xs font-medium text-slate-500'>{legend}</span>
+    <div role='radiogroup' aria-label={legend} className='flex items-center gap-4'>
+      <span className='text-sm font-medium text-slate-500'>{legend}</span>
       {options.map((option) => (
         <label
           key={option.value}
           htmlFor={`${name}-${option.value}`}
-          className='flex items-center gap-1 text-sm text-slate-600'
+          className='flex items-center gap-1.5 text-base text-slate-600'
         >
           <input
             type='radio'
@@ -65,7 +65,7 @@ function UnitRadioGroup<T extends string>({
             value={option.value}
             checked={value === option.value}
             onChange={() => onChange(option.value)}
-            className='accent-primary'
+            className='h-4 w-4 accent-primary'
           />
           {option.label}
         </label>
@@ -129,7 +129,7 @@ export default function Preferences({
   }
 
   return (
-    <div className='mx-auto flex w-full max-w-5xl flex-wrap items-center gap-x-8 gap-y-2 px-6 py-3'>
+    <div className='mx-auto flex w-full max-w-5xl flex-wrap items-center gap-x-10 gap-y-3 px-6 py-4'>
       <UnitRadioGroup
         legend='Temperature'
         name='temperature-unit'
@@ -157,7 +157,7 @@ export default function Preferences({
         onClick={handleApply}
         disabled={!showApplyButton}
         aria-hidden={!showApplyButton}
-        className={`min-w-52 text-center rounded-full bg-primary px-4 py-1 text-xs font-stretch-condensed font-semibold text-white transition-all ease-out ${
+        className={`min-w-56 text-center rounded-full bg-primary px-5 py-2 text-sm font-stretch-condensed font-semibold text-white transition-all ease-out ${
           showApplyButton
             ? 'duration-500 translate-y-0 opacity-100 hover:opacity-90'
             : 'duration-150 -translate-y-1.5 pointer-events-none opacity-0'
