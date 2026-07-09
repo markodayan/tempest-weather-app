@@ -50,26 +50,34 @@ function UnitRadioGroup<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div role='radiogroup' aria-label={legend} className='flex items-center gap-4'>
+    <div className='flex items-center gap-3'>
       <span className='text-sm font-medium text-slate-500'>{legend}</span>
-      {options.map((option) => (
-        <label
-          key={option.value}
-          htmlFor={`${name}-${option.value}`}
-          className='flex items-center gap-1.5 text-base text-slate-600'
-        >
-          <input
-            type='radio'
-            id={`${name}-${option.value}`}
-            name={name}
-            value={option.value}
-            checked={value === option.value}
-            onChange={() => onChange(option.value)}
-            className='h-4 w-4 accent-primary'
-          />
-          {option.label}
-        </label>
-      ))}
+      <div role='radiogroup' aria-label={legend} className='flex rounded-full bg-slate-800 p-1'>
+        {options.map((option) => {
+          const isActive = value === option.value;
+
+          return (
+            <label
+              key={option.value}
+              htmlFor={`${name}-${option.value}`}
+              className={`cursor-pointer rounded-full px-4 py-1.5 text-sm font-semibold transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary ${
+                isActive ? 'bg-primary text-white' : 'text-slate-300'
+              }`}
+            >
+              <input
+                type='radio'
+                id={`${name}-${option.value}`}
+                name={name}
+                value={option.value}
+                checked={isActive}
+                onChange={() => onChange(option.value)}
+                className='sr-only'
+              />
+              {option.label}
+            </label>
+          );
+        })}
+      </div>
     </div>
   );
 }
