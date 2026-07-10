@@ -15,6 +15,11 @@
   --color-search-locked-in-state: #f7f7f7;
   --color-reset-search: #979797;
 
+  /* Search  */
+  --color-location-badge-fill: #44a2f4;
+  --color-location-badge-text: #ffffff;
+  --color-location-badge-border: #92929200;
+
   /* Preferences  */
   --color-non-active-pref-bg: #ffffff;
   --color-non-active-pref-text: #666666;
@@ -30,6 +35,12 @@
 }
 
 @layer components {
+  .location-badge-colours {
+    background-color: var(--color-location-badge-fill);
+    border-color: var(--color-location-badge-border);
+    color: var(--color-location-badge-text);
+  }
+
   .sun-grad {
     color: linearGradient(315deg, #feff00, #18455a);
   }
