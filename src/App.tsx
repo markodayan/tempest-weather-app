@@ -84,10 +84,17 @@ function App() {
                 committed={committed}
                 onCommit={handleCommitPreferences}
               />
+              <hr className='mx-auto h-px mt-3 xl:mt-6 mb-5 xl:mb-1 bg-gradient-to-r from-transparent via-gray-400/50 to-transparent border-0' />
             </section>
           </div>
         </div>
-        {weatherLocation === null && <Landing onSelectLocation={handleLocationSelect} />}
+        {weatherLocation === null && (
+          <>
+            <Landing onSelectLocation={handleLocationSelect} />
+
+            <hr className='mx-auto h-px mt-0 xl:mt-0 mb-0 xl:mb-1 bg-gradient-to-r from-transparent via-gray-400/50 to-transparent border-0' />
+          </>
+        )}
         <div id='daily-forecast'>
           <DayPreview
             weather={weather}
