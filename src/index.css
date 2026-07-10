@@ -14,6 +14,10 @@
   --color-location-badge-text: #ffffff;
   --color-location-badge-border: #92929200;
 
+  /* Landing  */
+  --color-user-q: #5f86bb;
+  --color-cta: #424242;
+
   /* Weather Days Component  */
   --color-bg-selected-day: rgb(230, 230, 230);
   --color-bg-not-selected-day: rgba(254, 254, 254, 0.71);

@@ -111,15 +111,10 @@ export default function Landing({ onSelectLocation }: LandingProps) {
   return (
     <div
       id='landing-suggestions'
-      className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0  py-8 text-center'
+      className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 pt-1 pb-8 text-center'
     >
-      <p className='text-base text-slate-600'>
-        Tempest is a weather search service that shows the current day's weather, a 3-day forecast,
-        and 3 days of recent history - for any location in the world.
-      </p>
-
-      <p className='mt-6 text-sm font-medium text-slate-500'>
-        Need a suggestion to start? Select one of these locations:
+      <p className='text-xl font-extrabold xl:text-3xl text-user-q'>
+        Unsure what to search? <span className='text-cta font-bold'>Click a place below!</span>
       </p>
 
       <div className='mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4'>
