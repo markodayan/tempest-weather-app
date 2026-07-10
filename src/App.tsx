@@ -65,7 +65,7 @@ function App() {
   return (
     <div className='min-h-screen bg-page-background'>
       <main id='content' className=''>
-        <div id='location-search' className='backdrop-blur-2xl'>
+        <div id='location-search' className='relative z-20 backdrop-blur-2xl'>
           <div className='container px-6 xl:px-2 mx-auto'>
             <section
               id='location-search'
