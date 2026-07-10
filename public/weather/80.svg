@@ -11,7 +11,7 @@
       }
 
       .cls-3 {
-        fill: #aaa;
+        fill: #7f7f7f;
       }
 
       .cls-4 {
@@ -19,7 +19,7 @@
       }
 
       .cls-5 {
-        fill: #7f7f7f;
+        fill: #aaa;
       }
     </style>
     <filter id="luminosity-invert" x="7.01" y="13.4" width="36" height="23" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
