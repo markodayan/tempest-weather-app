@@ -6,6 +6,7 @@ import Landing from './components/Landing';
 import DayPreview from './components/DayPreview';
 import WeatherDays from './components/WeatherDays';
 import SelectedDayReport from './components/SelectedDayReport';
+import Footer from './components/Footer';
 import { useWeather } from './hooks/useWeather';
 import type { Location } from './api';
 import { TODAY_INDEX } from './api';
@@ -128,6 +129,7 @@ function App() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
