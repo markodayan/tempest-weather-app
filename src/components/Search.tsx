@@ -10,6 +10,16 @@ type SearchProps = {
   onReset: () => void;
 };
 
+// Approximate cutoff, not a pixel-measured one - past this many characters the full
+// "title, area, country" label is likely to wrap/overflow the badge, so just the title
+// (which is always what the user actually typed/recognised) is shown instead.
+const MAX_BADGE_LABEL_LENGTH = 30;
+
+function formatLocationBadgeLabel(location: Location): string {
+  const fullLabel = `${location.location_title}, ${location.location_area}, ${location.location_country}`;
+  return fullLabel.length > MAX_BADGE_LABEL_LENGTH ? location.location_title : fullLabel;
+}
+
 export default function Search({ searchSelection, onSelect, onReset }: SearchProps) {
   const { searchTerm, setSearchTerm, suggestions, loading, error } = useLocationSearch();
 
@@ -110,7 +120,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
           />
           {!!searchSelection && (
             <div className=' flex-1 text-1 xl:text-lg py-3 ml-3 flex justify-start  rounded-lg'>
-              <span className='location-badge-colours border px-3 py-0.5  rounded-lg '>{`${searchSelection.location_title}, ${searchSelection.location_area}, ${searchSelection.location_country}`}</span>
+              <span className='location-badge-colours border px-3 py-0.5  rounded-lg '>{formatLocationBadgeLabel(searchSelection)}</span>
             </div>
           )}
 
