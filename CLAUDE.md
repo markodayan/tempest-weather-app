@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Tempest is a weather application built for a take-home technical assessment (see `docs/assignment-instructions.md` for the full brief). It is a React + TypeScript SPA that shows current weather, a 3-day history, and a 3-day forecast for a searched location, with a detail view for whichever day is selected.
 
-The project is at an early scaffolding stage — `src/App.tsx` is currently a placeholder and the component architecture described below is the target design from `docs/`, not yet fully implemented.
+The project is feature-complete and submitted. `README.md` is the primary hiring-facing document (features, setup, design decisions); `ARCHITECTURE.md` covers state ownership and data flow in depth; `docs/post-assignment-thoughts.md` covers what was deliberately left out of scope and why. Read those before `docs/strategy.md`/`docs/components.md`/`docs/todo.md`, which are earlier-stage planning notes and may describe intent that changed once actually built.
 
 ## Commands
 
@@ -20,27 +20,31 @@ npm test           # run the Vitest suite once (jsdom environment, config in vit
 npm run test:watch  # Vitest in watch mode
 ```
 
-Playwright for E2E is specified in `docs/strategy.md` but not yet set up — add it when there's enough UI to drive end-to-end.
+Playwright for E2E was planned (per `docs/strategy.md`) but not set up in the time available — see `docs/post-assignment-thoughts.md` for why, and add it first if this project is picked back up.
 
 TypeScript uses project references (`tsconfig.json` → `tsconfig.app.json` for `src`/`playground`, `tsconfig.node.json` for Vite config). `npm run build` runs `tsc -b` across all references before bundling.
 
 ## Architecture
 
-**Data source**: Open-Meteo, via two APIs (no API key required):
-- **Geocoding API** (`geocoding-api.open-meteo.com/v1/search`) — resolves a free-text location search into lat/lon + place metadata, returning the top matches for search-as-you-type UX. See `playground/geocode.ts` for the request/response shape and normalized `LocationResult` type.
-- **Forecast API** — supplies current conditions plus the 3-day history/3-day forecast window.
+Full details (state ownership table, search→geocoding→weather data flow, the preferences draft/commit split, loading/error/missing-data handling) are in `ARCHITECTURE.md` — read that first for anything beyond the summary below.
+
+**Data source**: Open-Meteo, via two APIs (no API key required), both wrapped in `src/api/` (`geocode.ts`, `weather.ts`):
+- **Geocoding API** — resolves a free-text location search into lat/lon + place metadata for search-as-you-type suggestions. Includes country-hint disambiguation (`extractCountryHint`/`countryCodes.ts`) for common place names buried under more populous same-named locations elsewhere.
+- **Forecast API** — supplies current conditions plus the 3-day history/3-day forecast window. Always requested with `timezone=auto` rather than the geocoder's own `timezone` field, since some geocoding results omit it entirely (see `docs/error-investigations.md`).
 
 Only the native Fetch API is used (no Axios or similar).
 
-**Intended component structure** (per `docs/components.md`):
-- `SearchBar` — debounced location search with live top-5 suggestions, unit preference toggles (temperature, wind speed, precipitation), and an auto-refresh preference. Submitting locks in a `query` state that drives the fetch.
-- `WeatherDays` — 7 tiles (3 prior days, current day, 3 forecast days); clicking a tile selects it.
-- `SelectedDayReport` — verbose weather data for whichever tile is selected; the current-day view differs from past/future-day views (e.g. freshness of data, day/night indication).
+**Component structure** (`src/components/`):
+- `Branding` — logo/title/tagline; clicking the logo reloads the app (`<a href="/">`, no JS needed).
+- `Search` — debounced location search with live suggestions (ARIA combobox, full keyboard nav), plus the selected-location badge/reset UI.
+- `Preferences` — unit toggles (temperature, wind speed, precipitation) with a draft/apply flow; changes don't refetch until explicitly applied or a new location is searched.
+- `Landing` — suggested-city cards shown before any location has been searched.
+- `DayPreview` — photo-hero banner for the selected day, background image keyed to a weather "mood" bucket (`src/lib/weatherBackground.ts`).
+- `WeatherDays` — the 7-day tile grid (3 history, today, 3 forecast); clicking a tile selects it. Mobile: 2-column grid with the unpaired 7th tile spanning both columns.
+- `SelectedDayReport` — detailed panel-based report for whichever day is selected; missing fields render `-` via `src/lib/formatReading.ts` rather than leaking `NaN`.
+- `Footer`, `Skeleton` — page footer, and the shared loading-skeleton primitive used by `DayPreview`/`WeatherDays`/`SelectedDayReport`.
 
-**State/behavior notes from `docs/strategy.md`** (design intent, verify against actual code before relying on it):
-- Search results and user preferences (units, auto-refresh) are intended to be cached/persisted across sessions.
-- Current-day weather should reflect freshness (show time since last fetch) and a manual refresh affordance.
-- A custom hook is the planned mechanism for data retrieval/synchronization rather than a general-purpose state library, since the app has no broader extensibility requirements.
+**State management**: no global state library — all state (`searchSelection`, `weatherLocation`, committed preferences, `selectedDayIndex`) lives in `App.tsx` and flows down as props. `src/hooks/` (`useDebounce`, `useLocationSearch`, `useWeather`) are plain `useState`/`useEffect` hooks, not a data-fetching library — deliberate, since the app has one data domain and a shallow component tree. See `ARCHITECTURE.md` for the reasoning and `docs/post-assignment-thoughts.md` for what was cut (preference/search caching, auto-refresh polling, PWA support) and why.
 
 ## Styling
 

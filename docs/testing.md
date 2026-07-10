@@ -10,39 +10,65 @@ files, a new layer added, config changes), update it here.
   (imports `@testing-library/jest-dom/vitest` to extend `expect` with DOM
   matchers).
 - **@testing-library/react**, **@testing-library/user-event** — component
-  tests (`WeatherDays.test.tsx`) and the underlying hook tests above.
-- **Playwright** — planned for E2E per `docs/strategy.md`, not yet set up.
+  tests and the underlying hook tests below.
+- **Playwright** — planned for E2E per `docs/strategy.md`, not yet set up
+  (see `docs/post-assignment-thoughts.md`).
 
 ## Scripts
 
 - `npm test` — runs the suite once (`vitest run`); CI-safe default.
 - `npm run test:watch` — interactive watch mode (`vitest`).
 
+As of writing: **11 test files, 79 tests, all passing.**
+
 ## Current coverage
 
-- `src/lib/coordinates.test.ts` — `formatLatitude`/`formatLongitude`: sign →
-  hemisphere letter, degrees/minutes formatting, and the minute-rounding-to-60
-  carry into the next degree.
-- `src/api/countryCodes.test.ts` — `resolveCountryCode`/`extractCountryHint`:
+### Pure functions (`src/lib/`, `src/api/`) — no mocking, no DOM, no React
+
+- `coordinates.test.ts` — `formatLatitude`/`formatLongitude`: sign → hemisphere
+  letter, degrees/minutes formatting, and the minute-rounding-to-60 carry into
+  the next degree.
+- `countryCodes.test.ts` — `resolveCountryCode`/`extractCountryHint`:
   comma-separated form, plain trailing-words form (no comma), raw ISO-2 code
   passthrough, alias resolution, unrecognised-country fallback, and a
   regression case (`"New York"`) confirming an ordinary multi-word place name
   isn't misparsed as having a country hint.
+- `dates.test.ts` — the various day-label formatters (`formatDayLabelShort`,
+  `formatDayLabelCompact`, `formatDayLabelLong`), including a UTC-negative
+  timezone-boundary regression case.
+- `wind.test.ts` — `degreesToCompassDirection`: cardinal and intercardinal
+  points, and the 360°-wraparound boundary.
+- `weatherBackground.test.ts` — `getWeatherMood`/`getWeatherBackgroundSrc`:
+  every WMO-code-to-mood bucket (including the snow-shower codes that were
+  originally missing an explicit mapping — see `docs/weather-code-map.md`),
+  the neutral fallback, and the built asset path.
+- `formatReading.test.ts` — the missing-field-handling helper: formats a
+  present value, coerces a numeric string, returns `-` for `null`/`undefined`/
+  a non-numeric string, and doesn't mistake a real `0` for a missing value.
 
-  These two are pure-function suites — no mocking, no DOM, no React.
+### Hooks (`src/hooks/`)
 
-- `src/hooks/useDebounce.test.ts` — value doesn't update before the delay
-  elapses, updates once it does, rapid changes reset the timer so only the
-  final value ever commits, and the pending timer is cleared on unmount.
-- `src/hooks/useLocationSearch.test.ts` — debounced fetching, the `loading`
-  state while a request is in flight, error handling, superseded requests
-  getting aborted, and suggestions/error lagging behind a cleared input by
-  one debounce interval (see nuances below).
-- `src/components/WeatherDays.test.tsx` — renders one tile per day with its
-  label and rounded high/low temperatures, marks only the
-  `selectedDayIndex` tile as current, calls `onSelectDay` with the clicked
-  day's index, and the loading/error/no-data-yet states each render their
-  own thing with no tiles.
+- `useDebounce.test.ts` — value doesn't update before the delay elapses,
+  updates once it does, rapid changes reset the timer so only the final value
+  ever commits, and the pending timer is cleared on unmount.
+- `useLocationSearch.test.ts` — debounced fetching, the `loading` state while
+  a request is in flight, error handling, superseded requests getting
+  aborted, and suggestions/error lagging behind a cleared input by one
+  debounce interval (see nuances below).
+
+### Components (`src/components/`)
+
+- `WeatherDays.test.tsx` — one tile per day with its label and rounded
+  high/low temperatures, only `selectedDayIndex`'s tile marked current,
+  `onSelectDay` called with the clicked index, and the loading/error/
+  no-data-yet states each render their own thing with no tiles.
+- `DayPreview.test.tsx` — the weekday/temperature/condition/location/info-pill
+  content, the "Today" special case, and the loading/error/no-data states.
+- `SelectedDayReport.test.tsx` — the header's day label and 3-part location
+  name, each panel's unit suffix matching the selected preference, `-`
+  rendered for fields missing from the API response, the prev/next day
+  buttons' disabled boundaries and click behavior, and the loading/error/
+  no-data states.
 
 ## Nuances worth knowing before writing more component tests
 
@@ -63,6 +89,14 @@ so rendering `Preferences` in a test as-is will throw
 `Preferences.test.tsx` gets written, it'll need a `matchMedia` mock/polyfill
 first - either globally in `src/test/setup.ts` (if other components end up
 needing it too) or stubbed per-test via `vi.stubGlobal('matchMedia', ...)`.
+
+**Mobile/desktop dual-rendering doesn't need a viewport mock.** `WeatherDays`
+and `SelectedDayReport` render *both* the mobile-compact and desktop-full
+label variants at once (toggled purely via CSS `xl:hidden`/`xl:inline`, not
+conditional rendering), so tests can assert on either string directly without
+simulating a viewport width — see the `getAllByText('Today')` pattern in
+`WeatherDays.test.tsx` for the one place this required disambiguating between
+the two simultaneously-rendered copies.
 
 ## Nuances worth knowing before writing more hook tests
 
@@ -124,6 +158,8 @@ this hook needs to know not to rely on `suggestions`/`error` alone to detect
   Worth pinning down: request URL/params built correctly (this is where the
   `count`-vs-`countryCode` ordering gotcha lives), non-ok/network-error
   handling, and `weather.ts`'s normalisation logic.
-- Components: `Search`, `Preferences`
-- Integration (multiple components wired together, once more exist)
-- E2E (Playwright)
+- `src/lib/location.ts` (`formatLocationLabel`) — no dedicated test file yet.
+- Components: `Search`, `Preferences`, `Landing`, `Branding`, `Footer`,
+  `Skeleton` (the last is trivial enough it may not need its own test).
+- Integration (multiple components wired together through `App`).
+- E2E (Playwright) — see `docs/post-assignment-thoughts.md`.
