@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import Branding from './components/Branding';
 import Search from './components/Search';
 import Preferences from './components/Preferences';
+import Landing from './components/Landing';
+import DayPreview from './components/DayPreview';
 import WeatherDays from './components/WeatherDays';
 import SelectedDayReport from './components/SelectedDayReport';
 import { useWeather } from './hooks/useWeather';
@@ -61,35 +64,59 @@ function App() {
 
   return (
     <div className='min-h-screen bg-page-background'>
-      <main>
-        <div className='flex flex-col'>
-          <Search
-            searchSelection={searchSelection}
-            onSelect={handleLocationSelect}
-            onReset={handleLocationReset}
-          />
-          <Preferences
-            weatherLocationId={weatherLocation?.id ?? null}
-            hasSearchSelection={searchSelection !== null}
-            committed={committed}
-            onCommit={handleCommitPreferences}
-          />
-          <WeatherDays
+      <main id='content' className=''>
+        <div id='location-search' className='backdrop-blur-2xl'>
+          <div className='container px-6 xl:px-2 mx-auto'>
+            <section
+              id='location-search'
+              className='max-w-7xl mx-auto space-y-5 xl:space-y-2 pt-5 xl:pb-5'
+            >
+              <Branding />
+              <Search
+                searchSelection={searchSelection}
+                onSelect={handleLocationSelect}
+                onReset={handleLocationReset}
+              />
+              <Preferences
+                weatherLocationId={weatherLocation?.id ?? null}
+                hasSearchSelection={searchSelection !== null}
+                committed={committed}
+                onCommit={handleCommitPreferences}
+              />
+            </section>
+          </div>
+        </div>
+        {weatherLocation === null && <Landing onSelectLocation={handleLocationSelect} />}
+        <div id='daily-forecast'>
+          <DayPreview
             weather={weather}
-            loading={loading}
-            error={error}
-            selectedDayIndex={selectedDayIndex}
-            onSelectDay={setSelectedDayIndex}
-          />
-          <SelectedDayReport
-            weather={weather}
-            weatherLocation={weatherLocation}
             preferences={committed}
             loading={loading}
             error={error}
             selectedDayIndex={selectedDayIndex}
-            onSelectDay={setSelectedDayIndex}
           />
+        </div>
+        <div id='weekly-forecast'>
+          <div className='container'>
+            <WeatherDays
+              weather={weather}
+              loading={loading}
+              error={error}
+              selectedDayIndex={selectedDayIndex}
+              onSelectDay={setSelectedDayIndex}
+            />
+          </div>
+          <div className='container'>
+            <SelectedDayReport
+              weather={weather}
+              weatherLocation={weatherLocation}
+              preferences={committed}
+              loading={loading}
+              error={error}
+              selectedDayIndex={selectedDayIndex}
+              onSelectDay={setSelectedDayIndex}
+            />
+          </div>
         </div>
       </main>
     </div>

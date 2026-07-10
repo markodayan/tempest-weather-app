@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, SearchIcon, X } from 'lucide-react';
+import { MapPin, SearchIcon, X, ArrowRight } from 'lucide-react';
 import { useLocationSearch } from '../hooks/useLocationSearch';
 import type { Location } from '../api';
 import { formatLatitude, formatLongitude } from '../lib/coordinates';
@@ -69,72 +69,73 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
   }
 
   return (
-    <div className='relative w-full max-w-5xl mx-auto'>
-      <form onSubmit={handleSubmit}>
-        <div className={`flex  items-center gap-3 rounded-full bg-white px-6 py-5 shadow-lg`}>
-          <div className='flex items-center gap-2'>
-            <img src='/tempest-logo-trans.svg' alt='Tempest logo' className='h-6.5 w-6.5' />
-            <h2 className='text-[26px] font-stretch-extra-condensed  font-extrabold text-search-title-suffix'>
-              <span className=' text-tempest-title '>Tempest</span>
-            </h2>
-          </div>
+    <div id='search-bar-container' className='relative xl:py-2.5 '>
+      <form
+        id='location-search-form'
+        className='flex flex-col h-12 xl:h-14 '
+        onSubmit={handleSubmit}
+      >
+        <label htmlFor='location-search-input'></label>
+        <div className='flex items-center bg-input-mode border border-search-field-border rounded-sm'>
+          <SearchIcon className='h-5 xl:h-6 w-5 xl:w-6 ml-5  text-black/25' />
+          <input
+            name='search-term'
+            id='location-search-input'
+            className=' bg-white px-4 py-3 xl:px-4 xl:py-3.5 text-1 xl:text-lg min-h-12 xl:min-h-14 text-search-input-text outline-none placeholder:text-slate-400 flex-1'
+            placeholder='Enter a city, town or suburb'
+            type='text'
+            value={searchTerm}
+            onChange={handleChange}
+            onKeyDown={handleInputKeyDown}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              setIsFocused(false);
+              setHighlightedIndex(-1);
+            }}
+            autoComplete='off'
+            disabled={!!searchSelection}
+            hidden={!!searchSelection}
+            role='combobox'
+            aria-autocomplete='list'
+            aria-haspopup='listbox'
+            aria-owns='suggested-search-results'
+            aria-controls='suggested-search-results'
+            aria-expanded={showDropdown}
+            aria-activedescendant={
+              highlightedIndex >= 0
+                ? `suggestion-option-${suggestions[highlightedIndex].id}`
+                : undefined
+            }
+            required
+          />
+          {!!searchSelection && (
+            <div className=' flex-1 text-1 xl:text-lg py-3 ml-3 flex justify-start  rounded-lg'>
+              <span className='location-badge-colours border px-3 py-0.5  rounded-lg '>{`${searchSelection.location_title}, ${searchSelection.location_area}, ${searchSelection.location_country}`}</span>
+            </div>
+          )}
 
-          <label
-            className={` ${searchSelection ? 'bg-search-locked-in-state' : 'bg-input-mode'} flex flex-1 justify-between border-2 border-search-field-border rounded-full px-3 `}
-            htmlFor='search-input'
-          >
-            <input
-              name='search-term'
-              id='search-input'
-              className=' bg-transparent px-2 py-2 text-base text-slate-800 outline-none placeholder:text-slate-400 flex-1'
-              placeholder='Enter a city, town or suburb'
-              type='text'
-              value={searchTerm}
-              onChange={handleChange}
-              onKeyDown={handleInputKeyDown}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => {
-                setIsFocused(false);
-                setHighlightedIndex(-1);
-              }}
-              autoComplete='off'
+          {!searchSelection && (
+            <button
+              type='submit'
+              id='location-search-submit'
+              aria-label='Search new location'
+              className='px-4 py-2 transition-colors'
               disabled={!!searchSelection}
-              hidden={!!searchSelection}
-              role='combobox'
-              aria-autocomplete='list'
-              aria-haspopup='listbox'
-              aria-owns='suggested-search-results'
-              aria-controls='suggested-search-results'
-              aria-expanded={showDropdown}
-              aria-activedescendant={
-                highlightedIndex >= 0
-                  ? `suggestion-option-${suggestions[highlightedIndex].id}`
-                  : undefined
-              }
-            />
-            {!!searchSelection && (
-              <div className=' flex-1 text-base py-2 ml-3 flex justify-start  rounded-lg'>
-                <span className='location-badge-bg px-2   rounded-lg'>{`${searchSelection.location_title}, ${searchSelection.location_area}, ${searchSelection.location_country}`}</span>
-              </div>
-            )}
+            >
+              <ArrowRight className='h-5 xl:h-6 w-5 xl:w-6 text-black/85' />
+            </button>
+          )}
 
-            {!searchSelection && (
-              <button
-                type='submit'
-                aria-label='Search new location'
-                className='p-2 text-primary transition-colors'
-                disabled={!!searchSelection}
-              >
-                <SearchIcon className='h-5 w-5' />
-              </button>
-            )}
-
-            {!!searchSelection && (
-              <button type='button' aria-label='Reset location search' onClick={resetSearch}>
-                <X className='h-5 w-5 text-reset-search' strokeWidth={2} />
-              </button>
-            )}
-          </label>
+          {!!searchSelection && (
+            <button
+              type='button'
+              className='px-4 py-2'
+              aria-label='Reset location search'
+              onClick={resetSearch}
+            >
+              <X className='h-5 xl:h-6 w-5 xl:w-6 text-black/85' strokeWidth={2} />
+            </button>
+          )}
         </div>
       </form>
 
@@ -142,7 +143,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
         <div
           id='suggested-search-results'
           role='listbox'
-          className='absolute inset-x-0 top-full z-10 mt-2 overflow-hidden rounded-2xl bg-white shadow-lg'
+          className='absolute inset-x-2 xl:inset-x-6  z-10 mt-2 overflow-hidden rounded-2xl bg-white shadow-lg'
         >
           {loading && <p className='px-4 py-3 text-slate-400'>Searching…</p>}
 
@@ -172,7 +173,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
                     <MapPin className='mt-1 h-5 w-5 shrink-0 text-slate-400' />
 
                     <span>
-                      <span className='block text-slate-800'>
+                      <span className='block text-base text-slate-800'>
                         <span className='font-semibold'>{location.location_title}</span>,{' '}
                         {location.location_country}
                       </span>
