@@ -34,7 +34,6 @@ export default function WeatherDays({
       {weather.days.map((day, index) => {
         const isSelected = index === selectedDayIndex;
         const condition = getWeatherCondition(Number(day.weather_code));
-        const Icon = condition.icon;
 
         return (
           <button
@@ -49,7 +48,7 @@ export default function WeatherDays({
             <span className='text-xs font-semibold text-slate-600'>
               {formatDayLabelShort(day.date, day.isToday)}
             </span>
-            <Icon className='h-6 w-6 text-primary' aria-label={condition.label} />
+            <img src={condition.iconSrc} alt={condition.label} className='h-6 w-6' />
             <span className='text-sm'>
               <span className='font-semibold text-slate-800'>
                 {Math.round(Number(day.temperature_2m_max))}°
