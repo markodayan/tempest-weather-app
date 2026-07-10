@@ -23,8 +23,8 @@ type SelectedDayReportProps = {
 
 function ReportPanel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className='p-8'>
-      <h3 className='mb-4 text-lg font-bold text-slate-700'>{title}</h3>
+    <div className='p-8 w-full xl:w-[calc(50%-2px)] flex flex-col gap-6 bg-bg-selected-day '>
+      <h3 className='mb-4 text-2xl text-report-heading/90 font-bold'>{title}</h3>
       <div className='flex gap-10'>{children}</div>
     </div>
   );
@@ -33,7 +33,7 @@ function ReportPanel({ title, children }: { title: string; children: React.React
 function Reading({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className='text-xs font-medium uppercase tracking-wide text-slate-400'>{label}</p>
+      <p className='text-sm font-bold uppercase tracking-widest text-slate-400'>{label}</p>
       <p className='text-4xl font-bold text-slate-800'>{value}</p>
     </div>
   );
@@ -68,9 +68,9 @@ export default function SelectedDayReport({
   const windDirectionDegrees = Number(day.wind_direction_10m_dominant);
 
   return (
-    <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-4'>
-      <div className='overflow-hidden  bg-white shadow-sm'>
-        <div className='flex items-center gap-4 px-6 py-4'>
+    <section className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-4 mt-4'>
+      <div className='flex flex-col gap-y-4 overflow-hidden '>
+        <div className='flex items-center gap-4 px-6 py-4 bg-bg-selected-day rounded-lg shadow-xl '>
           <button
             type='button'
             aria-label='Previous day'
@@ -96,7 +96,7 @@ export default function SelectedDayReport({
           <span className='text-lg text-slate-600'>{formatLocationLabel(weatherLocation)}</span>
         </div>
 
-        <div className='grid grid-cols-1 divide-y divide-slate-100 sm:grid-cols-2 sm:divide-x sm:divide-y-0'>
+        <div className='flex flex-wrap gap-1'>
           <ReportPanel title='Temperature'>
             <Reading
               label='Daily high'
@@ -126,7 +126,7 @@ export default function SelectedDayReport({
 
           <ReportPanel title='Wind'>
             <Reading
-              label='Daily highest speed'
+              label='Daily high speed'
               value={`${Math.round(Number(day.wind_speed_10m_max))}${windSpeedLabel}`}
             />
             <div>
@@ -160,6 +160,6 @@ export default function SelectedDayReport({
           </ReportPanel>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
