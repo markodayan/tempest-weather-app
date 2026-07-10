@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { formatDayLabelShort, formatDayLabelLong, formatTimeOfDay } from './dates';
+import {
+  formatDayLabelShort,
+  formatDayLabelCompact,
+  formatDayLabelLong,
+  formatTimeOfDay,
+} from './dates';
 
 describe('formatDayLabelShort', () => {
   it('returns "Today" when isToday is true, regardless of the date', () => {
@@ -14,6 +19,16 @@ describe('formatDayLabelShort', () => {
     // 2026-01-01 00:00 UTC is still 2025-12-31 in negative-offset timezones (e.g. US) -
     // parsing/formatting must stay pinned to the date string, not the local clock.
     expect(formatDayLabelShort('2026-01-01', false)).toBe('Thu 1 Jan');
+  });
+});
+
+describe('formatDayLabelCompact', () => {
+  it('returns "Today" when isToday is true, regardless of the date', () => {
+    expect(formatDayLabelCompact('2026-07-09', true)).toBe('Today');
+  });
+
+  it('formats a non-today date as weekday, day - no month', () => {
+    expect(formatDayLabelCompact('2026-07-09', false)).toBe('Thu 9');
   });
 });
 
