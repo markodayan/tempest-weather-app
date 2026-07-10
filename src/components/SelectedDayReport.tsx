@@ -76,7 +76,7 @@ export default function SelectedDayReport({
             aria-label='Previous day'
             disabled={selectedDayIndex === 0}
             onClick={() => onSelectDay(selectedDayIndex - 1)}
-            className='text-slate-500 disabled:opacity-30'
+            className='cursor-pointer text-slate-500 transition-colors duration-300 hover:text-primary disabled:pointer-events-none disabled:opacity-30'
           >
             <ChevronLeft className='h-6 w-6' />
           </button>
@@ -85,7 +85,7 @@ export default function SelectedDayReport({
             aria-label='Next day'
             disabled={selectedDayIndex === TOTAL_DAYS - 1}
             onClick={() => onSelectDay(selectedDayIndex + 1)}
-            className='text-slate-500 disabled:opacity-30'
+            className='cursor-pointer text-slate-500 transition-colors duration-300 hover:text-primary disabled:pointer-events-none disabled:opacity-30'
           >
             <ChevronRight className='h-6 w-6' />
           </button>

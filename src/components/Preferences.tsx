@@ -67,8 +67,10 @@ function UnitRadioGroup<T extends string>({
             <label
               key={option.value}
               htmlFor={`${name}-${option.value}`}
-              className={`flex-1 cursor-pointer rounded-sm px-3 py-0.5 text-center text-xs font-semibold transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary xl:flex-none xl:px-4 xl:py-1 xl:text-sm ${
-                isActive ? 'bg-active-pref-bg text-active-pref-text' : 'text-non-active-pref-text'
+              className={`flex-1 cursor-pointer rounded-sm px-3 py-0.5 text-center text-xs font-semibold transition-colors duration-300 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary xl:flex-none xl:px-4 xl:py-1 xl:text-sm ${
+                isActive
+                  ? 'bg-active-pref-bg text-active-pref-text'
+                  : 'text-non-active-pref-text hover:bg-[color-mix(in_srgb,var(--color-active-pref-bg)_12%,white)] hover:text-active-pref-bg'
               }`}
             >
               <input
@@ -164,7 +166,7 @@ export default function Preferences({
         }}
         aria-expanded={isExpanded}
         aria-controls='preferences-content'
-        className={`flex w-full items-center justify-between gap-2 py-2 pr-4 transition-colors duration-[300ms] hover:text-active-pref-bg ${
+        className={`flex w-full cursor-pointer items-center justify-between gap-2 py-2 pr-4 transition-colors duration-[300ms] hover:text-active-pref-bg ${
           isExpanded ? 'text-active-pref-bg' : 'text-slate-500'
         }`}
       >

@@ -128,7 +128,7 @@ export default function Landing({ onSelectLocation }: LandingProps) {
             key={location.id}
             type='button'
             onClick={() => onSelectLocation(location)}
-            className='group relative aspect-4/3 overflow-hidden rounded-md transition-opacity duration-300 hover:opacity-80'
+            className='group relative aspect-4/3 cursor-pointer overflow-hidden rounded-md transition-opacity duration-300 hover:opacity-80'
           >
             <img
               src={location.imageSrc}

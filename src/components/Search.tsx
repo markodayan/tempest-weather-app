@@ -130,7 +130,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
               type='submit'
               id='location-search-submit'
               aria-label='Search new location'
-              className='px-4 py-2 transition-colors'
+              className='px-4 py-2 cursor-pointer transition-colors'
               disabled={!!searchSelection}
             >
               <ArrowRight className='h-5 xl:h-6 w-5 xl:w-6 text-black/85' />

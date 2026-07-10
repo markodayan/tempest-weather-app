@@ -50,9 +50,9 @@ export default function WeatherDays({
             type='button'
             onClick={() => onSelectDay(index)}
             aria-current={isSelected}
-            className={`flex flex-col min-w-[84px] rounded-lg shadow-lg  w-full items-center px-2 py-5 transition-colors ${
+            className={`flex flex-col min-w-[84px] cursor-pointer rounded-lg shadow-lg  w-full items-center px-2 py-5 transition-colors duration-300 ${
               isUnpaired ? 'col-span-2' : ''
-            } ${isSelected ? 'bg-bg-selected-day' : 'bg-bg-not-selected-day'}`}
+            } ${isSelected ? 'bg-bg-selected-day' : 'bg-bg-not-selected-day hover:bg-bg-selected-day'}`}
           >
             <span className='text-lg font-bold text-day-card-date xl:hidden'>
               {formatDayLabelCompact(day.date, day.isToday)}
