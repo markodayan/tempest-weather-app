@@ -39,7 +39,10 @@ describe('WeatherDays', () => {
     );
 
     expect(screen.getAllByRole('button')).toHaveLength(7);
-    expect(screen.getByText('Today')).toBeInTheDocument();
+    // Both the mobile-compact and desktop-full labels render at once (toggled via CSS
+    // breakpoints, not conditional rendering), so "Today" matches both of that tile's spans.
+    expect(screen.getAllByText('Today')).toHaveLength(2);
+    expect(screen.getByText('Fri 10')).toBeInTheDocument();
     expect(screen.getByText('Fri 10 Jul')).toBeInTheDocument();
     expect(screen.getByText('24°')).toBeInTheDocument();
     expect(screen.getByText('15°')).toBeInTheDocument();

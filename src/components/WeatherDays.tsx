@@ -1,6 +1,6 @@
 import { getWeatherCondition } from '../api';
 import type { WeatherReadings } from '../api';
-import { formatDayLabelShort } from '../lib/dates';
+import { formatDayLabelShort, formatDayLabelCompact } from '../lib/dates';
 
 type WeatherDaysProps = {
   weather: WeatherReadings | null;
@@ -18,7 +18,11 @@ export default function WeatherDays({
   onSelectDay,
 }: WeatherDaysProps) {
   if (loading) {
-    return <p className='mx-auto max-w-5xl px-6 py-3 text-slate-400'>Loading weather…</p>;
+    return (
+      <p className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-3 text-slate-400'>
+        Loading weather…
+      </p>
+    );
   }
 
   // DayPreview shows the friendly error state for a failed fetch; avoid repeating it here.
@@ -31,10 +35,14 @@ export default function WeatherDays({
   }
 
   return (
-    <div className='mx-auto grid w-full max-w-5xl grid-cols-7 gap-2 px-6 pt-3'>
+    <section className='grid grid-cols-2 gap-2 mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 xl:flex xl:justify-between xl:gap-x-2 mb-1'>
       {weather.days.map((day, index) => {
         const isSelected = index === selectedDayIndex;
         const condition = getWeatherCondition(Number(day.weather_code));
+        // 7 days doesn't split evenly into pairs - the odd one out spans both mobile
+        // columns instead of sitting alone next to an empty cell. col-span-2 is inert
+        // once xl:flex switches the container off grid, so no need to gate it further.
+        const isUnpaired = index === weather.days.length - 1;
 
         return (
           <button
@@ -42,23 +50,30 @@ export default function WeatherDays({
             type='button'
             onClick={() => onSelectDay(index)}
             aria-current={isSelected}
-            className={`flex flex-col items-center gap-1  border-t-4 bg-white px-2 py-3 shadow-sm transition-colors ${
-              isSelected ? 'border-primary' : 'border-transparent'
-            }`}
+            className={`flex flex-col min-w-[84px] rounded-lg shadow-lg  w-full items-center px-2 py-5 transition-colors ${
+              isUnpaired ? 'col-span-2' : ''
+            } ${isSelected ? 'bg-bg-selected-day' : 'bg-bg-not-selected-day'}`}
           >
-            <span className='text-xs font-semibold text-slate-600'>
+            <span className='text-lg font-bold text-day-card-date xl:hidden'>
+              {formatDayLabelCompact(day.date, day.isToday)}
+            </span>
+            <span className='hidden text-lg font-bold text-day-card-date xl:inline'>
               {formatDayLabelShort(day.date, day.isToday)}
             </span>
-            <img src={condition.iconSrc} alt={condition.label} className='h-6 w-6' />
-            <span className='text-sm'>
-              <span className='font-semibold text-slate-800'>
+            <img
+              src={condition.iconSrc}
+              alt={condition.label}
+              className='block h-[clamp(2.5rem,2rem_+_2.5vw,4rem)] w-[clamp(2.5rem,2rem_+_2.5vw,4rem)] xl:h-[clamp(3.5rem,3rem_+_2.5vw,5rem)] xl:w-[clamp(3.5rem,3rem_+_2.5vw,5rem)]'
+            />
+            <span className='flex flex-col items-center gap-0 text-lg xl:flex-row xl:gap-6'>
+              <span className='font-bold text-day-card-temp-max'>
                 {Math.round(Number(day.temperature_2m_max))}°
-              </span>{' '}
+              </span>
               <span className='text-slate-400'>{Math.round(Number(day.temperature_2m_min))}°</span>
             </span>
           </button>
         );
       })}
-    </div>
+    </section>
   );
 }
