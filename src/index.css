@@ -3,18 +3,11 @@
 @theme {
   --color-page-background: #f5f5f5;
   --color-primary: #147bbe;
-  --color-secondary: #06355bff;
-  --color-background: #1655d1;
   --color-tempest-title: #1a4b96;
   --color-search-title-suffix: #111111;
   --color-search-input-text: #0d0d0c;
   --color-search-field-border: #e8eaef;
-  --color-muted: #252e37;
-  --color-chosen-location-badge: black;
-  --color-potential-contrast: #ff171787;
   --color-input-mode: #fefefe;
-  --color-search-locked-in-state: #f7f7f7;
-  --color-reset-search: #979797;
 
   /* Search  */
   --color-location-badge-fill: #44a2f4;
@@ -24,6 +17,11 @@
   /* Weather Days Component  */
   --color-bg-selected-day: rgba(13, 13, 12, 0.09);
   --color-bg-not-selected-day: rgba(13, 13, 12, 0.05);
+  --color-day-card-date: rgb(96, 101, 116);
+  --color-day-card-temp-max: rgb(41, 41, 41);
+
+  /* Selected Day Report  */
+  --color-report-heading: #3c3c3c;
 
   /* Preferences  */
   --color-non-active-pref-bg: #ffffff;
