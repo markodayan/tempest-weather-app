@@ -90,6 +90,7 @@ function App() {
         <div id='daily-forecast'>
           <DayPreview
             weather={weather}
+            weatherLocation={weatherLocation}
             preferences={committed}
             loading={loading}
             error={error}
