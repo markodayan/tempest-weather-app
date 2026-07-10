@@ -31,7 +31,7 @@ export default function WeatherDays({
   }
 
   return (
-    <div className='mx-auto grid w-full max-w-5xl grid-cols-7 gap-2 px-6 py-3'>
+    <div className='mx-auto grid w-full max-w-5xl grid-cols-7 gap-2 px-6 pt-3'>
       {weather.days.map((day, index) => {
         const isSelected = index === selectedDayIndex;
         const condition = getWeatherCondition(Number(day.weather_code));

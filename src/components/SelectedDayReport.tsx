@@ -68,9 +68,9 @@ export default function SelectedDayReport({
   const windDirectionDegrees = Number(day.wind_direction_10m_dominant);
 
   return (
-    <div className='mx-auto w-full max-w-5xl px-6 py-4'>
+    <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-4'>
       <div className='overflow-hidden  bg-white shadow-sm'>
-        <div className='flex items-center gap-4 border-t-4 border-primary px-6 py-4'>
+        <div className='flex items-center gap-4 px-6 py-4'>
           <button
             type='button'
             aria-label='Previous day'

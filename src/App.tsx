@@ -99,7 +99,7 @@ function App() {
           />
         </div>
         <div id='weekly-forecast'>
-          <div className='container'>
+          <div>
             <WeatherDays
               weather={weather}
               loading={loading}
@@ -108,7 +108,7 @@ function App() {
               onSelectDay={setSelectedDayIndex}
             />
           </div>
-          <div className='container'>
+          <div>
             <SelectedDayReport
               weather={weather}
               weatherLocation={weatherLocation}
