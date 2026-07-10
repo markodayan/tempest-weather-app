@@ -1,9 +1,13 @@
 # Image Guidelines
 
-Guidelines for the `Landing` component's city suggestion card images (and any
-similar photographic assets added later).
+Guidelines for the `Landing` component's city suggestion card images and the
+`DayPreview` mood-background banners (and any similar photographic/graphic
+assets added later). These two sets have different aspect ratios/dimensions
+(see below) but share the same format/compression conventions.
 
-## Aspect ratio
+## Landing suggestion cards
+
+### Aspect ratio
 
 Use one consistent ratio across every card image — **4:3 or 3:2 (landscape)**.
 Most city/skyline photography is naturally composed in landscape, so this
@@ -18,12 +22,44 @@ overflows the target box. So picking photos that already roughly match the
 target ratio still matters, to avoid accidentally cropping out the
 skyline/landmark that makes each photo recognizable.
 
-## Dimensions
+### Dimensions
 
 These are small thumbnail cards, so source images don't need to be huge.
 Target roughly **800x600px at 4:3** (or the equivalent at 3:2) — about 2x the
 size the card actually renders at on screen, which covers retina/high-DPI
 displays without wastefully oversized files.
+
+## DayPreview mood-background banners
+
+### Aspect ratio
+
+**5:2 (2.5:1)** — matches the `aspect-5/2` set on the component. Doesn't need
+to be pixel-exact the way the Landing cards do, since these are abstract
+gradient/mood images rather than literal landmark photos - there's nothing
+specific `bg-cover` could crop out by accident here.
+
+### Dimensions
+
+This renders as a full-width banner, not a small tile - it can be up to
+~1280px wide on large desktop screens (`max-w-7xl` at the `xl:` breakpoint).
+Following the same "roughly 2x for retina" rule as above puts the target
+source size at roughly **2400x960 to 2560x1024px**. That's bigger than the
+Landing card images, but since these are smooth gradients rather than busy
+photographic detail, they should compress to a much smaller file size at
+that resolution than a real photo would - likely well under 30KB each even
+at full size.
+
+### Mood categories
+
+Five buckets, mapped from Open-Meteo's WMO weather codes in
+`src/lib/weatherBackground.ts` - see that file for the exact code → bucket
+mapping and the reasoning behind each grouping. Live in `public/day-preview/`:
+
+- `clear.webp`
+- `cloudy.webp`
+- `rainy.webp`
+- `snowy.webp`
+- `stormy.webp`
 
 ## Format: WebP, not PNG
 
