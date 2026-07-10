@@ -51,8 +51,12 @@ export default function DayPreview({
       <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-4'>
         <div className='flex flex-col items-center justify-center gap-2 rounded-md bg-slate-100 py-10 text-center'>
           <CloudOff className='h-8 w-8 text-slate-400' />
-          <p className='font-semibold text-slate-600'>Couldn&rsquo;t load the weather for this location.</p>
-          <p className='text-sm text-slate-400'>Try searching for it again, or pick a different location.</p>
+          <p className='font-semibold text-slate-600'>
+            Couldn&rsquo;t load the weather for this location.
+          </p>
+          <p className='text-sm text-slate-400'>
+            Try searching for it again, or pick a different location.
+          </p>
         </div>
       </div>
     );
@@ -80,7 +84,7 @@ export default function DayPreview({
             alt=''
             className='absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-110'
           />
-          <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent' />
+          <div className='absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.05)_38%,rgba(0,0,0,0.05)_62%,rgba(0,0,0,0.7)_100%)]' />
 
           <div className='relative flex h-full flex-col justify-between p-6'>
             <div className='flex items-center justify-between relative'>
