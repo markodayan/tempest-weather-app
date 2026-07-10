@@ -21,8 +21,9 @@ export default function WeatherDays({
     return <p className='mx-auto max-w-5xl px-6 py-3 text-slate-400'>Loading weather…</p>;
   }
 
+  // DayPreview shows the friendly error state for a failed fetch; avoid repeating it here.
   if (error) {
-    return <p className='mx-auto max-w-5xl px-6 py-3 text-red-500'>{error}</p>;
+    return null;
   }
 
   if (weather === null) {

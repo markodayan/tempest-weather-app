@@ -75,7 +75,11 @@ export function useWeather(
       {
         latitude: activeLocation.latitude,
         longitude: activeLocation.longitude,
-        timezone: activeLocation.timezone,
+        // 'auto' rather than activeLocation.timezone - Open-Meteo resolves the correct
+        // zone from lat/lon itself, and some geocoding results (e.g. country-level
+        // entries like "Greenland") come back with no timezone at all, which the
+        // forecast API otherwise rejects outright with a 400.
+        timezone: 'auto',
         currentFields: CURRENT_FIELDS,
         dailyFields: DAILY_FIELDS,
         temperatureUnit: preferences.temperatureUnit,

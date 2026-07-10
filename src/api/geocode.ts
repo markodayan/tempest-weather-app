@@ -23,12 +23,12 @@ type RawGeocodingItem = {
   admin1_id: number;
   admin2_id?: number;
   admin3_id?: number;
-  timezone: string;
+  timezone?: string;
   postcodes?: string[];
   population: number;
-  country_id: number;
-  country: string;
-  admin1: string;
+  country_id?: number;
+  country?: string;
+  admin1?: string;
   admin2?: string;
   admin3?: string;
 };
@@ -43,10 +43,10 @@ function normaliseLocation(item: RawGeocodingItem): Location {
     id: item.id,
     latitude: item.latitude,
     longitude: item.longitude,
-    timezone: item.timezone,
+    timezone: item.timezone ?? '',
     location_title: item.name,
     location_area: item.admin1 ?? '',
-    location_country: item.country,
+    location_country: item.country ?? '',
   };
 }
 

@@ -11,6 +11,7 @@ import type { Location } from './api';
 import { TODAY_INDEX } from './api';
 import { DEFAULT_PREFERENCES } from './types';
 import type { UnitPreferences } from './types';
+import { formatLocationLabel } from './lib/location';
 
 function App() {
   // drives Search components badge/disabled-input UI, it gets cleared on reset.
@@ -37,7 +38,7 @@ function App() {
 
   useEffect(() => {
     document.title = weatherLocation
-      ? `${weatherLocation.location_title}, ${weatherLocation.location_area}, ${weatherLocation.location_country} Weather Forecast | Tempest`
+      ? `${formatLocationLabel(weatherLocation)} Weather Forecast | Tempest`
       : 'Tempest';
   }, [weatherLocation]);
 

@@ -9,6 +9,7 @@ import {
 import type { UnitPreferences } from '../types';
 import { formatDayLabelLong, formatTimeOfDay } from '../lib/dates';
 import { degreesToCompassDirection } from '../lib/wind';
+import { formatLocationLabel } from '../lib/location';
 
 type SelectedDayReportProps = {
   weather: WeatherReadings | null;
@@ -51,8 +52,9 @@ export default function SelectedDayReport({
     return <p className='mx-auto max-w-5xl px-6 py-3 text-slate-400'>Loading weather…</p>;
   }
 
+  // DayPreview shows the friendly error state for a failed fetch; avoid repeating it here.
   if (error) {
-    return <p className='mx-auto max-w-5xl px-6 py-3 text-red-500'>{error}</p>;
+    return null;
   }
 
   if (weather === null || weatherLocation === null) {
@@ -91,10 +93,7 @@ export default function SelectedDayReport({
             {formatDayLabelLong(day.date, day.isToday)}
           </span>
           <span className='text-slate-300'>|</span>
-          <span className='text-lg text-slate-600'>
-            {weatherLocation.location_title}, {weatherLocation.location_area},{' '}
-            {weatherLocation.location_country}
-          </span>
+          <span className='text-lg text-slate-600'>{formatLocationLabel(weatherLocation)}</span>
         </div>
 
         <div className='grid grid-cols-1 divide-y divide-slate-100 sm:grid-cols-2 sm:divide-x sm:divide-y-0'>

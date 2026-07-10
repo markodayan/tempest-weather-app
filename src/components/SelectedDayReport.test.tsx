@@ -160,8 +160,8 @@ describe('SelectedDayReport', () => {
     expect(screen.queryByLabelText('Next day')).not.toBeInTheDocument();
   });
 
-  it('shows the error message and no report on error', () => {
-    render(
+  it('renders nothing on error, leaving the error state to DayPreview', () => {
+    const { container } = render(
       <SelectedDayReport
         weather={null}
         weatherLocation={testLocation}
@@ -173,8 +173,7 @@ describe('SelectedDayReport', () => {
       />,
     );
 
-    expect(screen.getByText('Forecast API request failed with status 500.')).toBeInTheDocument();
-    expect(screen.queryByLabelText('Next day')).not.toBeInTheDocument();
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('renders nothing when there is no weather yet and nothing is loading or errored', () => {

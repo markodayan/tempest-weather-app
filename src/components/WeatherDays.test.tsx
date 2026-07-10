@@ -89,8 +89,8 @@ describe('WeatherDays', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('shows the error message and no tiles on error', () => {
-    render(
+  it('renders nothing on error, leaving the error state to DayPreview', () => {
+    const { container } = render(
       <WeatherDays
         weather={null}
         loading={false}
@@ -100,8 +100,7 @@ describe('WeatherDays', () => {
       />,
     );
 
-    expect(screen.getByText('Forecast API request failed with status 500.')).toBeInTheDocument();
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('renders nothing when there is no weather yet and nothing is loading or errored', () => {

@@ -82,7 +82,7 @@ describe('DayPreview', () => {
     expect(screen.getByText('Loading weather…')).toBeInTheDocument();
   });
 
-  it('shows the error message on error', () => {
+  it('shows a friendly error message on error', () => {
     render(
       <DayPreview
         weather={null}
@@ -94,7 +94,9 @@ describe('DayPreview', () => {
       />,
     );
 
-    expect(screen.getByText('Forecast API request failed with status 500.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Couldn’t load the weather for this location.'),
+    ).toBeInTheDocument();
   });
 
   it('renders nothing when there is no weather yet and nothing is loading or errored', () => {

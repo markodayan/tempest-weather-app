@@ -1,4 +1,4 @@
-import { Thermometer, Droplets, Wind } from 'lucide-react';
+import { Thermometer, Droplets, Wind, CloudOff } from 'lucide-react';
 import { getWeatherCondition } from '../api';
 import type { Location, WeatherReadings } from '../api';
 import { TEMPERATURE_UNIT_LABELS, WIND_SPEED_UNIT_LABELS } from '../types';
@@ -47,7 +47,15 @@ export default function DayPreview({
   }
 
   if (error) {
-    return <p className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-3 text-red-500'>{error}</p>;
+    return (
+      <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-4'>
+        <div className='flex flex-col items-center justify-center gap-2 rounded-md bg-slate-100 py-10 text-center'>
+          <CloudOff className='h-8 w-8 text-slate-400' />
+          <p className='font-semibold text-slate-600'>Couldn&rsquo;t load the weather for this location.</p>
+          <p className='text-sm text-slate-400'>Try searching for it again, or pick a different location.</p>
+        </div>
+      </div>
+    );
   }
 
   if (weather === null || weatherLocation === null) {

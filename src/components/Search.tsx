@@ -3,6 +3,7 @@ import { MapPin, SearchIcon, X, ArrowRight } from 'lucide-react';
 import { useLocationSearch } from '../hooks/useLocationSearch';
 import type { Location } from '../api';
 import { formatLatitude, formatLongitude } from '../lib/coordinates';
+import { formatLocationLabel } from '../lib/location';
 
 type SearchProps = {
   searchSelection: Location | null;
@@ -16,7 +17,7 @@ type SearchProps = {
 const MAX_BADGE_LABEL_LENGTH = 30;
 
 function formatLocationBadgeLabel(location: Location): string {
-  const fullLabel = `${location.location_title}, ${location.location_area}, ${location.location_country}`;
+  const fullLabel = formatLocationLabel(location);
   return fullLabel.length > MAX_BADGE_LABEL_LENGTH ? location.location_title : fullLabel;
 }
 
@@ -184,12 +185,13 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
 
                     <span>
                       <span className='block text-base text-slate-800'>
-                        <span className='font-semibold'>{location.location_title}</span>,{' '}
-                        {location.location_country}
+                        <span className='font-semibold'>{location.location_title}</span>
+                        {location.location_country && `, ${location.location_country}`}
                       </span>
                       <span className='block text-sm text-slate-400'>
                         Lat.: {formatLatitude(location.latitude)} / Lon.:{' '}
-                        {formatLongitude(location.longitude)} / {location.location_area}
+                        {formatLongitude(location.longitude)}
+                        {location.location_area && ` / ${location.location_area}`}
                       </span>
                     </span>
                   </button>
