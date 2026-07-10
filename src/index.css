@@ -25,7 +25,9 @@
   --color-day-card-temp-max: rgb(41, 41, 41);
 
   /* Selected Day Report  */
-  --color-report-heading: #3c3c3c;
+  --color-report-heading: #535353;
+  --color-report-label: var(--color-location-badge-fill);
+  --color-report-reading: #1a4567;
 
   /* Preferences  */
   --color-non-active-pref-bg: #ffffff;

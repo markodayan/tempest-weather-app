@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, ArrowUp } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { TOTAL_DAYS } from '../api';
 import type { Location, WeatherReadings } from '../api';
 import {
@@ -7,9 +7,10 @@ import {
   PRECIPITATION_UNIT_LABELS,
 } from '../types';
 import type { UnitPreferences } from '../types';
-import { formatDayLabelLong, formatTimeOfDay } from '../lib/dates';
+import { formatDayLabelLong, formatDayLabelCompact, formatTimeOfDay } from '../lib/dates';
 import { degreesToCompassDirection } from '../lib/wind';
 import { formatLocationLabel } from '../lib/location';
+import { formatReading } from '../lib/formatReading';
 
 type SelectedDayReportProps = {
   weather: WeatherReadings | null;
@@ -23,18 +24,20 @@ type SelectedDayReportProps = {
 
 function ReportPanel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className='p-8 w-full xl:w-[calc(50%-2px)] flex flex-col gap-6 bg-bg-selected-day '>
-      <h3 className='mb-4 text-2xl text-report-heading/90 font-bold'>{title}</h3>
-      <div className='flex gap-10'>{children}</div>
+    <div className='p-8 w-full xl:w-[calc(50%-4px)] flex flex-col items-center xl:items-start gap-6 rounded-lg bg-bg-selected-day shadow-xl'>
+      <h3 className='mb-4 text-2xl text-report-heading/90 font-light xl:ml-3'>{title}</h3>
+      <div className='flex gap-10 xl:ml-3'>{children}</div>
     </div>
   );
 }
 
 function Reading({ label, value }: { label: string; value: string }) {
   return (
-    <div>
-      <p className='text-sm font-bold uppercase tracking-widest text-slate-400'>{label}</p>
-      <p className='text-4xl font-bold text-slate-800'>{value}</p>
+    <div className='text-center space-y-1 xl:space-y-0'>
+      <p className='text-sm font-medium uppercase tracking-widest text-report-label/80 xl:pb-2'>
+        {label}
+      </p>
+      <p className='text-2xl xl:text-3xl tracking-tight text-report-reading font-bold'>{value}</p>
     </div>
   );
 }
@@ -65,7 +68,6 @@ export default function SelectedDayReport({
   const temperatureLabel = TEMPERATURE_UNIT_LABELS[preferences.temperatureUnit];
   const windSpeedLabel = WIND_SPEED_UNIT_LABELS[preferences.windSpeedUnit];
   const precipitationLabel = PRECIPITATION_UNIT_LABELS[preferences.precipitationUnit];
-  const windDirectionDegrees = Number(day.wind_direction_10m_dominant);
 
   return (
     <section className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-4 mt-4'>
@@ -89,73 +91,79 @@ export default function SelectedDayReport({
           >
             <ChevronRight className='h-6 w-6' />
           </button>
-          <span className='text-lg font-semibold text-slate-800'>
+          <span className='text-lg font-semibold text-slate-800 xl:hidden'>
+            {formatDayLabelCompact(day.date, day.isToday)}
+          </span>
+          <span className='hidden text-lg font-semibold text-slate-800 xl:inline'>
             {formatDayLabelLong(day.date, day.isToday)}
           </span>
           <span className='text-slate-300'>|</span>
-          <span className='text-lg text-slate-600'>{formatLocationLabel(weatherLocation)}</span>
+          <span className='text-lg text-slate-600 xl:hidden'>{weatherLocation.location_title}</span>
+          <span className='hidden text-lg text-slate-600 xl:inline'>
+            {formatLocationLabel(weatherLocation)}
+          </span>
         </div>
 
-        <div className='flex flex-wrap gap-1'>
+        <div className='flex flex-wrap gap-2'>
           <ReportPanel title='Temperature'>
             <Reading
               label='Daily high'
-              value={`${Math.round(Number(day.temperature_2m_max))}${temperatureLabel}`}
+              value={formatReading(day.temperature_2m_max, (n) => `${Math.round(n)} ${temperatureLabel}`)}
             />
             <Reading
               label='Daily low'
-              value={`${Math.round(Number(day.temperature_2m_min))}${temperatureLabel}`}
+              value={formatReading(day.temperature_2m_min, (n) => `${Math.round(n)} ${temperatureLabel}`)}
             />
           </ReportPanel>
 
           <ReportPanel title='Sunrise and sunset'>
-            <Reading label='Sunrise' value={formatTimeOfDay(String(day.sunrise))} />
-            <Reading label='Sunset' value={formatTimeOfDay(String(day.sunset))} />
+            <Reading
+              label='Sunrise'
+              value={day.sunrise == null ? '-' : formatTimeOfDay(String(day.sunrise))}
+            />
+            <Reading
+              label='Sunset'
+              value={day.sunset == null ? '-' : formatTimeOfDay(String(day.sunset))}
+            />
           </ReportPanel>
 
           <ReportPanel title='Humidity'>
             <Reading
               label='Daily high'
-              value={`${Math.round(Number(day.relative_humidity_2m_max))}%`}
+              value={formatReading(day.relative_humidity_2m_max, (n) => `${Math.round(n)}%`)}
             />
             <Reading
               label='Daily low'
-              value={`${Math.round(Number(day.relative_humidity_2m_min))}%`}
+              value={formatReading(day.relative_humidity_2m_min, (n) => `${Math.round(n)}%`)}
             />
           </ReportPanel>
 
           <ReportPanel title='Wind'>
             <Reading
               label='Daily high speed'
-              value={`${Math.round(Number(day.wind_speed_10m_max))}${windSpeedLabel}`}
+              value={formatReading(day.wind_speed_10m_max, (n) => `${Math.round(n)} ${windSpeedLabel}`)}
             />
-            <div>
-              <p className='text-xs font-medium uppercase tracking-wide text-slate-400'>
-                Dominant direction
-              </p>
-              <p className='flex items-center gap-2 text-4xl font-bold text-slate-800'>
-                <ArrowUp
-                  className='h-7 w-7'
-                  style={{ transform: `rotate(${windDirectionDegrees}deg)` }}
-                  aria-hidden='true'
-                />
-                {degreesToCompassDirection(windDirectionDegrees)}
-              </p>
-            </div>
+            <Reading
+              label='Dominant direction'
+              value={formatReading(day.wind_direction_10m_dominant, degreesToCompassDirection)}
+            />
           </ReportPanel>
 
           <ReportPanel title='Rain probability'>
             <Reading
               label='Chance of rain'
-              value={`${Math.round(Number(day.precipitation_probability_mean))}%`}
+              value={formatReading(day.precipitation_probability_mean, (n) => `${Math.round(n)}%`)}
             />
           </ReportPanel>
 
           <ReportPanel title='Rain information'>
-            <Reading label='Rain hours' value={String(Number(day.precipitation_hours))} />
+            <Reading
+              label='Rain hours'
+              value={formatReading(day.precipitation_hours, (n) => String(n))}
+            />
             <Reading
               label='Rain sum'
-              value={`${Number(day.precipitation_sum).toFixed(1)}${precipitationLabel}`}
+              value={formatReading(day.precipitation_sum, (n) => `${n.toFixed(1)} ${precipitationLabel}`)}
             />
           </ReportPanel>
         </div>

@@ -73,17 +73,37 @@ describe('SelectedDayReport', () => {
       />,
     );
 
-    expect(screen.getByText('25°F')).toBeInTheDocument();
-    expect(screen.getByText('13°F')).toBeInTheDocument();
+    expect(screen.getByText('25 °F')).toBeInTheDocument();
+    expect(screen.getByText('13 °F')).toBeInTheDocument();
     expect(screen.getByText('06:51')).toBeInTheDocument();
     expect(screen.getByText('17:11')).toBeInTheDocument();
     expect(screen.getByText('94%')).toBeInTheDocument();
     expect(screen.getByText('68%')).toBeInTheDocument();
-    expect(screen.getByText('26mph')).toBeInTheDocument();
+    expect(screen.getByText('26 mph')).toBeInTheDocument();
     expect(screen.getByText('SSW')).toBeInTheDocument();
     expect(screen.getByText('40%')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.getByText('2.4in')).toBeInTheDocument();
+    expect(screen.getByText('2.4 in')).toBeInTheDocument();
+  });
+
+  it('renders "-" for fields missing from the API response instead of NaN/blank', () => {
+    render(
+      <SelectedDayReport
+        weather={buildWeather({
+          temperature_2m_max: null,
+          sunrise: null,
+          wind_direction_10m_dominant: null,
+        })}
+        weatherLocation={testLocation}
+        preferences={DEFAULT_PREFERENCES}
+        loading={false}
+        error={null}
+        selectedDayIndex={3}
+        onSelectDay={vi.fn()}
+      />,
+    );
+
+    expect(screen.getAllByText('-')).toHaveLength(3);
   });
 
   it('disables the previous-day button at the start of the window', () => {
