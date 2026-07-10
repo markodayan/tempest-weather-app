@@ -1,6 +1,9 @@
 import { getWeatherCondition } from '../api';
 import type { WeatherReadings } from '../api';
 import { formatDayLabelShort, formatDayLabelCompact } from '../lib/dates';
+import Skeleton from './Skeleton';
+
+const SKELETON_TILE_COUNT = 7;
 
 type WeatherDaysProps = {
   weather: WeatherReadings | null;
@@ -19,9 +22,24 @@ export default function WeatherDays({
 }: WeatherDaysProps) {
   if (loading) {
     return (
-      <p className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-3 text-slate-400'>
-        Loading weather…
-      </p>
+      <section
+        role='status'
+        aria-label='Loading weather'
+        className='grid grid-cols-2 gap-2 mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 xl:flex xl:justify-between xl:gap-x-2 mb-1'
+      >
+        {Array.from({ length: SKELETON_TILE_COUNT }).map((_, index) => (
+          <div
+            key={index}
+            className={`flex flex-col min-w-[84px] rounded-lg shadow-lg w-full items-center gap-2 px-2 py-5 bg-bg-not-selected-day ${
+              index === SKELETON_TILE_COUNT - 1 ? 'col-span-2' : ''
+            }`}
+          >
+            <Skeleton className='h-5 w-12' />
+            <Skeleton className='h-[clamp(2.5rem,2rem_+_2.5vw,4rem)] w-[clamp(2.5rem,2rem_+_2.5vw,4rem)] rounded-full xl:h-[clamp(3.5rem,3rem_+_2.5vw,5rem)] xl:w-[clamp(3.5rem,3rem_+_2.5vw,5rem)]' />
+            <Skeleton className='h-5 w-16' />
+          </div>
+        ))}
+      </section>
     );
   }
 

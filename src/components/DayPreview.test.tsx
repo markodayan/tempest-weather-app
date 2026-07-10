@@ -79,7 +79,7 @@ describe('DayPreview', () => {
       />,
     );
 
-    expect(screen.getByText('Loading weather…')).toBeInTheDocument();
+    expect(screen.getByRole('status', { name: 'Loading weather' })).toBeInTheDocument();
   });
 
   it('shows a friendly error message on error', () => {

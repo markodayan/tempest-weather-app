@@ -176,7 +176,7 @@ describe('SelectedDayReport', () => {
       />,
     );
 
-    expect(screen.getByText('Loading weather…')).toBeInTheDocument();
+    expect(screen.getByRole('status', { name: 'Loading weather' })).toBeInTheDocument();
     expect(screen.queryByLabelText('Next day')).not.toBeInTheDocument();
   });
 

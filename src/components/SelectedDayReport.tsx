@@ -11,6 +11,9 @@ import { formatDayLabelLong, formatDayLabelCompact, formatTimeOfDay } from '../l
 import { degreesToCompassDirection } from '../lib/wind';
 import { formatLocationLabel } from '../lib/location';
 import { formatReading } from '../lib/formatReading';
+import Skeleton from './Skeleton';
+
+const SKELETON_PANEL_COUNT = 6;
 
 type SelectedDayReportProps = {
   weather: WeatherReadings | null;
@@ -52,7 +55,44 @@ export default function SelectedDayReport({
   onSelectDay,
 }: SelectedDayReportProps) {
   if (loading) {
-    return <p className='mx-auto max-w-5xl px-6 py-3 text-slate-400'>Loading weather…</p>;
+    return (
+      <section
+        role='status'
+        aria-label='Loading weather'
+        className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-4 mt-4'
+      >
+        <div className='flex flex-col gap-y-4 overflow-hidden'>
+          <div className='flex items-center gap-4 px-6 py-4 bg-bg-selected-day rounded-lg shadow-xl'>
+            <Skeleton className='h-6 w-6 rounded-full' />
+            <Skeleton className='h-6 w-6 rounded-full' />
+            <Skeleton className='h-5 w-32' />
+            <span className='text-slate-300'>|</span>
+            <Skeleton className='h-5 w-40' />
+          </div>
+
+          <div className='flex flex-wrap gap-2'>
+            {Array.from({ length: SKELETON_PANEL_COUNT }).map((_, index) => (
+              <div
+                key={index}
+                className='p-8 w-full xl:w-[calc(50%-4px)] flex flex-col items-center xl:items-start gap-6 rounded-lg bg-bg-selected-day shadow-xl'
+              >
+                <Skeleton className='h-6 w-36' />
+                <div className='flex gap-10'>
+                  <div className='space-y-2'>
+                    <Skeleton className='h-3 w-16' />
+                    <Skeleton className='h-8 w-14' />
+                  </div>
+                  <div className='space-y-2'>
+                    <Skeleton className='h-3 w-16' />
+                    <Skeleton className='h-8 w-14' />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
   }
 
   // DayPreview shows the friendly error state for a failed fetch; avoid repeating it here.

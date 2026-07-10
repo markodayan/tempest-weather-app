@@ -5,6 +5,7 @@ import { TEMPERATURE_UNIT_LABELS, WIND_SPEED_UNIT_LABELS } from '../types';
 import type { UnitPreferences } from '../types';
 import { formatWeekdayLabel } from '../lib/dates';
 import { getWeatherBackgroundSrc } from '../lib/weatherBackground';
+import Skeleton from './Skeleton';
 
 type DayPreviewProps = {
   weather: WeatherReadings | null;
@@ -40,9 +41,32 @@ export default function DayPreview({
 }: DayPreviewProps) {
   if (loading) {
     return (
-      <p className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-3 text-slate-400'>
-        Loading weather…
-      </p>
+      <div
+        role='status'
+        aria-label='Loading weather'
+        className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-4 -mt-3'
+      >
+        <div className='relative h-56 overflow-hidden rounded-md bg-slate-200 xl:aspect-5/1 xl:h-auto'>
+          <div className='relative flex h-full flex-col justify-between p-6'>
+            <div className='flex items-start justify-between'>
+              <div className='space-y-3'>
+                <Skeleton className='h-3 w-20' />
+                <Skeleton className='h-10 w-32 xl:h-16' />
+                <Skeleton className='h-4 w-28' />
+              </div>
+              <div className='flex flex-col items-end gap-3'>
+                <Skeleton className='h-8 w-32 xl:h-16 xl:w-48' />
+                <Skeleton className='h-4 w-20' />
+              </div>
+            </div>
+            <div className='flex flex-wrap gap-2'>
+              <Skeleton className='h-7 w-28 rounded-full' />
+              <Skeleton className='h-7 w-24 rounded-full' />
+              <Skeleton className='h-7 w-36 rounded-full' />
+            </div>
+          </div>
+        </div>
+      </div>
     );
   }
 

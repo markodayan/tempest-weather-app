@@ -88,7 +88,7 @@ describe('WeatherDays', () => {
       <WeatherDays weather={null} loading={true} error={null} selectedDayIndex={3} onSelectDay={vi.fn()} />,
     );
 
-    expect(screen.getByText('Loading weather…')).toBeInTheDocument();
+    expect(screen.getByRole('status', { name: 'Loading weather' })).toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
