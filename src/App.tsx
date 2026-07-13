@@ -97,6 +97,15 @@ function App() {
           </>
         )}
         <div id='daily-forecast'>
+          <div>
+            <WeatherDays
+              weather={weather}
+              loading={loading}
+              error={error}
+              selectedDayIndex={selectedDayIndex}
+              onSelectDay={setSelectedDayIndex}
+            />
+          </div>
           <DayPreview
             weather={weather}
             weatherLocation={weatherLocation}
@@ -107,15 +116,6 @@ function App() {
           />
         </div>
         <div id='weekly-forecast'>
-          <div>
-            <WeatherDays
-              weather={weather}
-              loading={loading}
-              error={error}
-              selectedDayIndex={selectedDayIndex}
-              onSelectDay={setSelectedDayIndex}
-            />
-          </div>
           <div>
             <SelectedDayReport
               weather={weather}
