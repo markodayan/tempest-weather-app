@@ -19,7 +19,7 @@ files, a new layer added, config changes), update it here.
 - `npm test` — runs the suite once (`vitest run`); CI-safe default.
 - `npm run test:watch` — interactive watch mode (`vitest`).
 
-As of writing: **11 test files, 79 tests, all passing.**
+As of writing: **11 test files, 81 tests, all passing.**
 
 ## Current coverage
 
@@ -34,8 +34,8 @@ As of writing: **11 test files, 79 tests, all passing.**
   regression case (`"New York"`) confirming an ordinary multi-word place name
   isn't misparsed as having a country hint.
 - `dates.test.ts` — the various day-label formatters (`formatDayLabelShort`,
-  `formatDayLabelCompact`, `formatDayLabelLong`), including a UTC-negative
-  timezone-boundary regression case.
+  `formatDayLabelCompact`, `formatDayLabelMini`, `formatDayLabelLong`),
+  including a UTC-negative timezone-boundary regression case.
 - `wind.test.ts` — `degreesToCompassDirection`: cardinal and intercardinal
   points, and the 360°-wraparound boundary.
 - `weatherBackground.test.ts` — `getWeatherMood`/`getWeatherBackgroundSrc`:

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   formatDayLabelShort,
   formatDayLabelCompact,
+  formatDayLabelMini,
   formatDayLabelLong,
   formatTimeOfDay,
 } from './dates';
@@ -29,6 +30,16 @@ describe('formatDayLabelCompact', () => {
 
   it('formats a non-today date as weekday, day - no month', () => {
     expect(formatDayLabelCompact('2026-07-09', false)).toBe('Thu 9');
+  });
+});
+
+describe('formatDayLabelMini', () => {
+  it('returns "Today" when isToday is true, regardless of the date', () => {
+    expect(formatDayLabelMini('2026-07-09', true)).toBe('Today');
+  });
+
+  it('formats a non-today date as weekday only - no day or month', () => {
+    expect(formatDayLabelMini('2026-07-09', false)).toBe('Thu');
   });
 });
 
