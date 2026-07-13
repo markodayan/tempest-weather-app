@@ -1,4 +1,4 @@
-import { Thermometer, Droplets, Wind, CloudOff } from 'lucide-react';
+import { Thermometer, Droplets, Wind, CloudOff, ArrowUp, ArrowDown } from 'lucide-react';
 import { getWeatherCondition } from '../api';
 import type { Location, WeatherReadings } from '../api';
 import { TEMPERATURE_UNIT_LABELS, WIND_SPEED_UNIT_LABELS } from '../types';
@@ -6,6 +6,7 @@ import type { UnitPreferences } from '../types';
 import { formatWeekdayLabel } from '../lib/dates';
 import { getWeatherBackgroundSrc } from '../lib/weatherBackground';
 import Skeleton from './Skeleton';
+import { formatReading } from '../lib/formatReading';
 
 type DayPreviewProps = {
   weather: WeatherReadings | null;
@@ -59,6 +60,10 @@ export default function DayPreview({
                 <Skeleton className='h-4 w-20' />
               </div>
             </div>
+            <div className='flex gap-x-2 my-2'>
+              <Skeleton className='h-4 w-10' />
+              <Skeleton className='h-4 w-10' />
+            </div>
             <div className='flex flex-wrap gap-2'>
               <Skeleton className='h-7 w-28 rounded-full' />
               <Skeleton className='h-7 w-24 rounded-full' />
@@ -108,7 +113,7 @@ export default function DayPreview({
             alt=''
             className='absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-110'
           />
-          <div className='absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.05)_38%,rgba(0,0,0,0.05)_62%,rgba(0,0,0,0.7)_100%)]' />
+          <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-black/50 to-transparent' />
 
           <div className='relative flex h-full flex-col justify-between p-6'>
             <div className='flex items-center justify-between relative'>
@@ -131,6 +136,17 @@ export default function DayPreview({
                   {weatherLocation.location_country}
                 </p>
               </div>
+            </div>
+
+            <div className='flex gap-x-2 my-2 text-white text-md'>
+              <p className='flex items-center'>
+                <ArrowUp size={16} />
+                <span>{formatReading(day.temperature_2m_max, (n) => `${Math.round(n)}°`)}</span>
+              </p>
+              <p className='flex items-center opacity-60'>
+                <ArrowDown size={16} />
+                <span>{formatReading(day.temperature_2m_min, (n) => `${Math.round(n)}°`)}</span>
+              </p>
             </div>
 
             <div className='flex flex-wrap gap-2'>
@@ -159,7 +175,7 @@ export default function DayPreview({
           alt=''
           className='absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-110'
         />
-        <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent' />
+        <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-black/50 to-transparent' />
 
         <div className='relative flex h-full flex-col justify-between p-6'>
           <div className='flex items-center justify-between relative'>
@@ -182,6 +198,17 @@ export default function DayPreview({
                 {weatherLocation.location_country}
               </p>
             </div>
+          </div>
+
+          <div className='flex gap-x-2 my-2 text-white text-md'>
+            <p className='flex items-center'>
+              <ArrowUp size={16} />
+              <span>{formatReading(day.temperature_2m_max, (n) => `${Math.round(n)}°`)}</span>
+            </p>
+            <p className='flex items-center opacity-60'>
+              <ArrowDown size={16} />
+              <span>{formatReading(day.temperature_2m_min, (n) => `${Math.round(n)}°`)}</span>
+            </p>
           </div>
 
           <div className='flex flex-wrap gap-2'>
