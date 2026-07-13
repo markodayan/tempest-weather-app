@@ -55,7 +55,7 @@ export default function WeatherDays({
 
   return (
     <div className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 mb-1'>
-      <section className='grid grid-cols-7 overflow-clip rounded-lg shadow-lg xl:flex xl:justify-between xl:gap-x-0'>
+      <section className='grid grid-cols-7 overflow-clip xl:flex xl:justify-between xl:gap-x-0'>
         {weather.days.map((day, index) => {
           const isSelected = index === selectedDayIndex;
           const condition = getWeatherCondition(Number(day.weather_code));
@@ -70,9 +70,9 @@ export default function WeatherDays({
               type='button'
               onClick={() => onSelectDay(index)}
               aria-current={isSelected}
-              className={`flex flex-col w-[30px] cursor-pointer w-full items-center px-0 py-2 sm:py-5 transition-colors duration-300 ${
+              className={`flex flex-col w-[30px] cursor-pointer w-full items-center px-0 py-2 sm:py-5 transition-colors duration-300 rounded-lg ${
                 isUnpaired ? '' : ''
-              } ${isSelected ? 'bg-bg-selected-day' : 'bg-bg-not-selected-day hover:bg-bg-selected-day'}`}
+              } ${isSelected ? 'bg-bg-selected-day' : ' hover:bg-bg-selected-day'}`}
             >
               {/* Min Width View  */}
               <span
