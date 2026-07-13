@@ -76,19 +76,19 @@ export default function WeatherDays({
             >
               {/* Min Width View  */}
               <span
-                className={`block text-[9px] font-bold ${isSelected ? 'text-slate-600' : 'text-slate-400'} sm:hidden`}
+                className={`block text-sm font-bold ${isSelected ? 'text-selected-date' : 'text-slate-400'} sm:hidden`}
               >
                 {formatDayLabelMini(day.date, day.isToday)}
               </span>
               {/* Medium Width View  */}
               <span
-                className={`hidden text-[12px] font-bold ${isSelected ? 'text-slate-600' : 'text-slate-400'} sm:block xl:hidden`}
+                className={`hidden text-md font-bold ${isSelected ? 'text-selected-date' : 'text-slate-400'} sm:block xl:hidden`}
               >
                 {formatDayLabelCompact(day.date, day.isToday)}
               </span>
               {/* Large Width View  */}
               <span
-                className={`hidden text-sm font-bold ${isSelected ? 'text-slate-600' : 'text-slate-400'} xl:inline`}
+                className={`hidden text-lg font-bold ${isSelected ? 'text-selected-date' : 'text-slate-400'} xl:inline`}
               >
                 {formatDayLabelShort(day.date, day.isToday)}
               </span>
@@ -97,7 +97,7 @@ export default function WeatherDays({
                 alt={condition.label}
                 className='block size-day-card-icon-min sm:size-day-card-icon-sm xl:size-day-card-icon-xl'
               />
-              <span className='text-[9px] font-bold text-day-card-temp-max/70 sm:hidden'>
+              <span className='text-sm font-bold text-day-card-temp-max/70 sm:hidden'>
                 {formatReading(day.temperature_2m_mean, (n) => `${Math.round(n)}°`)}
               </span>
               <span className='hidden items-center gap-0 sm:flex sm:flex-col sm:text-sm xl:flex-row xl:gap-4 xl:text-sm'>

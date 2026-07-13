@@ -138,8 +138,10 @@ export default function SelectedDayReport({
             {formatDayLabelLong(day.date, day.isToday)}
           </span>
           <span className='text-slate-300'>|</span>
-          <span className='text-lg text-slate-600 xl:hidden'>{weatherLocation.location_title}</span>
-          <span className='hidden text-lg text-slate-600 xl:inline'>
+          <span className='text-lg font-medium text-header-location-report sm:hidden'>
+            {weatherLocation.location_title}
+          </span>
+          <span className='hidden text-lg font-medium text-header-location-report sm:inline'>
             {formatLocationLabel(weatherLocation)}
           </span>
         </div>

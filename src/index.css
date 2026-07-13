@@ -2,7 +2,7 @@
 
 @theme {
   --color-page-background: #23275b0b;
-  --color-primary: #147bbe;
+  --color-primary: #469aff;
   --color-tempest-title: #1a4b96;
   --color-search-title-suffix: #111111;
   --color-search-input-text: #0d0d0c;
@@ -10,7 +10,7 @@
   --color-input-mode: #fefefe;
 
   /* Search  */
-  --color-location-badge-fill: #4956ffd1;
+  --color-location-badge-fill: var(--color-primary);
   --color-location-badge-text: #ffffff;
   --color-location-badge-border: #92929200;
 
@@ -27,11 +27,13 @@
   /* Weather Days Component - condition icon size per docs/responsive-design.md's
      Small/Medium/Large View scheme (sm/xl breakpoints). Named here (rather than
      inline clamp() in the component) so all three tiers are tunable from one place. */
-  --spacing-day-card-icon-min: clamp(1.5rem, 2.25rem + 1vw, 1.9rem);
+  --spacing-day-card-icon-min: clamp(2.3rem, 2.25rem + 1vw, 2.3rem);
   --spacing-day-card-icon-sm: clamp(3rem, 2.5rem + 1.5vw, 3.6rem);
   --spacing-day-card-icon-xl: clamp(3rem, 3rem + 2.5vw, 3.6rem);
+  --color-selected-date: var(--color-primary);
 
   /* Selected Day Report  */
+  --color-header-location-report: var(--color-selected-date);
   --color-report-heading: #535353;
   --color-report-label: var(--color-location-badge-fill);
   --color-report-reading: #1a4567;
