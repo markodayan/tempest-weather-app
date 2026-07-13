@@ -148,11 +148,17 @@ export default function SelectedDayReport({
           <ReportPanel title='Temperature'>
             <Reading
               label='Daily high'
-              value={formatReading(day.temperature_2m_max, (n) => `${Math.round(n)} ${temperatureLabel}`)}
+              value={formatReading(
+                day.temperature_2m_max,
+                (n) => `${Math.round(n)} ${temperatureLabel}`,
+              )}
             />
             <Reading
               label='Daily low'
-              value={formatReading(day.temperature_2m_min, (n) => `${Math.round(n)} ${temperatureLabel}`)}
+              value={formatReading(
+                day.temperature_2m_min,
+                (n) => `${Math.round(n)} ${temperatureLabel}`,
+              )}
             />
           </ReportPanel>
 
@@ -181,7 +187,10 @@ export default function SelectedDayReport({
           <ReportPanel title='Wind'>
             <Reading
               label='Daily high speed'
-              value={formatReading(day.wind_speed_10m_max, (n) => `${Math.round(n)} ${windSpeedLabel}`)}
+              value={formatReading(
+                day.wind_speed_10m_max,
+                (n) => `${Math.round(n)} ${windSpeedLabel}`,
+              )}
             />
             <Reading
               label='Dominant direction'
@@ -203,7 +212,10 @@ export default function SelectedDayReport({
             />
             <Reading
               label='Rain sum'
-              value={formatReading(day.precipitation_sum, (n) => `${n.toFixed(1)} ${precipitationLabel}`)}
+              value={formatReading(
+                day.precipitation_sum,
+                (n) => `${n.toFixed(1)} ${precipitationLabel}`,
+              )}
             />
           </ReportPanel>
         </div>
