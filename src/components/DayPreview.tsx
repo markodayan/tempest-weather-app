@@ -106,8 +106,8 @@ export default function DayPreview({
   // day/night indication) has somewhere to go without reworking the non-today branch too.
   if (day.isToday) {
     return (
-      <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-4 -mt-3'>
-        <div className='group relative xl:aspect-5/1 overflow-hidden rounded-md'>
+      <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-2'>
+        <div className='group relative xl:aspect-5/1 overflow-hidden rounded-md shadow-lg'>
           <img
             src={backgroundSrc}
             alt=''
@@ -168,8 +168,8 @@ export default function DayPreview({
   }
 
   return (
-    <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-4 -mt-3'>
-      <div className='group relative xl:aspect-5/1 overflow-hidden rounded-md'>
+    <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-2'>
+      <div className='group relative xl:aspect-5/1 overflow-hidden rounded-md shadow-lg'>
         <img
           src={backgroundSrc}
           alt=''

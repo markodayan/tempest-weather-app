@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-page-background: #23275b0b;
+  --color-page-background: #f3f3f3;
   --color-primary: #469aff;
   --color-tempest-title: #1a4b96;
   --color-search-title-suffix: #111111;
@@ -19,15 +19,16 @@
   --color-cta: #424242;
 
   /* Weather Days Component  */
-  --color-bg-selected-day: rgb(230, 230, 230);
+  --color-bg-selected-day: rgb(252, 252, 252);
   --color-bg-not-selected-day: rgba(254, 254, 254, 0.71);
   --color-day-card-date: rgb(96, 101, 116);
   --color-day-card-temp-max: rgb(41, 41, 41);
+  --color-testing-sel: rgb(219, 235, 254);
 
   /* Weather Days Component - condition icon size per docs/responsive-design.md's
      Small/Medium/Large View scheme (sm/xl breakpoints). Named here (rather than
      inline clamp() in the component) so all three tiers are tunable from one place. */
-  --spacing-day-card-icon-min: clamp(2.3rem, 2.25rem + 1vw, 2.3rem);
+  --spacing-day-card-icon-min: clamp(2.5rem, 2.25rem + 1vw, 2.3rem);
   --spacing-day-card-icon-sm: clamp(3rem, 2.5rem + 1.5vw, 3.6rem);
   --spacing-day-card-icon-xl: clamp(3rem, 3rem + 2.5vw, 3.6rem);
   --color-selected-date: var(--color-primary);

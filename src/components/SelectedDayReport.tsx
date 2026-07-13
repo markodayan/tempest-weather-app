@@ -27,7 +27,7 @@ type SelectedDayReportProps = {
 
 function ReportPanel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className='p-8 w-full xl:w-[calc(50%-4px)] flex flex-col items-center xl:items-start gap-6 rounded-lg bg-bg-selected-day shadow-xl'>
+    <div className='p-8 w-full xl:w-[calc(50%-4px)] flex flex-col items-center xl:items-start gap-6 rounded-lg bg-white shadow-xl'>
       <h3 className='mb-4 text-2xl text-report-heading/90 font-light xl:ml-3'>{title}</h3>
       <div className='flex gap-10 xl:ml-3'>{children}</div>
     </div>
@@ -111,8 +111,8 @@ export default function SelectedDayReport({
 
   return (
     <section className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-4'>
-      <div className='flex flex-col gap-y-4 overflow-hidden '>
-        <div className='flex items-center gap-4 px-6 py-4 bg-bg-selected-day rounded-lg shadow-xl '>
+      <div className='flex flex-col gap-y-2'>
+        <div className='hidden sm:flex items-center gap-4 px-6 py-4 bg-white rounded-lg shadow-xl '>
           <button
             type='button'
             aria-label='Previous day'
