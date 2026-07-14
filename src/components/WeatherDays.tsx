@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { getWeatherCondition } from '../api';
 import type { WeatherReadings } from '../api';
 import { formatDayLabelShort, formatDayLabelCompact } from '../lib/dates';
@@ -20,6 +21,23 @@ export default function WeatherDays({
   selectedDayIndex,
   onSelectDay,
 }: WeatherDaysProps) {
+  const tileRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  // First centering (initial load/location switch) snaps instantly; every subsequent
+  // one (a tile click) animates, since the user can see the row move that time.
+  const hasCenteredOnceRef = useRef(false);
+
+  useEffect(() => {
+    const tile = tileRefs.current[selectedDayIndex];
+    if (!tile) return;
+
+    tile.scrollIntoView({
+      behavior: hasCenteredOnceRef.current ? 'smooth' : 'auto',
+      inline: 'center',
+      block: 'nearest',
+    });
+    hasCenteredOnceRef.current = true;
+  }, [selectedDayIndex, weather]);
+
   if (loading) {
     return (
       <section
@@ -60,6 +78,9 @@ export default function WeatherDays({
           return (
             <button
               key={day.date}
+              ref={(el) => {
+                tileRefs.current[index] = el;
+              }}
               type='button'
               onClick={() => onSelectDay(index)}
               aria-current={isSelected}
