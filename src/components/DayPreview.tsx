@@ -143,7 +143,7 @@ export default function DayPreview({
             <div className='mt-1 flex items-center'>
               <p className='xl:text-2xl font-semibold text-white/90'>{condition.label}</p>
               <p className='px-3 text-[21px] text-white/100'>|</p>
-              <p className='xl:text-2xl text-white/60 '>{temperatureCondition} Temperature</p>
+              <p className='xl:text-2xl text-white/60 '>{temperatureCondition}</p>
             </div>
 
             <div className='flex gap-x-2 my-2 text-white text-md'>
@@ -209,7 +209,7 @@ export default function DayPreview({
           <div className='mt-1 flex items-center'>
             <p className='xl:text-2xl font-semibold text-white/90'>{condition.label}</p>
             <p className='px-3 text-[21px] text-white/100'>|</p>
-            <p className='xl:text-2xl text-white/60 '>{temperatureCondition} Temperature</p>
+            <p className='xl:text-2xl text-white/60 '>{temperatureCondition}</p>
           </div>
 
           <div className='flex gap-x-2 my-2 text-white text-md'>

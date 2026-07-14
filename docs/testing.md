@@ -40,7 +40,7 @@ As of writing: **12 test files, 82 tests, all passing.**
   points, and the 360°-wraparound boundary.
 - `weatherBackground.test.ts` — `getWeatherMood`/`getWeatherBackgroundSrc`:
   every WMO-code-to-mood bucket (including the snow-shower codes that were
-  originally missing an explicit mapping — see `docs/weather-code-map.md`),
+  originally missing an explicit mapping — see `docs/weather-data-mapping.md`),
   the neutral fallback, and the built asset path.
 - `formatReading.test.ts` — the missing-field-handling helper: formats a
   present value, coerces a numeric string, returns `-` for `null`/`undefined`/

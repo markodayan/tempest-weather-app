@@ -8,11 +8,11 @@ describe('getTemperatureCondition', () => {
     expect(getTemperatureCondition(8, 'celsius')).toBe('Cold');
     expect(getTemperatureCondition(4, 'celsius')).toBe('Cold');
     expect(getTemperatureCondition(11, 'celsius')).toBe('Chilly');
-    expect(getTemperatureCondition(19, 'celsius')).toBe('Mild');
+    expect(getTemperatureCondition(19, 'celsius')).toBe('Temperate');
     expect(getTemperatureCondition(25, 'celsius')).toBe('Warm');
     expect(getTemperatureCondition(31, 'celsius')).toBe('Hot');
-    expect(getTemperatureCondition(32, 'celsius')).toBe('Scorching');
-    expect(getTemperatureCondition(40, 'celsius')).toBe('Scorching');
+    expect(getTemperatureCondition(32, 'celsius')).toBe('Scorching Hot');
+    expect(getTemperatureCondition(40, 'celsius')).toBe('Scorching Hot');
   });
 
   it('converts Fahrenheit back to Celsius before bucketing, so the label matches the physical temperature regardless of display unit', () => {
@@ -21,6 +21,6 @@ describe('getTemperatureCondition', () => {
     // 0°C == 32°F
     expect(getTemperatureCondition(32, 'fahrenheit')).toBe('Freezing');
     // 100°F == ~37.8°C
-    expect(getTemperatureCondition(100, 'fahrenheit')).toBe('Scorching');
+    expect(getTemperatureCondition(100, 'fahrenheit')).toBe('Scorching Hot');
   });
 });

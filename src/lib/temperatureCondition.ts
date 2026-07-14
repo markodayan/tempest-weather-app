@@ -10,11 +10,11 @@ const CELSIUS_UPPER_BOUNDS: [number, string][] = [
   [0, 'Freezing'],
   [8, 'Cold'],
   [13, 'Chilly'],
-  [19, 'Mild'],
+  [19, 'Temperate'],
   [25, 'Warm'],
   [31, 'Hot'],
 ];
-const HOTTEST_CONDITION = 'Scorching';
+const HOTTEST_CONDITION = 'Scorching Hot';
 
 export function getTemperatureCondition(value: number, unit: TemperatureUnit): string {
   const celsius =

@@ -1,7 +1,9 @@
-# Weather Code Map
+# Weather Data Mapping
 
-How Open-Meteo's WMO weather codes (`src/api/weatherCodes.ts`) map to the
-`DayPreview` mood buckets and background graphics (`src/lib/weatherBackground.ts`).
+How raw Open-Meteo readings map to the labels/graphics this app displays:
+WMO weather codes (`src/api/weatherCodes.ts`) to `DayPreview` mood buckets and
+background graphics (`src/lib/weatherBackground.ts`), and temperature readings
+to condition labels (`src/lib/temperatureCondition.ts`).
 
 ## Weather code → mood → graphic → icon
 
@@ -49,3 +51,21 @@ falls back to the closest available icon (85→71, 86→75, 96/99→95).
 | rainy | `rainy.webp` | 51, 53, 55, 61, 63, 80 |
 | snowy | `snowy.webp` | 71, 73, 75, 77, 85, 86 |
 | stormy | `stormy.webp` | 56, 57, 65, 66, 67, 81, 82, 95, 96, 99 |
+
+## Temperature → condition label
+
+`getTemperatureCondition` (`src/lib/temperatureCondition.ts`) buckets a
+reading into one of these labels, shown in `DayPreview` next to the weather
+condition (e.g. "Clear sky | Scorching Hot"). Bucket boundaries are always
+Celsius - a Fahrenheit reading is converted back to Celsius first, so the
+label reflects the physical temperature regardless of display unit.
+
+| Range (°C) | Condition Label |
+| --- | --- |
+| ≤ 0 | Freezing |
+| 1 – 8 | Cold |
+| 9 – 13 | Chilly |
+| 14 – 19 | Temperate |
+| 20 – 25 | Warm |
+| 26 – 31 | Hot |
+| ≥ 32 | Scorching Hot |

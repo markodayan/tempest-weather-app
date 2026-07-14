@@ -47,7 +47,7 @@ describe('DayPreview', () => {
     expect(screen.getByText('Partly cloudy')).toBeInTheDocument();
     // Temperature condition ("Warm" at 21.3°C) renders next to the weather condition,
     // separated by a "|" divider.
-    expect(screen.getByText('Warm Temperature')).toBeInTheDocument();
+    expect(screen.getByText('Warm')).toBeInTheDocument();
     expect(screen.getByText('Bantry Bay')).toBeInTheDocument();
     expect(screen.getByText('South Africa')).toBeInTheDocument();
     expect(screen.getByText('Feels like 20°')).toBeInTheDocument();
