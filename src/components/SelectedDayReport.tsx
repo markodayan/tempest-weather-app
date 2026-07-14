@@ -28,7 +28,7 @@ type SelectedDayReportProps = {
 function ReportPanel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className='p-8 w-full xl:w-[calc(50%-4px)] flex flex-col items-center xl:items-start gap-6 rounded-lg bg-white shadow-xl'>
-      <h3 className='mb-4 text-2xl text-report-heading/90 font-light xl:ml-3'>{title}</h3>
+      <h3 className='mb-0 text-xl text-report-heading/90 font-light xl:ml-3'>{title}</h3>
       <div className='flex gap-10 xl:ml-3'>{children}</div>
     </div>
   );
@@ -36,11 +36,11 @@ function ReportPanel({ title, children }: { title: string; children: React.React
 
 function Reading({ label, value }: { label: string; value: string }) {
   return (
-    <div className='text-center space-y-1 xl:space-y-0'>
-      <p className='text-sm font-medium uppercase tracking-widest text-report-label/80 xl:pb-2'>
+    <div className='text-center sm:text-left space-y-0 xl:space-y-0'>
+      <p className='text-xs font-medium uppercase tracking-widest text-report-label/80 xl:pb-2'>
         {label}
       </p>
-      <p className='text-2xl xl:text-3xl tracking-tight text-report-reading font-bold'>{value}</p>
+      <p className='text-xl xl:text-2xl tracking-tight text-report-reading font-bold'>{value}</p>
     </div>
   );
 }
