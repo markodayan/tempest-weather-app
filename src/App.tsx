@@ -85,7 +85,7 @@ function App() {
                 committed={committed}
                 onCommit={handleCommitPreferences}
               />
-              <hr className='mx-auto h-px mt-3 xl:mt-6 mb-5 xl:mb-1 bg-gradient-to-r from-transparent via-gray-400/50 to-transparent border-0' />
+              <hr className='mx-auto h-px mt-1 xl:mt-3 mb-2 xl:mb-0 bg-gradient-to-r from-transparent via-gray-400/50 to-transparent border-0' />
             </section>
           </div>
         </div>
@@ -97,6 +97,15 @@ function App() {
           </>
         )}
         <div id='daily-forecast'>
+          <DayPreview
+            weather={weather}
+            weatherLocation={weatherLocation}
+            preferences={committed}
+            loading={loading}
+            error={error}
+            selectedDayIndex={selectedDayIndex}
+          />
+
           <div>
             <WeatherDays
               weather={weather}
@@ -106,14 +115,6 @@ function App() {
               onSelectDay={setSelectedDayIndex}
             />
           </div>
-          <DayPreview
-            weather={weather}
-            weatherLocation={weatherLocation}
-            preferences={committed}
-            loading={loading}
-            error={error}
-            selectedDayIndex={selectedDayIndex}
-          />
         </div>
         <div id='weekly-forecast'>
           <div>

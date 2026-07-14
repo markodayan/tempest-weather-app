@@ -157,7 +157,7 @@ export default function Preferences({
   }
 
   return (
-    <div>
+    <div className='mb-4'>
       <button
         type='button'
         onClick={() => {
@@ -186,8 +186,8 @@ export default function Preferences({
           isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
         }`}
       >
-        <div className='flex w-full flex-col items-start gap-y-5 overflow-hidden xl:flex-row xl:justify-evenly'>
-          <div className='flex-1 flex flex-wrap xl:flex-nowrap gap-x-5 justify-center  items-start xl:items-center xl:justify-between xl:pr-30 gap-y-2 xl:gap-y-0'>
+        <div className='flex w-full flex-col items-center xl:items-start gap-y-5 overflow-hidden xl:flex-row xl:justify-evenly'>
+          <div className='flex-1 w-full flex flex-wrap xl:flex-nowrap gap-x-5 justify-center  items-start xl:items-center xl:justify-between xl:pr-30 gap-y-2 xl:gap-y-0'>
             <UnitRadioGroup
               legend='Temperature'
               name='temperature-unit'
@@ -220,8 +220,8 @@ export default function Preferences({
             aria-hidden={!showApplyButton}
             className={`w-full xl:w-auto xl:min-w-56 text-center rounded-sm bg-active-pref-bg px-5 py-2 text-sm font-stretch-condensed font-semibold text-white transition-all ease-out ${
               showApplyButton
-                ? 'duration-500 translate-y-0 opacity-100 hover:opacity-90'
-                : 'duration-150 -translate-y-1.5 pointer-events-none opacity-0'
+                ? 'block duration-500 translate-y-0 opacity-100 hover:opacity-90 '
+                : 'hidden xl:block duration-150 -translate-y-1.5 pointer-events-none opacity-0'
             }`}
           >
             {applyButtonLabel}
