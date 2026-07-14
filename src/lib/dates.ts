@@ -22,8 +22,8 @@ export function formatDayLabelShort(dateString: string, isToday: boolean): strin
   }).format(parseIsoDateUtc(dateString));
 }
 
-// Used by WeatherDays tiles at the md breakpoint, e.g. "Thu 9" - drops the month that
-// formatDayLabelShort includes, since there's less room per tile than at xl.
+// Used by WeatherDays tiles below the md breakpoint (frozen/scrollable row), e.g. "Thu 9" -
+// drops the month that formatDayLabelShort includes, since tiles stay narrow there.
 export function formatDayLabelCompact(dateString: string, isToday: boolean): string {
   if (isToday) {
     return 'Today';
@@ -32,19 +32,6 @@ export function formatDayLabelCompact(dateString: string, isToday: boolean): str
   return new Intl.DateTimeFormat('en-GB', {
     weekday: 'short',
     day: 'numeric',
-    timeZone: 'UTC',
-  }).format(parseIsoDateUtc(dateString));
-}
-
-// Used by WeatherDays tiles below the md breakpoint, e.g. "Thu" - weekday only, since
-// there's no room for the day/month at this width.
-export function formatDayLabelMini(dateString: string, isToday: boolean): string {
-  if (isToday) {
-    return 'Today';
-  }
-
-  return new Intl.DateTimeFormat('en-GB', {
-    weekday: 'short',
     timeZone: 'UTC',
   }).format(parseIsoDateUtc(dateString));
 }

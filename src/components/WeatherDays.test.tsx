@@ -21,9 +21,6 @@ function buildWeather(): WeatherReadings {
     weather_code: 0,
     temperature_2m_max: 24 - index,
     temperature_2m_min: 15 - index,
-    // Deliberately outside the max/min ranges above so assertions on one field can't
-    // accidentally match text rendered by another.
-    temperature_2m_mean: 50 - index,
   }));
 
   return { days };
@@ -42,14 +39,11 @@ describe('WeatherDays', () => {
     );
 
     expect(screen.getAllByRole('button')).toHaveLength(7);
-    // All three label variants (mini, compact, short) render at once (toggled via CSS
-    // breakpoints, not conditional rendering), so "Today" matches all three of that tile's spans.
-    expect(screen.getAllByText('Today')).toHaveLength(3);
-    expect(screen.getByText('Fri')).toBeInTheDocument();
+    // Both label variants (compact, short) render at once (toggled via CSS breakpoints,
+    // not conditional rendering), so "Today" matches both of that tile's spans.
+    expect(screen.getAllByText('Today')).toHaveLength(2);
     expect(screen.getByText('Fri 10')).toBeInTheDocument();
     expect(screen.getByText('Fri 10 Jul')).toBeInTheDocument();
-    // Small View shows the mean only; md/xl show max/min - both render at once (CSS-toggled).
-    expect(screen.getByText('50°')).toBeInTheDocument();
     expect(screen.getByText('24°')).toBeInTheDocument();
     expect(screen.getByText('15°')).toBeInTheDocument();
   });

@@ -23,6 +23,26 @@
 
 ### Responsive scheme am going to apply
 
+Superseded for `WeatherDays` (see below) - still applies elsewhere in the app.
+
 - Large View (1280px and larger): `xl` and beyond [example: `xl:px-4`]
 - Medium View (640px-1280px): `sm` to `xl` [example: `sm:px-2`]
 - Small View (0-640px): Up to `sm` [example: `px-1`]
+
+### WeatherDays cards: continuous scaling instead of tiers
+
+Rather than three discrete tiers, `WeatherDays` tile sizing (icon, date font-size,
+vertical padding) scales continuously between `md` (768px) and `xl` (1280px) via
+CSS `clamp()`-based theme tokens (`--spacing-day-card-icon`, `--spacing-day-card-py`,
+`--text-day-card-label` in `src/index.css`). Each token is
+`clamp(value-at-md, <linear-interpolation>, value-at-xl)` - clamp's own floor holds
+every value at its md-size once the viewport drops below 768px, so no separate
+breakpoint-gated CSS is needed to "freeze" sizing.
+
+Below `md`, tile width is fixed (`--spacing-day-card-frozen-width`) and the row
+becomes horizontally scrollable (`overflow-x-auto`) instead of shrinking further or
+wrapping to a grid. From `md` up, tiles use `flex-1` to fill the row evenly.
+
+The date label still swaps *content* (not size) at `md` - full "Fri 10 Jul" from
+`md` up, compact "Fri 10" below `md` - since text content can't fluidly interpolate
+the way a numeric size can.

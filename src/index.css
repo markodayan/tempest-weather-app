@@ -25,12 +25,19 @@
   --color-day-card-temp-max: rgb(41, 41, 41);
   --color-testing-sel: rgb(219, 235, 254);
 
-  /* Weather Days Component - condition icon size per docs/responsive-design.md's
-     Small/Medium/Large View scheme (sm/xl breakpoints). Named here (rather than
-     inline clamp() in the component) so all three tiers are tunable from one place. */
-  --spacing-day-card-icon-min: clamp(2.5rem, 2.25rem + 1vw, 2.3rem);
-  --spacing-day-card-icon-sm: clamp(3rem, 2.5rem + 1.5vw, 3.6rem);
-  --spacing-day-card-icon-xl: clamp(3rem, 3rem + 2.5vw, 3.6rem);
+  /* Weather Days Component - card scales continuously between md (768px) and xl
+     (1280px) per docs/responsive-design.md, then freezes below md (clamp()'s own
+     floor holds each value at its md-size - no separate breakpoint needed for
+     that). Each token reads as clamp(value-at-md, <fluid part>, value-at-xl) - to
+     tune a ratio, only touch the first/last number; the middle vw formula is the
+     same interpolation for every token here and shouldn't need editing. */
+  --spacing-day-card-icon: clamp(3rem, 3rem + (5rem - 3rem) * ((100vw - 768px) / (1280px - 768px)), 5rem);
+  --spacing-day-card-py: clamp(0.5rem, 0.5rem + (1rem - 0.5rem) * ((100vw - 768px) / (1280px - 768px)), 1rem);
+  --text-day-card-label: clamp(0.875rem, 0.875rem + (1.125rem - 0.875rem) * ((100vw - 768px) / (1280px - 768px)), 1.125rem);
+  /* Fixed tile width below md, where the row freezes and becomes horizontally
+     scrollable instead of shrinking further. From md up, tiles use flex-1 instead
+     (fills the row evenly) so this value only matters below md. */
+  --spacing-day-card-frozen-width: 6rem;
   --color-selected-date: var(--color-primary);
 
   /* Selected Day Report  */
