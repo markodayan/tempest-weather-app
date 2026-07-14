@@ -7,6 +7,7 @@ import { formatWeekdayLabel } from '../lib/dates';
 import { getWeatherBackgroundSrc } from '../lib/weatherBackground';
 import Skeleton from './Skeleton';
 import { formatReading } from '../lib/formatReading';
+import { getTemperatureCondition } from '../lib/temperatureCondition';
 
 type DayPreviewProps = {
   weather: WeatherReadings | null;
@@ -100,6 +101,9 @@ export default function DayPreview({
   const backgroundSrc = getWeatherBackgroundSrc(Number(day.weather_code));
   const temperatureLabel = TEMPERATURE_UNIT_LABELS[preferences.temperatureUnit];
   const windSpeedLabel = WIND_SPEED_UNIT_LABELS[preferences.windSpeedUnit];
+  const temperatureCondition = formatReading(day.temperature_2m_mean, (n) =>
+    getTemperatureCondition(n, preferences.temperatureUnit),
+  );
 
   // Today's data is fresher/live (current conditions), vs. a forecast/history day - the two
   // branches render identically for now, but exist so today-specific content (e.g. freshness,
@@ -125,7 +129,6 @@ export default function DayPreview({
                   {Math.round(Number(day.temperature_2m_mean))}
                   {temperatureLabel}
                 </p>
-                <p className='mt-1 xl:text-2xl font-semibold text-white/90'>{condition.label}</p>
               </div>
 
               <div className='text-right relative top-[-20px] right-[4px]'>
@@ -136,6 +139,11 @@ export default function DayPreview({
                   {weatherLocation.location_country}
                 </p>
               </div>
+            </div>
+            <div className='mt-1 flex items-center'>
+              <p className='xl:text-2xl font-semibold text-white/90'>{condition.label}</p>
+              <p className='px-3 text-[21px] text-white/100'>|</p>
+              <p className='xl:text-2xl text-white/60 '>{temperatureCondition} Temperature</p>
             </div>
 
             <div className='flex gap-x-2 my-2 text-white text-md'>
@@ -187,7 +195,6 @@ export default function DayPreview({
                 {Math.round(Number(day.temperature_2m_mean))}
                 {temperatureLabel}
               </p>
-              <p className='mt-1 xl:text-2xl font-semibold text-white/90'>{condition.label}</p>
             </div>
 
             <div className='text-right relative top-[-20px] right-[4px]'>
@@ -198,6 +205,11 @@ export default function DayPreview({
                 {weatherLocation.location_country}
               </p>
             </div>
+          </div>
+          <div className='mt-1 flex items-center'>
+            <p className='xl:text-2xl font-semibold text-white/90'>{condition.label}</p>
+            <p className='px-3 text-[21px] text-white/100'>|</p>
+            <p className='xl:text-2xl text-white/60 '>{temperatureCondition} Temperature</p>
           </div>
 
           <div className='flex gap-x-2 my-2 text-white text-md'>

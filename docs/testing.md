@@ -19,7 +19,7 @@ files, a new layer added, config changes), update it here.
 - `npm test` — runs the suite once (`vitest run`); CI-safe default.
 - `npm run test:watch` — interactive watch mode (`vitest`).
 
-As of writing: **11 test files, 80 tests, all passing.**
+As of writing: **12 test files, 82 tests, all passing.**
 
 ## Current coverage
 
@@ -45,6 +45,10 @@ As of writing: **11 test files, 80 tests, all passing.**
 - `formatReading.test.ts` — the missing-field-handling helper: formats a
   present value, coerces a numeric string, returns `-` for `null`/`undefined`/
   a non-numeric string, and doesn't mistake a real `0` for a missing value.
+- `temperatureCondition.test.ts` — `getTemperatureCondition`: every Celsius
+  bucket at its boundary and mid-range, and that a Fahrenheit reading is
+  converted back to Celsius before bucketing so the label matches the
+  physical temperature regardless of display unit.
 
 ### Hooks (`src/hooks/`)
 
