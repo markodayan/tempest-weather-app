@@ -84,20 +84,22 @@ export default function WeatherDays({
               type='button'
               onClick={() => onSelectDay(index)}
               aria-current={isSelected}
-              className={`flex shrink-0 w-day-card-frozen-width md:w-auto md:flex-1 flex-col cursor-pointer items-center py-day-card-py transition-colors duration-300 rounded-lg shadow-xl ${
-                isSelected ? 'bg-[#e0e0f1]' : 'bg-bg-selected-day hover:bg-bg-selected-day'
+              className={`border-2 border-black/0 flex shrink-0 w-day-card-frozen-width md:w-auto md:flex-1 flex-col cursor-pointer items-center py-day-card-py transition-colors duration-300 rounded-lg shadow-xl ${
+                isSelected
+                  ? 'bg-[#e0e0f1] border-primary/90'
+                  : 'bg-bg-selected-day hover:bg-bg-selected-day'
               }`}
             >
               {/* Full date from md up ("Fri 10 Jul"); below md the row is frozen/scrollable
                   so the compact form ("Fri 10") is swapped in instead - a content change,
                   not a size change, so it toggles at the md breakpoint rather than scaling. */}
               <span
-                className={`hidden md:block text-day-card-label font-light ${isSelected ? 'text-selected-date' : 'text-slate-400'}`}
+                className={`hidden md:block text-day-card-label font-light ${isSelected ? 'text-selected-date font-medium' : 'text-slate-400'}`}
               >
                 {formatDayLabelShort(day.date, day.isToday)}
               </span>
               <span
-                className={`block md:hidden text-day-card-label font-light ${isSelected ? 'text-selected-date' : 'text-slate-400'}`}
+                className={`block md:hidden text-day-card-label font-light ${isSelected ? 'text-selected-date font-medium' : 'text-slate-400'}`}
               >
                 {formatDayLabelCompact(day.date, day.isToday)}
               </span>
