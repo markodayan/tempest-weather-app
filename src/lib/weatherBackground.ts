@@ -1,14 +1,15 @@
-export type WeatherMood = 'clear' | 'cloudy' | 'rainy' | 'snowy' | 'stormy';
+export type WeatherMood = 'clear' | 'partly-cloudy' | 'cloudy' | 'rainy' | 'snowy' | 'stormy';
 
-// Deliberately coarse - lots of WMO codes collapse onto just 5 mood buckets (see
-// docs/image-guidelines.md for the image conventions). clear/cloudy split dry conditions by
-// how grey it is; rainy/snowy are their own buckets since snow reads as a genuinely different
-// visual mood from rain, not just "more/less severe"; stormy covers anything violent, icy, or a
-// thunderstorm regardless of precipitation type.
+// Deliberately coarse - lots of WMO codes collapse onto just 6 mood buckets (see
+// docs/image-guidelines.md for the image conventions). clear/partly-cloudy/cloudy split dry
+// conditions by how grey it is (code 2, "partly cloudy", gets its own bucket rather than folding
+// into the fully-overcast "cloudy" image); rainy/snowy are their own buckets since snow reads as
+// a genuinely different visual mood from rain, not just "more/less severe"; stormy covers
+// anything violent, icy, or a thunderstorm regardless of precipitation type.
 const MOOD_BY_CODE: Record<number, WeatherMood> = {
   0: 'clear',
   1: 'clear',
-  2: 'cloudy',
+  2: 'partly-cloudy',
   3: 'cloudy',
   45: 'cloudy',
   48: 'cloudy',

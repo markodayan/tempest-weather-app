@@ -51,11 +51,12 @@ at full size.
 
 ### Mood categories
 
-Five buckets, mapped from Open-Meteo's WMO weather codes in
+Six buckets, mapped from Open-Meteo's WMO weather codes in
 `src/lib/weatherBackground.ts` - see that file for the exact code → bucket
 mapping and the reasoning behind each grouping. Live in `public/day-preview/`:
 
 - `clear.webp`
+- `partly-cloudy.webp`
 - `cloudy.webp`
 - `rainy.webp`
 - `snowy.webp`

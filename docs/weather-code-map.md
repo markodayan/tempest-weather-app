@@ -9,7 +9,7 @@ How Open-Meteo's WMO weather codes (`src/api/weatherCodes.ts`) map to the
 | --- | --- | --- | --- | --- |
 | 0 | Clear sky | clear | `clear.webp` | `/weather/0.svg` |
 | 1 | Mainly clear | clear | `clear.webp` | `/weather/1.svg` |
-| 2 | Partly cloudy | cloudy | `cloudy.webp` | `/weather/2.svg` |
+| 2 | Partly cloudy | partly-cloudy | `partly-cloudy.webp` | `/weather/2.svg` |
 | 3 | Overcast | cloudy | `cloudy.webp` | `/weather/3.svg` |
 | 45 | Fog | cloudy | `cloudy.webp` | `/weather/45.svg` |
 | 48 | Depositing rime fog | cloudy | `cloudy.webp` | `/weather/48.svg` |
@@ -44,7 +44,8 @@ falls back to the closest available icon (85→71, 86→75, 96/99→95).
 | Mood | Graphic | WMO Codes |
 | --- | --- | --- |
 | clear | `clear.webp` | 0, 1 |
-| cloudy | `cloudy.webp` | 2, 3, 45, 48 |
+| partly-cloudy | `partly-cloudy.webp` | 2 |
+| cloudy | `cloudy.webp` | 3, 45, 48 |
 | rainy | `rainy.webp` | 51, 53, 55, 61, 63, 80 |
 | snowy | `snowy.webp` | 71, 73, 75, 77, 85, 86 |
 | stormy | `stormy.webp` | 56, 57, 65, 66, 67, 81, 82, 95, 96, 99 |

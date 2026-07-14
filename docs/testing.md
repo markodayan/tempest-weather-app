@@ -19,7 +19,7 @@ files, a new layer added, config changes), update it here.
 - `npm test` — runs the suite once (`vitest run`); CI-safe default.
 - `npm run test:watch` — interactive watch mode (`vitest`).
 
-As of writing: **11 test files, 79 tests, all passing.**
+As of writing: **11 test files, 80 tests, all passing.**
 
 ## Current coverage
 

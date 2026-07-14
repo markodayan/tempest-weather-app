@@ -7,7 +7,11 @@ describe('getWeatherMood', () => {
     expect(getWeatherMood(1)).toBe('clear');
   });
 
-  it('maps cloud/fog codes (dry) to cloudy', () => {
+  it('maps partly cloudy (code 2) to its own bucket, distinct from fully overcast', () => {
+    expect(getWeatherMood(2)).toBe('partly-cloudy');
+  });
+
+  it('maps cloud/fog codes (dry, fully overcast) to cloudy', () => {
     expect(getWeatherMood(3)).toBe('cloudy');
     expect(getWeatherMood(45)).toBe('cloudy');
   });
@@ -44,6 +48,7 @@ describe('getWeatherMood', () => {
 describe('getWeatherBackgroundSrc', () => {
   it('builds the /day-preview/<mood>.webp path', () => {
     expect(getWeatherBackgroundSrc(0)).toBe('/day-preview/clear.webp');
+    expect(getWeatherBackgroundSrc(2)).toBe('/day-preview/partly-cloudy.webp');
     expect(getWeatherBackgroundSrc(71)).toBe('/day-preview/snowy.webp');
     expect(getWeatherBackgroundSrc(95)).toBe('/day-preview/stormy.webp');
   });
