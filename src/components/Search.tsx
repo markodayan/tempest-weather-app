@@ -78,11 +78,11 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
       >
         <label htmlFor='location-search-input'></label>
         <div className='flex items-center bg-input-mode border border-search-field-border rounded-sm'>
-          <SearchIcon className='h-5 xl:h-6 w-5 xl:w-6 ml-5  text-black/25' />
+          <SearchIcon className='h-5 xl:h-6 w-5 xl:w-6 ml-5 shrink-0 text-black/25' />
           <input
             name='search-term'
             id='location-search-input'
-            className=' bg-white px-4 py-3 xl:px-4 xl:py-3.5 text-1 xl:text-lg min-h-12 xl:min-h-14 text-search-input-text outline-none placeholder:text-slate-400 flex-1'
+            className=' bg-white px-4 py-3 xl:px-4 xl:py-3.5 text-1 xl:text-lg min-h-12 xl:min-h-14 text-search-input-text outline-none placeholder:text-slate-400 flex-1 min-w-0'
             placeholder='Enter a city, town or suburb'
             type='text'
             value={searchTerm}
