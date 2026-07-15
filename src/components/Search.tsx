@@ -146,7 +146,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
         <div
           id='suggested-search-results'
           role='listbox'
-          className='absolute inset-x-2 xl:inset-x-6  z-10 mt-2 overflow-hidden rounded-2xl bg-white shadow-lg'
+          className='absolute inset-x-0 z-10 mt-2 overflow-hidden rounded-sm bg-white shadow-lg'
         >
           {loading && <p className='px-4 py-3 text-slate-400'>Searching…</p>}
 
