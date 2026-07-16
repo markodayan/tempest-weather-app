@@ -68,7 +68,7 @@ function App() {
     <div className='min-h-screen bg-page-background'>
       <main id='content' className=''>
         <div id='location-search' className='relative z-20 backdrop-blur-2xl'>
-          <div className='container px-6 xl:px-2 mx-auto'>
+          <div className='container px-2 md:px-2 mx-auto'>
             <section
               id='location-search'
               className='max-w-7xl mx-auto space-y-5 xl:space-y-2 pt-5 xl:pb-5'
@@ -91,13 +91,13 @@ function App() {
           </div>
         </div>
         {weatherLocation === null && (
-          <>
+          <div className='px-2 md:px-2 '>
             <Landing onSelectLocation={handleLocationSelect} />
 
             <hr className='mx-auto h-px mt-0 xl:mt-0 mb-0 xl:mb-1 bg-gradient-to-r from-transparent via-gray-400/50 to-transparent border-0' />
-          </>
+          </div>
         )}
-        <div id='daily-forecast'>
+        <div className='px-2 md:px-2' id='daily-forecast'>
           <DayPreview
             weather={weather}
             weatherLocation={weatherLocation}
@@ -117,7 +117,7 @@ function App() {
             />
           </div>
         </div>
-        <div id='weekly-forecast'>
+        <div className='px-2 md:px-2' id='weekly-forecast'>
           <div>
             <SelectedDayReport
               weather={weather}

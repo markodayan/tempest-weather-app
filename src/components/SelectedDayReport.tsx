@@ -59,7 +59,7 @@ export default function SelectedDayReport({
       <section
         role='status'
         aria-label='Loading weather'
-        className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-4'
+        className='mx-auto w-full max-w-5xl xl:max-w-7xl pb-4'
       >
         <div className='flex flex-col gap-y-4 overflow-hidden'>
           <div className='flex items-center gap-4 px-6 py-4 bg-bg-selected-day rounded-lg shadow-xl'>
@@ -110,7 +110,7 @@ export default function SelectedDayReport({
   const precipitationLabel = PRECIPITATION_UNIT_LABELS[preferences.precipitationUnit];
 
   return (
-    <section className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-4'>
+    <section className='mx-auto w-full max-w-5xl xl:max-w-7xl pb-4'>
       <div className='flex flex-col gap-y-2'>
         <div className='hidden sm:flex items-center gap-4 px-6 py-4 bg-white rounded-lg shadow-xl '>
           <button

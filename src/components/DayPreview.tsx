@@ -46,7 +46,7 @@ export default function DayPreview({
       <div
         role='status'
         aria-label='Loading weather'
-        className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-4 -mt-3'
+        className='mx-auto w-full max-w-5xl xl:max-w-7xl py-4 -mt-3'
       >
         <div className='relative h-56 overflow-hidden rounded-md bg-slate-200 xl:aspect-5/1 xl:h-auto'>
           <div className='relative flex h-full flex-col justify-between p-6'>
@@ -78,7 +78,7 @@ export default function DayPreview({
 
   if (error) {
     return (
-      <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-4'>
+      <div className='mx-auto w-full max-w-5xl xl:max-w-7xl py-4'>
         <div className='flex flex-col items-center justify-center gap-2 rounded-md bg-slate-100 py-10 text-center'>
           <CloudOff className='h-8 w-8 text-slate-400' />
           <p className='font-semibold text-slate-600'>
@@ -110,7 +110,7 @@ export default function DayPreview({
   // day/night indication) has somewhere to go without reworking the non-today branch too.
   if (day.isToday) {
     return (
-      <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-2'>
+      <div className='mx-auto w-full max-w-5xl xl:max-w-7xl py-2'>
         <div className='group relative xl:aspect-5/1 overflow-hidden rounded-md shadow-lg'>
           <img
             src={backgroundSrc}
@@ -176,7 +176,7 @@ export default function DayPreview({
   }
 
   return (
-    <div className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-2'>
+    <div className='mx-auto w-full max-w-5xl xl:max-w-7xl py-2'>
       <div className='group relative xl:aspect-5/1 overflow-hidden rounded-md shadow-lg'>
         <img
           src={backgroundSrc}

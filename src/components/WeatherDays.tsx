@@ -43,7 +43,7 @@ export default function WeatherDays({
       <section
         role='status'
         aria-label='Loading weather'
-        className='flex gap-2 mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 mb-1'
+        className='flex gap-2 mx-auto max-w-5xl xl:max-w-7xl mb-1'
       >
         {Array.from({ length: SKELETON_TILE_COUNT }).map((_, index) => (
           <div
@@ -69,7 +69,7 @@ export default function WeatherDays({
   }
 
   return (
-    <div className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 pb-2'>
+    <div className='mx-auto max-w-5xl xl:max-w-7xl pb-2'>
       <section className='flex gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 -mb-2 md:mb-0'>
         {weather.days.map((day, index) => {
           const isSelected = index === selectedDayIndex;

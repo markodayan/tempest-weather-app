@@ -166,7 +166,7 @@ export default function Preferences({
         }}
         aria-expanded={isExpanded}
         aria-controls='preferences-content'
-        className={`flex w-full cursor-pointer items-center justify-between gap-2 py-2 pr-4 transition-colors duration-[300ms] hover:text-active-pref-bg ${
+        className={`-mt-3 xl:-mt-3 ml-1 md:ml-0 flex w-full cursor-pointer items-center justify-between gap-2 py-2 pb-4 pr-4 transition-colors duration-[300ms] hover:text-active-pref-bg ${
           isExpanded ? 'text-active-pref-bg' : 'text-slate-500'
         }`}
       >
@@ -182,7 +182,7 @@ export default function Preferences({
 
       <div
         id='preferences-content'
-        className={`grid transition-[grid-template-rows] duration-[300ms] ease-out ${
+        className={`px-2 lg:px-0 grid transition-[grid-template-rows] duration-[300ms] ease-out ${
           isExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
         }`}
       >

@@ -111,7 +111,7 @@ export default function Landing({ onSelectLocation }: LandingProps) {
   return (
     <div
       id='landing-suggestions'
-      className='mx-auto max-w-5xl xl:max-w-7xl px-6 xl:px-0 pt-1 pb-8 text-center'
+      className='mx-auto max-w-5xl xl:max-w-7xl px-2 xl:px-0 pt-1 pb-8 text-center'
     >
       <p className='text-xl font-extrabold xl:text-3xl text-user-q'>
         Unsure what to search? <span className='text-cta font-bold'>Click a place below!</span>
