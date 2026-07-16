@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { MapPin, SearchIcon, X, ArrowRight } from 'lucide-react';
+import { MapPin, SearchIcon, X, ArrowRight, Locate } from 'lucide-react';
 import { useLocationSearch } from '../hooks/useLocationSearch';
+import { useCurrentLocation } from '../hooks/useCurrentLocation';
 import type { Location } from '../api';
 import { formatLatitude, formatLongitude } from '../lib/coordinates';
 import { formatLocationLabel } from '../lib/location';
@@ -13,14 +14,30 @@ type SearchProps = {
 
 export default function Search({ searchSelection, onSelect, onReset }: SearchProps) {
   const { searchTerm, setSearchTerm, suggestions, loading, error } = useLocationSearch();
+  const { locate, loading: locating, error: locationError, clearError: clearLocationError } =
+    useCurrentLocation();
 
   // will remove dropdown after selection to avoid searchTerm state value not to immediately reopen to do another search for locations matching the term
   const [justSelected, setJustSelected] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   // which suggestion the keyboard has moved to; -1 means none (focus stays on the input either way)
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  // tracks searchTerm as of the last render, purely to detect the change below
+  const [previousSearchTerm, setPreviousSearchTerm] = useState(searchTerm);
 
-  const showDropdown = searchTerm.trim().length > 0 && !justSelected && isFocused;
+  const hasQuery = searchTerm.trim().length > 0;
+  // open on focus alone (not gated on hasQuery) so "Use current location" is reachable
+  // before the user types anything
+  const showDropdown = !justSelected && isFocused;
+
+  // Adjusts state during render rather than in an effect, per React's own recommended pattern
+  // for "reset state when a prop/value changes" (mirrors App.tsx's previousWeatherLocation reset)
+  // - a "Use current location" failure is stale the moment the user types again, since they're
+  // now looking at (or about to see) a different set of search suggestions.
+  if (searchTerm !== previousSearchTerm) {
+    setPreviousSearchTerm(searchTerm);
+    clearLocationError();
+  }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setJustSelected(false);
@@ -32,6 +49,13 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
     setJustSelected(true);
     setHighlightedIndex(-1);
     onSelect(location);
+  }
+
+  async function handleUseCurrentLocation() {
+    const location = await locate();
+    if (location) {
+      handleSelect(location);
+    }
   }
 
   function handleInputKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -92,6 +116,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
             onBlur={() => {
               setIsFocused(false);
               setHighlightedIndex(-1);
+              clearLocationError();
             }}
             autoComplete='off'
             disabled={!!searchSelection}
@@ -143,54 +168,109 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
       </form>
 
       {showDropdown && (
-        <div
-          id='suggested-search-results'
-          role='listbox'
-          className='absolute inset-x-0 z-10 mt-2 overflow-hidden rounded-sm bg-white shadow-lg'
-        >
-          {loading && <p className='px-4 py-3 text-slate-400'>Searching…</p>}
-
-          {!loading && error && <p className='px-4 py-3 text-red-500'>{error}</p>}
-
-          {!loading && !error && suggestions.length === 0 && (
-            <p className='px-4 py-3 text-slate-400'>
-              No matches found for &ldquo;{searchTerm}&rdquo;.
+        <div className='absolute inset-x-1 flex flex-col mt-2 z-10 gap-y-1 '>
+          {/* {locationError && (
+            <p className='text-center rounded-sm px-4 py-2 text-sm bg-red-500/30  text-red-500 shadow-2xl'>
+              {locationError}
             </p>
-          )}
+          )} */}
 
-          {!loading && !error && suggestions.length > 0 && (
-            <ul>
-              {suggestions.map((location, index) => (
-                <li key={location.id} className='border-b border-slate-100 last:border-none'>
-                  <button
-                    type='button'
-                    id={`suggestion-option-${location.id}`}
-                    role='option'
-                    aria-selected={index === highlightedIndex}
-                    onClick={() => handleSelect(location)}
-                    onMouseDown={(e) => e.preventDefault()} // keeps focus on the input, so blur never fires (important to override default mousedown behaviour of shifting focus since we are using it to control drop down)
-                    className={`flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-100 ${
-                      index === highlightedIndex ? 'bg-slate-100' : ''
-                    }`}
-                  >
-                    <MapPin className='mt-1 h-5 w-5 shrink-0 text-slate-400' />
+          <div
+            id='suggested-search-results'
+            role='listbox'
+            className='overflow-hidden rounded-sm bg-white shadow-2xl'
+          >
+            {locationError && (
+              <div className='flex flex-col px-6 pt-4 pb-4 gap-y-2 bg-white'>
+                <h3 className='text-lg font-bold tracking-wide  text-[#595959]'>
+                  Geolocation Error
+                </h3>
+                <p className='text-sm   text-black/40'>{locationError}</p>
+              </div>
+            )}
 
-                    <span>
-                      <span className='block text-base text-slate-800'>
-                        <span className='font-semibold'>{location.location_title}</span>
-                        {location.location_country && `, ${location.location_country}`}
-                      </span>
-                      <span className='block text-sm text-slate-400'>
-                        Lat.: {formatLatitude(location.latitude)} / Lon.:{' '}
-                        {formatLongitude(location.longitude)}
-                        {location.location_area && ` / ${location.location_area}`}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+            <p className='px-4 py-2 text-sm font-semibold tracking-tighter text-[#818181]'>
+              Current Location
+            </p>
+
+            <button
+              type='button'
+              onClick={handleUseCurrentLocation}
+              onMouseDown={(e) => e.preventDefault()} // keeps focus on the input while locating, so blur doesn't hide this panel mid-lookup
+              disabled={locating}
+              className='flex w-full cursor-pointer items-center gap-x-3  px-4 py-2 text-base  transition-colors duration-300 disabled:cursor-not-allowed disabled:opacity-70 bg-[#f2f2f2] hover:bg-slate-100'
+            >
+              <div className='p-2 rounded-lg bg-black/6'>
+                <Locate strokeWidth={2} className='h-5 w-5 shrink-0 text-black/80' />
+              </div>
+
+              <span className='font-normal'>
+                {locating ? 'Locating…' : 'Use my current location'}
+              </span>
+            </button>
+
+            {hasQuery && (
+              <>
+                {loading && <p className='bg-[#f9f9f9] px-4 py-3 text-slate-400'>Searching…</p>}
+
+                {!loading && error && (
+                  <p className='bg-[#f9f9f9] px-4 py-3 text-red-500'>{error}</p>
+                )}
+
+                {!loading && !error && suggestions.length === 0 && (
+                  <p className='px-4 py-3 text-slate-400'>
+                    No matches found for &ldquo;{searchTerm}&rdquo;.
+                  </p>
+                )}
+
+                {!loading && !error && suggestions.length > 0 && (
+                  <>
+                    <p className='px-4 py-2 text-sm font-semibold tracking-tighter text-[#818181]'>
+                      Search Results ({suggestions.length})
+                    </p>
+                    <div className='py-0' />
+                    <ul className='max-h-[21.5rem] overflow-y-auto'>
+                      {suggestions.map((location, index) => (
+                        <li
+                          key={location.id}
+                          className='border-b border-slate-100 first:border last:border-none'
+                        >
+                          <button
+                            type='button'
+                            id={`suggestion-option-${location.id}`}
+                            role='option'
+                            aria-selected={index === highlightedIndex}
+                            onClick={() => handleSelect(location)}
+                            onMouseDown={(e) => e.preventDefault()} // keeps focus on the input, so blur never fires (important to override default mousedown behaviour of shifting focus since we are using it to control drop down)
+                            className={`flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-100 ${
+                              index === highlightedIndex ? 'bg-slate-100' : ''
+                            }`}
+                          >
+                            <div className='p-2 rounded-lg bg-black/6'>
+                              <MapPin className=' h-5 w-5 shrink-0 text-black/60' />
+                            </div>
+
+                            <span>
+                              <span className='block text-base text-slate-800'>
+                                <span className='font-semibold'>{location.location_title}</span>
+                                {location.location_country && `, ${location.location_country}`}
+                              </span>
+                              <span className='block text-sm text-slate-400'>
+                                Lat.: {formatLatitude(location.latitude)} / Lon.:{' '}
+                                {formatLongitude(location.longitude)}
+                                {location.location_area && ` / ${location.location_area}`}
+                              </span>
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className='py-0 bg-[#f6f6f6]'></div>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>

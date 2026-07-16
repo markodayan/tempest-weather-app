@@ -94,6 +94,16 @@ so rendering `Preferences` in a test as-is will throw
 first - either globally in `src/test/setup.ts` (if other components end up
 needing it too) or stubbed per-test via `vi.stubGlobal('matchMedia', ...)`.
 
+**`navigator.geolocation` isn't implemented by jsdom.** `Search.tsx`'s "Use
+current location" button drives `useCurrentLocation`, which calls
+`navigator.geolocation.getCurrentPosition(...)`. jsdom doesn't implement the
+Geolocation API at all, so `navigator.geolocation` is `undefined` by default -
+rendering `Search` is fine (the hook only calls it on click), but a test that
+clicks the button needs `navigator.geolocation` stubbed first (e.g.
+`vi.stubGlobal('navigator', { geolocation: { getCurrentPosition: vi.fn() } })`)
+or `getCurrentPosition`'s mock immediately calls the success/error callback,
+whichever the hook's own `!navigator.geolocation` guard should be exercised.
+
 **Mobile/desktop dual-rendering doesn't need a viewport mock.** `WeatherDays`
 and `SelectedDayReport` render *both* the mobile-compact and desktop-full
 label variants at once (toggled purely via CSS `xl:hidden`/`xl:inline`, not
@@ -153,6 +163,34 @@ harmless today because `Search.tsx` gates dropdown *visibility* on the raw
 `searchTerm` itself, not on `suggestions`/`error` — but any future consumer of
 this hook needs to know not to rely on `suggestions`/`error` alone to detect
 "the user cleared the input."
+
+## "Use current location" behaviors to verify
+
+Plain-language checklist for `Search.tsx` / `useCurrentLocation.ts` once a
+`Search.test.tsx` gets written - what a user would actually notice, not
+implementation detail:
+
+- If I focus the search bar without typing anything, I should see the "Use
+  current location" option in the dropdown straight away.
+- If I click that button, it should show a "Locating…" state and be
+  unclickable until it resolves (success or failure).
+- If it resolves successfully, it should behave exactly like clicking a
+  normal search suggestion - badge appears, weather loads, dropdown closes.
+- If I click that button and it errors (permission denied, position
+  unavailable, timed out, geolocation unsupported, or a network failure
+  resolving the address), that error should appear in the dropdown.
+- If I have that error showing, then type and receive new search results, it
+  should clear. This should hold whether I started from an empty box or was
+  already mid-search (e.g. "ca" → "car").
+- If I have that error showing but haven't typed anything new (e.g. pressed
+  arrow keys, or the dropdown re-renders for an unrelated reason), it should
+  stay visible - it only clears on an actual change to what's typed.
+- If I have that error showing and click away from the search bar (closing
+  the dropdown), then click back in, the error should be gone - it only
+  persists for as long as the dropdown that produced it stays open.
+- The "Use current location" option itself should stay visible regardless of
+  whether I've typed a query - only the "Search Results" section underneath
+  it depends on having typed something.
 
 ## Not yet covered
 

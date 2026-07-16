@@ -85,6 +85,7 @@ function App() {
                 committed={committed}
                 onCommit={handleCommitPreferences}
               />
+
               <hr className='mx-auto h-px mt-1 xl:mt-3 mb-2 xl:mb-0 bg-gradient-to-r from-transparent via-gray-400/50 to-transparent border-0' />
             </section>
           </div>
