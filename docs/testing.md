@@ -176,6 +176,9 @@ implementation detail:
   unclickable until it resolves (success or failure).
 - If it resolves successfully, it should behave exactly like clicking a
   normal search suggestion - badge appears, weather loads, dropdown closes.
+- If I then remove the badge by clicking the X (re-enabling the search bar),
+  the dropdown with "Use current location" should reopen immediately - not
+  only after I start typing.
 - If I click that button and it errors (permission denied, position
   unavailable, timed out, geolocation unsupported, or a network failure
   resolving the address), that error should appear in the dropdown.

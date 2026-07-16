@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MapPin, SearchIcon, X, ArrowRight, Locate } from 'lucide-react';
 import { useLocationSearch } from '../hooks/useLocationSearch';
 import { useCurrentLocation } from '../hooks/useCurrentLocation';
@@ -25,6 +25,11 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
   // tracks searchTerm as of the last render, purely to detect the change below
   const [previousSearchTerm, setPreviousSearchTerm] = useState(searchTerm);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  // tracks searchSelection as of the last render, purely to detect the "badge just removed"
+  // transition below - doesn't need to be state since nothing renders off it directly
+  const previousSearchSelectionRef = useRef(searchSelection);
+
   const hasQuery = searchTerm.trim().length > 0;
   // open on focus alone (not gated on hasQuery) so "Use current location" is reachable
   // before the user types anything
@@ -38,6 +43,18 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
     setPreviousSearchTerm(searchTerm);
     clearLocationError();
   }
+
+  // Refocusing the input has to wait until after the badge-removal re-render actually commits
+  // (the input is still disabled/hidden at the moment the X button's onClick runs), so this is
+  // an effect rather than the render-time adjustment used above - focusing re-triggers onFocus,
+  // which is what makes the dropdown (with "Use current location") reopen immediately, the same
+  // as it would from any other focus.
+  useEffect(() => {
+    if (previousSearchSelectionRef.current !== null && searchSelection === null) {
+      inputRef.current?.focus();
+    }
+    previousSearchSelectionRef.current = searchSelection;
+  }, [searchSelection]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setJustSelected(false);
@@ -91,6 +108,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
   function resetSearch() {
     onReset();
     setSearchTerm('');
+    setJustSelected(false);
   }
 
   return (
@@ -104,6 +122,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
         <div className='flex items-center bg-input-mode border border-search-field-border rounded-sm'>
           <SearchIcon className='h-5 xl:h-6 w-5 xl:w-6 ml-5 shrink-0 text-black/25' />
           <input
+            ref={inputRef}
             name='search-term'
             id='location-search-input'
             className=' bg-white px-4 py-3 xl:px-4 xl:py-3.5 text-1 xl:text-lg min-h-12 xl:min-h-14 text-search-input-text outline-none placeholder:text-slate-400 flex-1 min-w-0'
