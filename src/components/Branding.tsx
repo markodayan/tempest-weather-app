@@ -11,7 +11,7 @@ export default function Branding() {
           <span className=' text-tempest-title '>Tempest</span>
         </h2>
       </a>
-      <p className='text-center text-base text-slate-500 xl:text-left'>
+      <p className='px-4 xl:px-0 text-center text-base text-slate-500 xl:text-left'>
         7-day weather forecasts for locations all around the world.
       </p>
     </div>
