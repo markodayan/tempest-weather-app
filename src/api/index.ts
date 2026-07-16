@@ -1,4 +1,5 @@
 export { geocodeLocation } from './geocode';
+export { reverseGeocodeCoordinates } from './reverseGeocode';
 export { requestWeather, PAST_DAYS, FORECAST_DAYS, TODAY_INDEX, TOTAL_DAYS } from './weather';
 export { getWeatherCondition } from './weatherCodes';
 
