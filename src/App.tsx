@@ -73,7 +73,9 @@ function App() {
               id='location-search'
               className='max-w-7xl mx-auto space-y-5 xl:space-y-2 pt-5 xl:pb-5'
             >
-              <Branding />
+              <div className=''>
+                <Branding />
+              </div>
               <Search
                 searchSelection={searchSelection}
                 onSelect={handleLocationSelect}

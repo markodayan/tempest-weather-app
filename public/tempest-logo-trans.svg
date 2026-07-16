@@ -12,10 +12,10 @@
   <style>
     :root {
       --tempest-bg: transparent;
-      --tempest-triangle: #5d75bbff;
-      --tempest-line: #06355bff;
-      --tempest-triangle-stroke-width: 64;
-      --tempest-line-stroke-width: 48;
+      --tempest-triangle: #1a4b96;
+      --tempest-line: #1a4b96;
+      --tempest-triangle-stroke-width: 76;
+      --tempest-line-stroke-width: 60;
     }
   </style>
 
