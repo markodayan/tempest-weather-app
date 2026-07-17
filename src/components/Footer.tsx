@@ -12,29 +12,34 @@ function GithubIcon({ className }: { className?: string }) {
 
 export default function Footer() {
   return (
-    <footer className='mx-auto w-full max-w-5xl xl:max-w-7xl px-6 xl:px-0 py-8 text-center'>
-      <p className='text-sm text-slate-400'>
-        Created by <span className='font-medium text-slate-500'>Mark Odayan</span>
-      </p>
-      <div className='mt-3 flex items-center justify-center gap-4'>
-        <a
-          href='https://github.com/markodayan'
-          target='_blank'
-          rel='noopener noreferrer'
-          aria-label='GitHub'
-          className='text-slate-400 transition-colors duration-300 hover:text-primary'
-        >
-          <GithubIcon className='h-5 w-5' />
-        </a>
-        <a
-          href='https://odayan.xyz'
-          target='_blank'
-          rel='noopener noreferrer'
-          aria-label='Personal website'
-          className='text-slate-400 transition-colors duration-300 hover:text-primary'
-        >
-          <Globe className='h-5 w-5' />
-        </a>
+    <footer className='mx-auto w-full xl:px-0 py-8 bg-[#343434] '>
+      <div
+        id='footer-contents-container'
+        className='text-center flex lg:flex-col justify-between items-center lg:gap-x-0 lg:gap-y-3 px-8'
+      >
+        <p className='text-sm text-slate-400'>
+          Created by <span className='font-medium text-slate-500'>Mark Odayan</span>
+        </p>
+        <div className='flex items-center justify-center gap-2 lg:gap-4'>
+          <a
+            href='https://github.com/markodayan'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='GitHub'
+            className='text-slate-400 transition-colors duration-300 hover:text-primary'
+          >
+            <GithubIcon className='h-5 w-5' />
+          </a>
+          <a
+            href='https://odayan.xyz'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='Personal website'
+            className='text-slate-400 transition-colors duration-300 hover:text-primary'
+          >
+            <Globe className='h-5 w-5' />
+          </a>
+        </div>
       </div>
     </footer>
   );

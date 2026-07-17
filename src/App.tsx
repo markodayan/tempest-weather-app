@@ -83,8 +83,8 @@ function App() {
   }
 
   return (
-    <div className='min-h-screen bg-page-background'>
-      <main id='content' className=''>
+    <div className='min-h-screen flex flex-col bg-page-background'>
+      <main id='content' className='flex-1'>
         <div id='location-search' className='relative z-20 backdrop-blur-2xl'>
           <div className='container px-2 md:px-2 mx-auto'>
             <section
