@@ -14,13 +14,30 @@ import { DEFAULT_PREFERENCES } from './types';
 import type { UnitPreferences } from './types';
 import { formatLocationLabel } from './lib/location';
 
+const UNIT_PREFERENCES_STORAGE_KEY = 'unitPreferences';
+
+// Guards against a missing, corrupt, or (after some future schema change) incompatible cached
+// value - localStorage is an external boundary, so unlike most internal state it can't be
+// trusted to always hold well-formed JSON. Falling back to DEFAULT_PREFERENCES keeps a bad
+// value from crashing the initial render (there's no error boundary in this app to catch it).
+function loadCachedPreferences(): UnitPreferences {
+  const cached = localStorage.getItem(UNIT_PREFERENCES_STORAGE_KEY);
+  if (!cached) return DEFAULT_PREFERENCES;
+
+  try {
+    return JSON.parse(cached) as UnitPreferences;
+  } catch {
+    return DEFAULT_PREFERENCES;
+  }
+}
+
 function App() {
   // drives Search components badge/disabled-input UI, it gets cleared on reset.
   const [searchSelection, setSearchSelection] = useState<Location | null>(null);
   // the location whose weather is currently displayed; only ever set forward (on select), never nulled by reset
   const [weatherLocation, setWeatherLocation] = useState<Location | null>(null);
   // canonical preferences used to fetch weather; only updated on a new search or an explicit Apply
-  const [committed, setCommitted] = useState(DEFAULT_PREFERENCES);
+  const [committed, setCommitted] = useState(loadCachedPreferences);
   // which of the 7 days in the window is selected; reset to today whenever a new location loads
   const [selectedDayIndex, setSelectedDayIndex] = useState(TODAY_INDEX);
   // tracks weatherLocation as of the last render, purely to detect the change below
@@ -50,6 +67,7 @@ function App() {
   const handleCommitPreferences = useCallback(
     (preferences: UnitPreferences) => {
       setCommitted(preferences);
+      localStorage.setItem(UNIT_PREFERENCES_STORAGE_KEY, JSON.stringify(preferences));
       setSearchSelection(weatherLocation);
     },
     [weatherLocation],

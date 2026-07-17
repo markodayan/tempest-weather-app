@@ -3,7 +3,6 @@ import { ChevronDown } from 'lucide-react';
 import type { TemperatureUnit, WindSpeedUnit, PrecipitationUnit } from '../api';
 import type { UnitPreferences } from '../types';
 import {
-  DEFAULT_PREFERENCES,
   TEMPERATURE_UNIT_LABELS,
   WIND_SPEED_UNIT_LABELS,
   PRECIPITATION_UNIT_LABELS,
@@ -105,7 +104,7 @@ export default function Preferences({
   onCommit,
 }: PreferencesProps) {
   // in-progress, editing window
-  const [draft, setDraft] = useState<UnitPreferences>(DEFAULT_PREFERENCES);
+  const [draft, setDraft] = useState<UnitPreferences>(committed);
   const previousWeatherLocationId = useRef<number | null>(null);
   // collapsed by default below the xl breakpoint, expanded by default at/above it - matches
   // Tailwind's xl: breakpoint (1280px), checked once on mount rather than kept in sync with
@@ -173,7 +172,8 @@ export default function Preferences({
         <span
           className={`text-sm font-medium ${isExpanded && hasToggled ? 'animate-pref-text-pulse' : ''}`}
         >
-          Manage Unit Preferences
+          Manage Unit Preferences ({committed.temperatureUnit === 'celsius' ? '°C' : '°F'},{' '}
+          {committed.precipitationUnit}, {committed.windSpeedUnit})
         </span>
         <ChevronDown
           className={`h-5 w-5 transition-transform duration-[300ms] ${isExpanded ? 'rotate-180' : ''} ${isExpanded && hasToggled ? 'animate-pref-text-pulse' : ''}`}
