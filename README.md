@@ -100,7 +100,7 @@ npm run test:watch   # run tests in watch mode
 
 ## Testing
 
-82 tests across 12 files (pure functions, hooks, and components) — `npm test` to run
+90 tests across 13 files (pure functions, hooks, and components) — `npm test` to run
 them. A full breakdown of what's covered, what isn't yet, and non-obvious testing
 gotchas encountered along the way is in [`docs/testing.md`](docs/testing.md).
 

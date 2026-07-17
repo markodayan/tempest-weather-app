@@ -13,8 +13,10 @@ import { TODAY_INDEX } from './api';
 import { DEFAULT_PREFERENCES } from './types';
 import type { UnitPreferences } from './types';
 import { formatLocationLabel } from './lib/location';
+import { addToLocationHistory } from './lib/locationHistory';
 
 const UNIT_PREFERENCES_STORAGE_KEY = 'unitPreferences';
+const LOCATION_HISTORY_STORAGE_KEY = 'locationHistory';
 
 // Guards against a missing, corrupt, or (after some future schema change) incompatible cached
 // value - localStorage is an external boundary, so unlike most internal state it can't be
@@ -31,6 +33,19 @@ function loadCachedPreferences(): UnitPreferences {
   }
 }
 
+// Same rationale as loadCachedPreferences above - localStorage can hold anything, so a missing
+// or malformed value falls back to an empty history rather than crashing the initial render.
+function loadCachedLocationHistory(): Location[] {
+  const cached = localStorage.getItem(LOCATION_HISTORY_STORAGE_KEY);
+  if (!cached) return [];
+
+  try {
+    return JSON.parse(cached) as Location[];
+  } catch {
+    return [];
+  }
+}
+
 function App() {
   // drives Search components badge/disabled-input UI, it gets cleared on reset.
   const [searchSelection, setSearchSelection] = useState<Location | null>(null);
@@ -38,6 +53,8 @@ function App() {
   const [weatherLocation, setWeatherLocation] = useState<Location | null>(null);
   // canonical preferences used to fetch weather; only updated on a new search or an explicit Apply
   const [committed, setCommitted] = useState(loadCachedPreferences);
+  // up to MAX_HISTORY_SIZE most-recently-selected locations, most recent first
+  const [locationHistory, setLocationHistory] = useState(loadCachedLocationHistory);
   // which of the 7 days in the window is selected; reset to today whenever a new location loads
   const [selectedDayIndex, setSelectedDayIndex] = useState(TODAY_INDEX);
   // tracks weatherLocation as of the last render, purely to detect the change below
@@ -76,6 +93,10 @@ function App() {
   function handleLocationSelect(location: Location) {
     setSearchSelection(location);
     setWeatherLocation(location);
+
+    const updatedHistory = addToLocationHistory(locationHistory, location);
+    setLocationHistory(updatedHistory);
+    localStorage.setItem(LOCATION_HISTORY_STORAGE_KEY, JSON.stringify(updatedHistory));
   }
 
   function handleLocationReset() {

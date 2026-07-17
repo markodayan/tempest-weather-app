@@ -109,33 +109,37 @@ function formatCountryLabel(country: string): string {
 
 export default function Landing({ onSelectLocation }: LandingProps) {
   return (
-    <div
-      id='landing-suggestions'
-      className='mx-auto max-w-5xl xl:max-w-7xl px-2 xl:px-0 pt-1 pb-8 text-center'
-    >
-      <p className='text-xl font-extrabold xl:text-3xl text-user-q'>
-        Unsure what to search? <span className='text-cta font-bold'>Click a place below!</span>
-      </p>
+    <div id='landing-content-container'>
+      <div id='landing-app-copy'></div>
 
-      <div className='mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4'>
-        {SUGGESTED_LOCATIONS.map((location) => (
-          <button
-            key={location.id}
-            type='button'
-            onClick={() => onSelectLocation(location)}
-            className='group relative aspect-4/3 cursor-pointer overflow-hidden rounded-md transition-opacity duration-300 hover:opacity-80'
-          >
-            <img
-              src={location.imageSrc}
-              alt=''
-              className='h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-110'
-            />
-            <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent' />
-            <span className='absolute bottom-0 left-0 p-3 text-left text-[12px] xl:text-[20px] font-bold text-white opacity-90 transition-opacity duration-300 group-hover:opacity-100'>
-              {location.location_title}, {formatCountryLabel(location.location_country)}
-            </span>
-          </button>
-        ))}
+      <div
+        id='landing-suggestions'
+        className='mx-auto max-w-5xl xl:max-w-7xl px-2 xl:px-0 pt-1 pb-8 text-center'
+      >
+        <p className='text-xl font-extrabold xl:text-3xl text-user-q'>
+          Unsure what to search? <span className='text-cta font-bold'>Click a place below!</span>
+        </p>
+
+        <div className='mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4'>
+          {SUGGESTED_LOCATIONS.map(({ imageSrc, ...location }) => (
+            <button
+              key={location.id}
+              type='button'
+              onClick={() => onSelectLocation(location)}
+              className='group relative aspect-4/3 cursor-pointer overflow-hidden rounded-md transition-opacity duration-300 hover:opacity-80'
+            >
+              <img
+                src={imageSrc}
+                alt=''
+                className='h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-110'
+              />
+              <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent' />
+              <span className='absolute bottom-0 left-0 p-3 text-left text-[12px] xl:text-[20px] font-bold text-white opacity-90 transition-opacity duration-300 group-hover:opacity-100'>
+                {location.location_title}, {formatCountryLabel(location.location_country)}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
