@@ -19,7 +19,7 @@ files, a new layer added, config changes), update it here.
 - `npm test` — runs the suite once (`vitest run`); CI-safe default.
 - `npm run test:watch` — interactive watch mode (`vitest`).
 
-As of writing: **13 test files, 90 tests, all passing.**
+As of writing: **13 test files, 93 tests, all passing.**
 
 ## Current coverage
 
@@ -49,12 +49,14 @@ As of writing: **13 test files, 90 tests, all passing.**
   bucket at its boundary and mid-range, and that a Fahrenheit reading is
   converted back to Celsius before bucketing so the label matches the
   physical temperature regardless of display unit.
-- `locationHistory.test.ts` — `locationHistoryKey`/`addToLocationHistory`:
-  coordinates rounded to 2 decimal places for the dedup key, near-duplicate
-  coordinates treated as the same location, a fresh selection prepended
-  ahead of existing entries, re-adding an existing location bumping it to
-  the front instead of duplicating it, and the oldest entry getting
-  dropped once history would exceed `MAX_HISTORY_SIZE`.
+- `locationHistory.test.ts` — `locationHistoryKey`/`addToLocationHistory`/
+  `removeFromLocationHistory`: coordinates rounded to 2 decimal places for
+  the dedup key, near-duplicate coordinates treated as the same location, a
+  fresh selection prepended ahead of existing entries, re-adding an existing
+  location bumping it to the front instead of duplicating it, the oldest
+  entry getting dropped once history would exceed `MAX_HISTORY_SIZE`, and
+  removal matching by key (not by reference) so a near-duplicate coordinate
+  still removes the right entry.
 
 ### Hooks (`src/hooks/`)
 

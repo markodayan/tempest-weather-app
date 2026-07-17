@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapPin, SearchIcon, X, ArrowRight, Locate } from 'lucide-react';
+import { MapPin, SearchIcon, X, ArrowRight, Locate, Clock4 } from 'lucide-react';
 import { useLocationSearch } from '../hooks/useLocationSearch';
 import { useCurrentLocation } from '../hooks/useCurrentLocation';
 import type { Location } from '../api';
@@ -10,12 +10,24 @@ type SearchProps = {
   searchSelection: Location | null;
   onSelect: (location: Location) => void;
   onReset: () => void;
+  searchHistory: Location[];
+  onRemoveFromHistory: (location: Location) => void;
 };
 
-export default function Search({ searchSelection, onSelect, onReset }: SearchProps) {
+export default function Search({
+  searchSelection,
+  onSelect,
+  onReset,
+  searchHistory,
+  onRemoveFromHistory,
+}: SearchProps) {
   const { searchTerm, setSearchTerm, suggestions, loading, error } = useLocationSearch();
-  const { locate, loading: locating, error: locationError, clearError: clearLocationError } =
-    useCurrentLocation();
+  const {
+    locate,
+    loading: locating,
+    error: locationError,
+    clearError: clearLocationError,
+  } = useCurrentLocation();
 
   // will remove dropdown after selection to avoid searchTerm state value not to immediately reopen to do another search for locations matching the term
   const [justSelected, setJustSelected] = useState(false);
@@ -34,6 +46,8 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
   // open on focus alone (not gated on hasQuery) so "Use current location" is reachable
   // before the user types anything
   const showDropdown = !justSelected && isFocused;
+
+  const showSearchHistory = !hasQuery && searchHistory.length > 0;
 
   // Adjusts state during render rather than in an effect, per React's own recommended pattern
   // for "reset state when a prop/value changes" (mirrors App.tsx's previousWeatherLocation reset)
@@ -188,12 +202,6 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
 
       {showDropdown && (
         <div className='absolute inset-x-1 flex flex-col mt-2 z-10 gap-y-1 '>
-          {/* {locationError && (
-            <p className='text-center rounded-sm px-4 py-2 text-sm bg-red-500/30  text-red-500 shadow-2xl'>
-              {locationError}
-            </p>
-          )} */}
-
           <div
             id='suggested-search-results'
             role='listbox'
@@ -228,6 +236,56 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
               </span>
             </button>
 
+            {showSearchHistory && (
+              <>
+                <p className='px-4 py-2 text-sm font-semibold tracking-tighter text-[#818181]'>
+                  Search History
+                </p>
+                <div className='py-0' />
+                <ul className='max-h-[21.5rem] overflow-y-auto'>
+                  {searchHistory.map((location, index) => (
+                    <li
+                      key={location.id}
+                      className='flex items-center border-b border-slate-100 first:border last:border-none group has-[#clear-search-history-item:hover]:bg-red-500/4 has-[button:hover]:bg-slate-100'
+                    >
+                      <button
+                        type='button'
+                        id={`suggestion-option-${location.id}`}
+                        role='option'
+                        aria-selected={index === highlightedIndex}
+                        onClick={() => handleSelect(location)}
+                        onMouseDown={(e) => e.preventDefault()} // keeps focus on the input, so blur never fires (important to override default mousedown behaviour of shifting focus since we are using it to control drop down)
+                        className={`flex flex-1 items-center gap-3 px-4 py-2 text-left cursor-pointer`}
+                      >
+                        <Clock4 className=' h-4 w-4 shrink-0 text-black/10' />
+
+                        <span>
+                          <span className='block text-[15px] text-[#636363]'>
+                            <span className=''>{location.location_title}</span>
+                            {location.location_country && `, ${location.location_country}`}
+                          </span>
+                        </span>
+                      </button>
+                      <button
+                        type='button'
+                        id='clear-search-history-item'
+                        aria-label={`Remove ${location.location_title} from search history`}
+                        onClick={() => onRemoveFromHistory(location)}
+                        onMouseDown={(e) => e.preventDefault()} // keeps focus on the input, so blur doesn't hide this panel
+                        className='mr-4 shrink-0 cursor-pointer'
+                      >
+                        <X
+                          className='h-4 w-4 text-black/85 hover:text-red-500/60'
+                          strokeWidth={3}
+                        />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <div className='py-0 bg-[#f6f6f6]'></div>
+              </>
+            )}
+
             {hasQuery && (
               <>
                 {loading && <p className='bg-[#f9f9f9] px-4 py-3 text-slate-400'>Searching…</p>}
@@ -261,7 +319,7 @@ export default function Search({ searchSelection, onSelect, onReset }: SearchPro
                             aria-selected={index === highlightedIndex}
                             onClick={() => handleSelect(location)}
                             onMouseDown={(e) => e.preventDefault()} // keeps focus on the input, so blur never fires (important to override default mousedown behaviour of shifting focus since we are using it to control drop down)
-                            className={`flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-100 ${
+                            className={`flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-100 cursor-pointer ${
                               index === highlightedIndex ? 'bg-slate-100' : ''
                             }`}
                           >

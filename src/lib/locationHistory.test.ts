@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { addToLocationHistory, locationHistoryKey, MAX_HISTORY_SIZE } from './locationHistory';
+import {
+  addToLocationHistory,
+  locationHistoryKey,
+  MAX_HISTORY_SIZE,
+  removeFromLocationHistory,
+} from './locationHistory';
 import type { Location } from '../api';
 
 function buildLocation(overrides: Partial<Location> = {}): Location {
@@ -77,5 +82,34 @@ describe('addToLocationHistory', () => {
     expect(result).toHaveLength(MAX_HISTORY_SIZE);
     expect(result[0]).toEqual(newLocation);
     expect(result).not.toContainEqual(history[MAX_HISTORY_SIZE - 1]);
+  });
+});
+
+describe('removeFromLocationHistory', () => {
+  it('removes the matching entry', () => {
+    const capeTown = buildLocation();
+    const dubai = buildLocation({ latitude: 25.07725, longitude: 55.30927, id: -2 });
+
+    const result = removeFromLocationHistory([dubai, capeTown], dubai);
+
+    expect(result).toEqual([capeTown]);
+  });
+
+  it('removes a near-duplicate (within 2 decimal places) by key, not by reference', () => {
+    const original = buildLocation({ latitude: -33.9258, longitude: 18.4232 });
+    const near = buildLocation({ latitude: -33.9261, longitude: 18.4229, id: 99 });
+
+    const result = removeFromLocationHistory([original], near);
+
+    expect(result).toEqual([]);
+  });
+
+  it('leaves history unchanged when the location is not present', () => {
+    const capeTown = buildLocation();
+    const dubai = buildLocation({ latitude: 25.07725, longitude: 55.30927, id: -2 });
+
+    const result = removeFromLocationHistory([capeTown], dubai);
+
+    expect(result).toEqual([capeTown]);
   });
 });

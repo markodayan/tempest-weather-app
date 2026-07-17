@@ -13,7 +13,7 @@ import { TODAY_INDEX } from './api';
 import { DEFAULT_PREFERENCES } from './types';
 import type { UnitPreferences } from './types';
 import { formatLocationLabel } from './lib/location';
-import { addToLocationHistory } from './lib/locationHistory';
+import { addToLocationHistory, removeFromLocationHistory } from './lib/locationHistory';
 
 const UNIT_PREFERENCES_STORAGE_KEY = 'unitPreferences';
 const LOCATION_HISTORY_STORAGE_KEY = 'locationHistory';
@@ -103,6 +103,12 @@ function App() {
     setSearchSelection(null);
   }
 
+  function handleRemoveFromHistory(location: Location) {
+    const updatedHistory = removeFromLocationHistory(locationHistory, location);
+    setLocationHistory(updatedHistory);
+    localStorage.setItem(LOCATION_HISTORY_STORAGE_KEY, JSON.stringify(updatedHistory));
+  }
+
   return (
     <div className='min-h-screen flex flex-col bg-page-background'>
       <main id='content' className='flex-1'>
@@ -119,6 +125,8 @@ function App() {
                 searchSelection={searchSelection}
                 onSelect={handleLocationSelect}
                 onReset={handleLocationReset}
+                searchHistory={locationHistory}
+                onRemoveFromHistory={handleRemoveFromHistory}
               />
               <Preferences
                 weatherLocationId={weatherLocation?.id ?? null}

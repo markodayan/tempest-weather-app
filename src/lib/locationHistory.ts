@@ -19,3 +19,8 @@ export function addToLocationHistory(history: Location[], location: Location): L
 
   return [location, ...withoutExisting].slice(0, MAX_HISTORY_SIZE);
 }
+
+export function removeFromLocationHistory(history: Location[], location: Location): Location[] {
+  const key = locationHistoryKey(location);
+  return history.filter((entry) => locationHistoryKey(entry) !== key);
+}
