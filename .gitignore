@@ -25,3 +25,9 @@ dist-ssr
 
 playground
 private_notes
+
+# Playwright MCP server's own scratch output (snapshots, screenshots, console logs)
+.playwright-mcp
+
+# Claude Code's machine-local permission/settings state - not shared config
+.claude/settings.local.json
